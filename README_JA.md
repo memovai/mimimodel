@@ -1,4 +1,4 @@
-# mimimodel — 10 ドルの ESP32-S3 上でオフライン動作する 45M パラメータのツール呼び出し LLM
+# mimimodel — 5 ドルの ESP32-S3 上でオフライン動作する 45M パラメータのツール呼び出し LLM
 
 [Cactus Compute の Needle 2](https://github.com/cactus-compute/needle) 向けにゼロから書いた
 単一ファイルの C 推論エンジン。ESP32-S3 マイコン上で完結して動きます。Linux も Python も
@@ -14,7 +14,7 @@ $ turn on pin 5
 | | |
 |---|---|
 | **モデル** | Needle 2 — 45M パラメータ、CQ 2-bit 量子化、13.7 MB の単一ファイル |
-| **ハードウェア** | ESP32-S3、240 MHz Xtensa LX7、16 MB flash、8 MB PSRAM（約 1,500 円） |
+| **ハードウェア** | ESP32-S3、240 MHz Xtensa LX7、16 MB flash、8 MB PSRAM（約 750 円） |
 | **エンジン** | C99 ファイル 1 本、約 2,000 行、`libm` 以外の依存なし |
 | **速度** | ウォーム呼び出し **29 秒** · コールド **241 秒** · プリフィル 1.4 tok/s |
 | **メモリ** | 13.7 MB flash（メモリマップ）· 約 7.7 MB PSRAM · ファームウェア 256 KB |

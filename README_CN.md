@@ -1,4 +1,4 @@
-# mimimodel — 在 10 美元的 ESP32-S3 上离线运行 45M 参数的工具调用大模型
+# mimimodel — 在 5 美元的 ESP32-S3 上离线运行 45M 参数的工具调用大模型
 
 为 [Cactus Compute 的 Needle 2](https://github.com/cactus-compute/needle) 从零手写的单文件 C 推理引擎，
 完全跑在 ESP32-S3 单片机上。不需要 Linux，不需要 Python，不需要联网。
@@ -14,7 +14,7 @@ $ turn on pin 5
 | | |
 |---|---|
 | **模型** | Needle 2 — 45M 参数，CQ 2-bit 量化，13.7 MB 单文件 |
-| **硬件** | ESP32-S3，240 MHz Xtensa LX7，16 MB flash，8 MB PSRAM（约 ¥70） |
+| **硬件** | ESP32-S3，240 MHz Xtensa LX7，16 MB flash，8 MB PSRAM（约 ¥35） |
 | **引擎** | 单个 C99 文件，约 2000 行，除 `libm` 外零依赖 |
 | **速度** | 热调用 **29 秒** · 冷调用 **241 秒** · 预填充 1.4 tok/s |
 | **内存** | 13.7 MB flash（内存映射）· 约 7.7 MB PSRAM · 固件 256 KB |

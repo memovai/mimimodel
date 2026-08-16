@@ -1,4 +1,4 @@
-# mimimodel — un LLM de 45M parámetros con llamada a herramientas, funcionando sin conexión en un ESP32-S3 de 10 $
+# mimimodel — un LLM de 45M parámetros con llamada a herramientas, funcionando sin conexión en un ESP32-S3 de 5 $
 
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo
@@ -15,7 +15,7 @@ $ turn on pin 5
 | | |
 |---|---|
 | **Modelo** | Needle 2 — 45M parámetros, CQ de 2 bits, archivo único de 13,7 MB |
-| **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~10 $) |
+| **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~5 $) |
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
 | **Velocidad** | llamada en caliente **29 s** · en frío **241 s** · prefill 1,4 tok/s |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |

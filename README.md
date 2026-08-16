@@ -1,4 +1,4 @@
-# mimimodel — a 45M-parameter tool-calling LLM running offline on a $10 ESP32-S3
+# mimimodel — a 45M-parameter tool-calling LLM running offline on a $5 ESP32-S3
 
 A from-scratch, single-file C inference engine for [Cactus Compute's Needle 2](https://github.com/cactus-compute/needle),
 running entirely on an ESP32-S3 microcontroller. No Linux, no Python, no network.
@@ -14,7 +14,7 @@ $ turn on pin 5
 | | |
 |---|---|
 | **Model** | Needle 2 — 45M params, CQ 2-bit, 13.7 MB single file |
-| **Hardware** | ESP32-S3, 240 MHz Xtensa LX7, 16 MB flash, 8 MB PSRAM (~$10) |
+| **Hardware** | ESP32-S3, 240 MHz Xtensa LX7, 16 MB flash, 8 MB PSRAM (~$5) |
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
 | **Speed** | warm tool call **29 s** · cold **241 s** · 1.4 tok/s prefill |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
