@@ -1,0 +1,374 @@
+{
+ "tools_needle": "[{\"name\":\"gpio_write\",\"description\":\"Set a GPIO pin high or low to control a device\",\"parameters\":{\"type\":\"object\",\"properties\":{\"pin\":{\"type\":\"integer\",\"description\":\"GPIO pin number\"},\"value\":{\"type\":\"integer\",\"description\":\"1 for on, 0 for off\"}},\"required\":[\"pin\",\"value\"]}},{\"name\":\"get_time\",\"description\":\"Get the current date and time\",\"parameters\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"set_timer\",\"description\":\"Set a countdown timer\",\"parameters\":{\"type\":\"object\",\"properties\":{\"minutes\":{\"type\":\"integer\",\"description\":\"Timer length in minutes\"}},\"required\":[\"minutes\"]}},{\"name\":\"get_weather\",\"description\":\"Get current weather for a city\",\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\",\"description\":\"City name\"}},\"required\":[\"city\"]}},{\"name\":\"web_search\",\"description\":\"Search the web for information\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Search query\"}},\"required\":[\"query\"]}},{\"name\":\"send_message\",\"description\":\"Send a text message to a contact\",\"parameters\":{\"type\":\"object\",\"properties\":{\"to\":{\"type\":\"string\",\"description\":\"Contact name\"},\"text\":{\"type\":\"string\",\"description\":\"Message body\"}},\"required\":[\"to\",\"text\"]}}]",
+ "tools_oracle": [
+  {
+   "name": "gpio_write",
+   "description": "Set a GPIO pin high or low to control a device",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "pin": {
+      "type": "integer",
+      "description": "GPIO pin number"
+     },
+     "value": {
+      "type": "integer",
+      "description": "1 for on, 0 for off"
+     }
+    },
+    "required": [
+     "pin",
+     "value"
+    ]
+   }
+  },
+  {
+   "name": "get_time",
+   "description": "Get the current date and time",
+   "parameters": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "name": "set_timer",
+   "description": "Set a countdown timer",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "minutes": {
+      "type": "integer",
+      "description": "Timer length in minutes"
+     }
+    },
+    "required": [
+     "minutes"
+    ]
+   }
+  },
+  {
+   "name": "get_weather",
+   "description": "Get current weather for a city",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "city": {
+      "type": "string",
+      "description": "City name"
+     }
+    },
+    "required": [
+     "city"
+    ]
+   }
+  },
+  {
+   "name": "web_search",
+   "description": "Search the web for information",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "Search query"
+     }
+    },
+    "required": [
+     "query"
+    ]
+   }
+  },
+  {
+   "name": "send_message",
+   "description": "Send a text message to a contact",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "to": {
+      "type": "string",
+      "description": "Contact name"
+     },
+     "text": {
+      "type": "string",
+      "description": "Message body"
+     }
+    },
+    "required": [
+     "to",
+     "text"
+    ]
+   }
+  }
+ ],
+ "cases": [
+  {
+   "id": "weather-basic",
+   "cat": "single",
+   "q": "What's the weather in Paris right now?",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "Paris"
+    }
+   }
+  },
+  {
+   "id": "weather-tokyo",
+   "cat": "single",
+   "q": "How's the weather looking in Tokyo today?",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "Tokyo"
+    }
+   }
+  },
+  {
+   "id": "weather-sf",
+   "cat": "single",
+   "q": "Is it raining in San Francisco?",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "San Francisco"
+    }
+   }
+  },
+  {
+   "id": "time-basic",
+   "cat": "single",
+   "q": "What time is it?",
+   "expect": {
+    "name": "get_time",
+    "args": {}
+   }
+  },
+  {
+   "id": "time-date",
+   "cat": "single",
+   "q": "Tell me today's date please",
+   "expect": {
+    "name": "get_time",
+    "args": {}
+   }
+  },
+  {
+   "id": "timer-10",
+   "cat": "params",
+   "q": "Set a timer for 10 minutes",
+   "expect": {
+    "name": "set_timer",
+    "args": {
+     "minutes": 10
+    }
+   }
+  },
+  {
+   "id": "timer-45",
+   "cat": "params",
+   "q": "I need a 45 minute countdown for my pasta",
+   "expect": {
+    "name": "set_timer",
+    "args": {
+     "minutes": 45
+    }
+   }
+  },
+  {
+   "id": "timer-hour",
+   "cat": "params",
+   "q": "Set a timer for one and a half hours",
+   "expect": {
+    "name": "set_timer",
+    "args": {
+     "minutes": 90
+    }
+   }
+  },
+  {
+   "id": "gpio-on",
+   "cat": "params",
+   "q": "Turn on pin 5",
+   "expect": {
+    "name": "gpio_write",
+    "args": {
+     "pin": 5,
+     "value": 1
+    }
+   }
+  },
+  {
+   "id": "gpio-off",
+   "cat": "params",
+   "q": "Switch off GPIO 12",
+   "expect": {
+    "name": "gpio_write",
+    "args": {
+     "pin": 12,
+     "value": 0
+    }
+   }
+  },
+  {
+   "id": "gpio-light",
+   "cat": "params",
+   "q": "The lamp is wired to pin 8, please turn it on",
+   "expect": {
+    "name": "gpio_write",
+    "args": {
+     "pin": 8,
+     "value": 1
+    }
+   }
+  },
+  {
+   "id": "search-recipe",
+   "cat": "single",
+   "q": "Search for the best carbonara recipe",
+   "expect": {
+    "name": "web_search",
+    "args": {
+     "query": "*carbonara*"
+    }
+   }
+  },
+  {
+   "id": "search-news",
+   "cat": "single",
+   "q": "Look up the latest news about SpaceX",
+   "expect": {
+    "name": "web_search",
+    "args": {
+     "query": "*SpaceX*"
+    }
+   }
+  },
+  {
+   "id": "msg-basic",
+   "cat": "params",
+   "q": "Send a message to Alice saying I'll be late",
+   "expect": {
+    "name": "send_message",
+    "args": {
+     "to": "Alice",
+     "text": "*late*"
+    }
+   }
+  },
+  {
+   "id": "msg-mom",
+   "cat": "params",
+   "q": "Text mom that dinner is ready",
+   "expect": {
+    "name": "send_message",
+    "args": {
+     "to": "*om*",
+     "text": "*dinner*"
+    }
+   }
+  },
+  {
+   "id": "select-vs-time",
+   "cat": "select",
+   "q": "How many minutes until midnight? First check the current time",
+   "expect": {
+    "name": "get_time",
+    "args": {}
+   }
+  },
+  {
+   "id": "select-weather",
+   "cat": "select",
+   "q": "Should I bring an umbrella in London?",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "London"
+    }
+   }
+  },
+  {
+   "id": "select-search",
+   "cat": "select",
+   "q": "Who won the world cup in 2022?",
+   "expect": {
+    "name": "web_search",
+    "args": {
+     "query": "*world cup*"
+    }
+   }
+  },
+  {
+   "id": "zh-weather",
+   "cat": "chinese",
+   "q": "北京现在天气怎么样？",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "*"
+    }
+   }
+  },
+  {
+   "id": "zh-timer",
+   "cat": "chinese",
+   "q": "帮我定一个15分钟的计时器",
+   "expect": {
+    "name": "set_timer",
+    "args": {
+     "minutes": 15
+    }
+   }
+  },
+  {
+   "id": "zh-gpio",
+   "cat": "chinese",
+   "q": "打开3号引脚",
+   "expect": {
+    "name": "gpio_write",
+    "args": {
+     "pin": 3,
+     "value": 1
+    }
+   }
+  },
+  {
+   "id": "compound-1",
+   "cat": "compound",
+   "q": "Turn on pin 5 and set a timer for 20 minutes",
+   "expect": {
+    "name": "gpio_write",
+    "args": {
+     "pin": 5,
+     "value": 1
+    },
+    "multi_ok": [
+     "set_timer"
+    ]
+   }
+  },
+  {
+   "id": "compound-2",
+   "cat": "compound",
+   "q": "Check the weather in Rome and text the result to Bob",
+   "expect": {
+    "name": "get_weather",
+    "args": {
+     "city": "Rome"
+    },
+    "multi_ok": [
+     "send_message"
+    ]
+   }
+  },
+  {
+   "id": "chitchat",
+   "cat": "none",
+   "q": "Tell me a joke about programmers",
+   "expect": {
+    "name": null,
+    "args": {}
+   }
+  }
+ ]
+}

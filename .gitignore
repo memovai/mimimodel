@@ -1,0 +1,23 @@
+# third-party sources, cloned by the developer (see README credits)
+/cactus/
+/needle/
+
+# model weights — download from Hugging Face, see README
+/model/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# ESP-IDF build output and generated config
+needle-esp32s3/build/
+needle-esp32s3/sdkconfig
+needle-esp32s3/sdkconfig.old
+needle-esp32s3/managed_components/
+needle-esp32s3/dependencies.lock
+
+# local tooling
+.gstack/
+bench/results.json
+.DS_Store
