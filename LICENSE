@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-This repository contains an inference *engine* only. It does not redistribute
-the Needle 2 model weights, which are published separately by Cactus Compute
-under Apache-2.0 at https://huggingface.co/Cactus-Compute/needle2 and must be
-downloaded by the user. See the Credits section of README.md for the full list
-of upstream work this engine builds on.
