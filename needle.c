@@ -1987,20 +1987,26 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
     int max_calls = NEEDLE_MAX_CALLS;
     if (getenv("NEEDLE_MAX_CALLS")) max_calls = atoi(getenv("NEEDLE_MAX_CALLS"));
     for (int call = 0; call < max_calls; call++) {
-        /* Force the opening as ONE segment. dc_force masks logits per segment,
-         * so splitting "[{\"name\":\"" into "[" + "{\"name\":\"" changes which
-         * tokens the model walks through and measurably degrades the first
-         * call (1-call exact 61.1% -> 50.8% on the full eval when split). */
-        dc_force(m, &dc, call ? ",{\"name\":\"" : "[{\"name\":\"", out, &olen);
-
-        /* A tool already used this turn is not a candidate again: no ground
+        /* Work out whether this call can happen BEFORE emitting anything for
+         * it. Bailing out after the opening was already forced leaves a
+         * dangling `,{"name":"` and the whole array fails to parse — that was
+         * 172 of the 320 two-call cases scoring zero.
+         *
+         * A tool already used this turn is not a candidate again: no ground
          * truth in google/mobile-actions repeats one, and without this the
-         * model happily emits the same call four times. */
+         * model happily emits the same call four times. Retrieval usually
+         * leaves only 2-3 tools, so this is what ends the loop in practice. */
         const char *names[NT_MAX_TOOLS];
         int nmap[NT_MAX_TOOLS], n_cand = 0;
         for (int i = 0; i < n_tools; i++)
             if (!emitted[i]) { names[n_cand] = tools[i].name; nmap[n_cand++] = i; }
         if (n_cand == 0) break;
+
+        /* Force the opening as ONE segment. dc_force masks logits per segment,
+         * so splitting "[{\"name\":\"" into "[" + "{\"name\":\"" changes which
+         * tokens the model walks through and measurably degrades the first
+         * call (1-call exact 61.1% -> 50.8% on the full eval when split). */
+        dc_force(m, &dc, call ? ",{\"name\":\"" : "[{\"name\":\"", out, &olen);
         /* Greedy prefix-constrained walk beats scoring each candidate by mean token
          * logprob (measured: 64% vs 58% tool-name accuracy on mobile-actions). The
          * scored variant also teacher-forces ~21 tokens through engram_step while
@@ -2173,6 +2179,26 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
         emitted_calls++;
         /* another call, or done? compare the model's own preference */
         {
+            if (getenv("NEEDLE_DEBUG_STOP")) {
+                int top[6];
+                for (int a = 0; a < 6; a++) {
+                    int b2 = -1;
+                    for (uint32_t t = 1; t < m->n_pieces; t++) {
+                        int dup = 0;
+                        for (int c2 = 0; c2 < a; c2++) if (top[c2] == (int)t) dup = 1;
+                        if (dup) continue;
+                        if (b2 < 0 || dc.logits[t] > dc.logits[b2]) b2 = (int)t;
+                    }
+                    top[a] = b2;
+                }
+                fprintf(stderr, "[stop? after call %d]", call + 1);
+                for (int a = 0; a < 6; a++) {
+                    char pc[64];
+                    needle_decode_piece(m, top[a], pc, sizeof pc);
+                    fprintf(stderr, "  %s(%.2f)", pc[0] ? pc : "<mk>", dc.logits[top[a]]);
+                }
+                fprintf(stderr, "\n");
+            }
             float lc = -1e30f, lb = -1e30f;
             for (uint32_t t = 0; t < m->n_pieces; t++) {
                 if (m->types[t] != 0 || m->piece_len[t] == 0) continue;

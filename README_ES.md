@@ -19,11 +19,13 @@ $ turn on pin 5
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
 | **Velocidad** | llamada en caliente **29 s** · en frío **241 s** · prefill 1,4 tok/s |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
-| **Precisión** | 15/24 en un benchmark de llamada a herramientas — el motor oficial cerrado saca 14/24 |
+| **Precisión** | 40,7% en google/mobile-actions (961 casos, coincidencia estricta) — el motor oficial saca 71,3% |
 
 > **Honestidad por delante:** esto es unas 5 veces más lento que una API en la nube, no entiende
-> chino, y si le saludas te llamará una herramienta igualmente. Véanse las [limitaciones](#limitaciones).
-> Lo que ganas es un modelo de lenguaje que funciona con el cable de red desenchufado.
+> chino, si le saludas te llamará una herramienta igualmente, y queda bastante por debajo del
+> motor oficial en la misma evaluación. Véanse el [benchmark](#benchmark) y las
+> [limitaciones](#limitaciones). Lo que ganas es un modelo de lenguaje que funciona con el
+> cable de red desenchufado.
 
 ---
 
@@ -162,8 +164,9 @@ stateDiagram-v2
 ```
 
 
-Por esto el motor supera al oficial en el benchmark pese a usar pesos idénticos: la salida siempre
-es válida según el esquema.
+La recompensa es que la salida siempre es válida según el esquema — un modelo de 45M en carrera
+libre no lo consigue. No cierra la diferencia con el motor oficial, que ejecuta los mismos pesos
+con su propio compilador de gramáticas; véase el [benchmark](#benchmark).
 
 ### 5. Caché de prefijo KV — la mayor ganancia individual
 
@@ -299,16 +302,45 @@ es la comprobación que detectó los dos errores descritos en [Corrección](#cor
 
 ## Benchmark
 
-`bench/run_bench.py` ejecuta 24 casos (herramienta única, extracción de argumentos, desambiguación
-entre varias herramientas, chino, órdenes compuestas, charla informal) contra este motor y contra la
-biblioteca oficial cerrada usada como oráculo.
+Evaluado sobre [google/mobile-actions](https://huggingface.co/datasets/google/mobile-actions)
+(CC-BY-4.0) — el conjunto de 961 casos de llamada a funciones en dispositivo
+publicado junto a FunctionGemma — con su propia métrica, *ordered strict exact
+match*: los nombres de función, el orden de las llamadas y cada argumento deben
+coincidir.
 
-```
-=== ours 15/24 (62%) | oracle 14/24 (58%) | tool-choice agreement 16/24 (66%)
-```
+| | este motor | motor oficial, mismos prompts | publicado |
+|---|---|---|---|
+| precisión | 40,7% | 71,3% | 63,7% |
+| precisión de nombre | 63,6% | 98,0% | 98,3% |
+| casos de 1 llamada (640) | 61,1% | 75,6% | 71,3% |
+| casos de 2 llamadas (320) | 0% | 62,5% | 48,4% |
+| latencia, mediana | 1820 ms | 587 ms | — |
+| prefill · decode | 154 · 64 tok/s | 1408 · 797 tok/s | — |
+| RSS máximo | 20 MB | 163 MB | — |
 
-Ambos motores fallan en lo mismo —chino, órdenes compuestas, declinar la charla informal—, que es la
-firma esperable de un modelo de 45M compartido y no de una diferencia de implementación.
+El motor oficial cerrado, medido con este mismo arnés, queda a 0,3 puntos de su
+precisión de nombre publicada. Esa coincidencia es lo que indica que el arnés es
+correcto y que la diferencia restante es de este motor, no del modelo ni de los datos.
+
+**Dónde está la diferencia.** Las respuestas de dos llamadas son un tercio del
+conjunto y la configuración por defecto emite exactamente una llamada por turno,
+así que ahí saca cero. La decodificación multi-llamada está implementada y
+desactivada por defecto: todavía sale perdiendo
+(ver [`bench/README.md`](bench/README.md#multi-call)). En el host es 3,1× más
+lento de extremo a extremo pero 9–12× más lento por token; es C99 escalar frente
+a una compilación ARM64 optimizada con NEON, así que la mayor parte es juego de
+instrucciones, no diseño.
+
+**En el ESP32-S3** los mismos casos tardan una mediana de 342 s cada uno y las
+respuestas de la placa son **idénticas byte a byte** a las del host. Esa paridad
+es lo que permite leer la precisión de 961 casos del host como la de la placa:
+ejecutar el conjunto completo en el dispositivo llevaría unas tres horas. Los
+342 s son el peor caso de este benchmark: cada registro lleva una fecha distinta,
+así que la caché de prefijo KV nunca acierta. Con un system prompt estable, la
+misma placa responde en unos 30 s.
+
+[`bench/README.md`](bench/README.md) tiene los comandos, los resultados crudos por
+caso y qué conviene no equivocar al volver a ejecutarlos.
 
 ## Corrección
 

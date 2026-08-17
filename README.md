@@ -18,10 +18,11 @@ $ turn on pin 5
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
 | **Speed** | warm tool call **29 s** · cold **241 s** · 1.4 tok/s prefill |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
-| **Accuracy** | 15/24 on a tool-calling benchmark — the official closed-source engine scores 14/24 |
+| **Accuracy** | 40.7% on google/mobile-actions (961 cases, strict exact match) — the official engine scores 71.3% |
 
 > **Honesty first:** this is slower than a cloud API by roughly 5×, it does not understand
-> Chinese, and it will happily call a tool when you say hello. See [Limitations](#limitations).
+> Chinese, it will happily call a tool when you say hello, and it scores well below the
+> official engine on the same eval. See [Benchmark](#benchmark) and [Limitations](#limitations).
 > What it buys you is a language model that works with the network cable pulled out.
 
 ---
@@ -156,8 +157,9 @@ stateDiagram-v2
 ```
 
 
-This is why the engine beats the official one on the benchmark despite identical weights: the
-output is always schema-valid.
+The payoff is that the output is always schema-valid — a 45M model left to free-run is not.
+It does not close the gap to the official engine, which runs the same weights through its own
+grammar compiler; see [Benchmark](#benchmark).
 
 ### 5. KV prefix cache — the single biggest win
 
@@ -286,16 +288,42 @@ caught both of the bugs described under [Correctness](#correctness).
 
 ## Benchmark
 
-`bench/run_bench.py` runs 24 cases (single tool, argument extraction, multi-tool disambiguation,
-Chinese, compound commands, chit-chat) against both this engine and the official closed-source
-library as an oracle.
+Scored on [google/mobile-actions](https://huggingface.co/datasets/google/mobile-actions)
+(CC-BY-4.0) — the 961-case on-device function-calling eval published alongside
+FunctionGemma — using its own metric, ordered strict exact match: function names,
+call order and every argument must match.
 
-```
-=== ours 15/24 (62%) | oracle 14/24 (58%) | tool-choice agreement 16/24 (66%)
-```
+| | this engine | official engine, same prompts | published |
+|---|---|---|---|
+| accuracy | 40.7% | 71.3% | 63.7% |
+| tool-name accuracy | 63.6% | 98.0% | 98.3% |
+| 1-call cases (640) | 61.1% | 75.6% | 71.3% |
+| 2-call cases (320) | 0% | 62.5% | 48.4% |
+| latency, median | 1820 ms | 587 ms | — |
+| prefill · decode | 154 · 64 tok/s | 1408 · 797 tok/s | — |
+| peak RSS | 20 MB | 163 MB | — |
 
-Both engines fail on the same things — Chinese, compound commands, declining chit-chat — which is
-the expected signature of a shared 45M-parameter model rather than an implementation gap.
+The official closed-source engine, measured through this same harness, lands
+within 0.3 points of its published tool-name accuracy. That agreement is what
+says the harness is sound and the remaining gap is this engine's, not the
+model's or the data's.
+
+**Where the gap is.** Two-call answers are a third of the eval and the default
+configuration emits exactly one call per turn, so it scores zero on all of them.
+Multi-call decoding is implemented and off by default — it is still a net loss
+(see [`bench/README.md`](bench/README.md#multi-call)). On the host the engine is
+3.1× slower end-to-end but 9–12× slower per token; it is scalar C99 against a
+NEON-optimised ARM64 build, so most of that is instruction set, not design.
+
+**On the ESP32-S3**, the same cases take a median of 342 s each and the board's
+answers are byte-for-byte identical to the host's. That parity is what lets the
+961-case host accuracy stand as the device's accuracy — running the full eval on
+the board would take about three hours. The 342 s is this benchmark's worst case:
+every record carries a different date, so the KV prefix cache never hits. With a
+stable system prompt the same board answers in about 30 s.
+
+[`bench/README.md`](bench/README.md) has the commands, the raw per-case results,
+and what to avoid getting wrong when re-running any of it.
 
 ## Correctness
 
