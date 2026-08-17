@@ -1,0 +1,1002 @@
+[
+ {
+  "ms": 2428.0,
+  "prefill_tok": 310,
+  "decode_tok": 219
+ },
+ {
+  "ms": 1748.0,
+  "prefill_tok": 304,
+  "decode_tok": 84
+ },
+ {
+  "ms": 1891.0,
+  "prefill_tok": 307,
+  "decode_tok": 110
+ },
+ {
+  "ms": 1684.0,
+  "prefill_tok": 279,
+  "decode_tok": 93
+ },
+ {
+  "ms": 2245.0,
+  "prefill_tok": 323,
+  "decode_tok": 162
+ },
+ {
+  "ms": 1569.0,
+  "prefill_tok": 254,
+  "decode_tok": 100
+ },
+ {
+  "ms": 1763.0,
+  "prefill_tok": 270,
+  "decode_tok": 121
+ },
+ {
+  "ms": 1369.0,
+  "prefill_tok": 265,
+  "decode_tok": 49
+ },
+ {
+  "ms": 2478.0,
+  "prefill_tok": 329,
+  "decode_tok": 203
+ },
+ {
+  "ms": 1142.0,
+  "prefill_tok": 248,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2319.0,
+  "prefill_tok": 308,
+  "decode_tok": 188
+ },
+ {
+  "ms": 1801.0,
+  "prefill_tok": 266,
+  "decode_tok": 134
+ },
+ {
+  "ms": 1766.0,
+  "prefill_tok": 270,
+  "decode_tok": 119
+ },
+ {
+  "ms": 1709.0,
+  "prefill_tok": 301,
+  "decode_tok": 84
+ },
+ {
+  "ms": 2615.0,
+  "prefill_tok": 327,
+  "decode_tok": 225
+ },
+ {
+  "ms": 1826.0,
+  "prefill_tok": 255,
+  "decode_tok": 140
+ },
+ {
+  "ms": 1901.0,
+  "prefill_tok": 265,
+  "decode_tok": 153
+ },
+ {
+  "ms": 2908.0,
+  "prefill_tok": 330,
+  "decode_tok": 284
+ },
+ {
+  "ms": 2177.0,
+  "prefill_tok": 307,
+  "decode_tok": 163
+ },
+ {
+  "ms": 1219.0,
+  "prefill_tok": 264,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2173.0,
+  "prefill_tok": 298,
+  "decode_tok": 169
+ },
+ {
+  "ms": 2342.0,
+  "prefill_tok": 310,
+  "decode_tok": 198
+ },
+ {
+  "ms": 1711.0,
+  "prefill_tok": 287,
+  "decode_tok": 91
+ },
+ {
+  "ms": 1883.0,
+  "prefill_tok": 320,
+  "decode_tok": 97
+ },
+ {
+  "ms": 1105.0,
+  "prefill_tok": 243,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2163.0,
+  "prefill_tok": 298,
+  "decode_tok": 165
+ },
+ {
+  "ms": 2175.0,
+  "prefill_tok": 303,
+  "decode_tok": 146
+ },
+ {
+  "ms": 1628.0,
+  "prefill_tok": 266,
+  "decode_tok": 95
+ },
+ {
+  "ms": 1369.0,
+  "prefill_tok": 268,
+  "decode_tok": 44
+ },
+ {
+  "ms": 1659.0,
+  "prefill_tok": 262,
+  "decode_tok": 95
+ },
+ {
+  "ms": 2340.0,
+  "prefill_tok": 277,
+  "decode_tok": 210
+ },
+ {
+  "ms": 1998.0,
+  "prefill_tok": 314,
+  "decode_tok": 117
+ },
+ {
+  "ms": 1785.0,
+  "prefill_tok": 296,
+  "decode_tok": 101
+ },
+ {
+  "ms": 1897.0,
+  "prefill_tok": 309,
+  "decode_tok": 108
+ },
+ {
+  "ms": 1829.0,
+  "prefill_tok": 304,
+  "decode_tok": 102
+ },
+ {
+  "ms": 1365.0,
+  "prefill_tok": 263,
+  "decode_tok": 47
+ },
+ {
+  "ms": 2170.0,
+  "prefill_tok": 339,
+  "decode_tok": 131
+ },
+ {
+  "ms": 1839.0,
+  "prefill_tok": 256,
+  "decode_tok": 142
+ },
+ {
+  "ms": 1427.0,
+  "prefill_tok": 252,
+  "decode_tok": 74
+ },
+ {
+  "ms": 1123.0,
+  "prefill_tok": 245,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2198.0,
+  "prefill_tok": 323,
+  "decode_tok": 150
+ },
+ {
+  "ms": 1280.0,
+  "prefill_tok": 239,
+  "decode_tok": 47
+ },
+ {
+  "ms": 2477.0,
+  "prefill_tok": 320,
+  "decode_tok": 192
+ },
+ {
+  "ms": 1211.0,
+  "prefill_tok": 225,
+  "decode_tok": 47
+ },
+ {
+  "ms": 1123.0,
+  "prefill_tok": 191,
+  "decode_tok": 69
+ },
+ {
+  "ms": 2154.0,
+  "prefill_tok": 276,
+  "decode_tok": 187
+ },
+ {
+  "ms": 1925.0,
+  "prefill_tok": 264,
+  "decode_tok": 156
+ },
+ {
+  "ms": 2309.0,
+  "prefill_tok": 283,
+  "decode_tok": 202
+ },
+ {
+  "ms": 996.0,
+  "prefill_tok": 216,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1160.0,
+  "prefill_tok": 249,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1979.0,
+  "prefill_tok": 295,
+  "decode_tok": 137
+ },
+ {
+  "ms": 1641.0,
+  "prefill_tok": 267,
+  "decode_tok": 94
+ },
+ {
+  "ms": 1903.0,
+  "prefill_tok": 264,
+  "decode_tok": 144
+ },
+ {
+  "ms": 1615.0,
+  "prefill_tok": 303,
+  "decode_tok": 46
+ },
+ {
+  "ms": 1255.0,
+  "prefill_tok": 200,
+  "decode_tok": 80
+ },
+ {
+  "ms": 1195.0,
+  "prefill_tok": 260,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1847.0,
+  "prefill_tok": 304,
+  "decode_tok": 105
+ },
+ {
+  "ms": 1370.0,
+  "prefill_tok": 269,
+  "decode_tok": 47
+ },
+ {
+  "ms": 2073.0,
+  "prefill_tok": 287,
+  "decode_tok": 161
+ },
+ {
+  "ms": 2288.0,
+  "prefill_tok": 297,
+  "decode_tok": 193
+ },
+ {
+  "ms": 1915.0,
+  "prefill_tok": 300,
+  "decode_tok": 117
+ },
+ {
+  "ms": 2597.0,
+  "prefill_tok": 322,
+  "decode_tok": 218
+ },
+ {
+  "ms": 1749.0,
+  "prefill_tok": 274,
+  "decode_tok": 101
+ },
+ {
+  "ms": 1291.0,
+  "prefill_tok": 278,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2723.0,
+  "prefill_tok": 323,
+  "decode_tok": 254
+ },
+ {
+  "ms": 2058.0,
+  "prefill_tok": 296,
+  "decode_tok": 147
+ },
+ {
+  "ms": 1938.0,
+  "prefill_tok": 268,
+  "decode_tok": 151
+ },
+ {
+  "ms": 1486.0,
+  "prefill_tok": 270,
+  "decode_tok": 67
+ },
+ {
+  "ms": 1798.0,
+  "prefill_tok": 285,
+  "decode_tok": 97
+ },
+ {
+  "ms": 2194.0,
+  "prefill_tok": 309,
+  "decode_tok": 156
+ },
+ {
+  "ms": 1743.0,
+  "prefill_tok": 287,
+  "decode_tok": 97
+ },
+ {
+  "ms": 1982.0,
+  "prefill_tok": 322,
+  "decode_tok": 112
+ },
+ {
+  "ms": 2396.0,
+  "prefill_tok": 324,
+  "decode_tok": 193
+ },
+ {
+  "ms": 1811.0,
+  "prefill_tok": 298,
+  "decode_tok": 100
+ },
+ {
+  "ms": 2492.0,
+  "prefill_tok": 320,
+  "decode_tok": 211
+ },
+ {
+  "ms": 2429.0,
+  "prefill_tok": 294,
+  "decode_tok": 219
+ },
+ {
+  "ms": 1991.0,
+  "prefill_tok": 262,
+  "decode_tok": 166
+ },
+ {
+  "ms": 2662.0,
+  "prefill_tok": 341,
+  "decode_tok": 225
+ },
+ {
+  "ms": 1889.0,
+  "prefill_tok": 308,
+  "decode_tok": 108
+ },
+ {
+  "ms": 2459.0,
+  "prefill_tok": 313,
+  "decode_tok": 197
+ },
+ {
+  "ms": 1194.0,
+  "prefill_tok": 242,
+  "decode_tok": 28
+ },
+ {
+  "ms": 1143.0,
+  "prefill_tok": 245,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1120.0,
+  "prefill_tok": 247,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2226.0,
+  "prefill_tok": 293,
+  "decode_tok": 187
+ },
+ {
+  "ms": 1697.0,
+  "prefill_tok": 260,
+  "decode_tok": 115
+ },
+ {
+  "ms": 1239.0,
+  "prefill_tok": 212,
+  "decode_tok": 67
+ },
+ {
+  "ms": 1677.0,
+  "prefill_tok": 295,
+  "decode_tok": 76
+ },
+ {
+  "ms": 1865.0,
+  "prefill_tok": 304,
+  "decode_tok": 101
+ },
+ {
+  "ms": 1965.0,
+  "prefill_tok": 297,
+  "decode_tok": 134
+ },
+ {
+  "ms": 1210.0,
+  "prefill_tok": 267,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1240.0,
+  "prefill_tok": 267,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1199.0,
+  "prefill_tok": 263,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1219.0,
+  "prefill_tok": 247,
+  "decode_tok": 32
+ },
+ {
+  "ms": 1723.0,
+  "prefill_tok": 243,
+  "decode_tok": 131
+ },
+ {
+  "ms": 1212.0,
+  "prefill_tok": 264,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2448.0,
+  "prefill_tok": 353,
+  "decode_tok": 171
+ },
+ {
+  "ms": 2079.0,
+  "prefill_tok": 291,
+  "decode_tok": 159
+ },
+ {
+  "ms": 1626.0,
+  "prefill_tok": 283,
+  "decode_tok": 81
+ },
+ {
+  "ms": 1708.0,
+  "prefill_tok": 260,
+  "decode_tok": 108
+ },
+ {
+  "ms": 2217.0,
+  "prefill_tok": 282,
+  "decode_tok": 186
+ },
+ {
+  "ms": 2057.0,
+  "prefill_tok": 306,
+  "decode_tok": 138
+ },
+ {
+  "ms": 1710.0,
+  "prefill_tok": 314,
+  "decode_tok": 70
+ },
+ {
+  "ms": 1808.0,
+  "prefill_tok": 300,
+  "decode_tok": 97
+ },
+ {
+  "ms": 1514.0,
+  "prefill_tok": 289,
+  "decode_tok": 51
+ },
+ {
+  "ms": 1356.0,
+  "prefill_tok": 259,
+  "decode_tok": 50
+ },
+ {
+  "ms": 2509.0,
+  "prefill_tok": 335,
+  "decode_tok": 194
+ },
+ {
+  "ms": 1460.0,
+  "prefill_tok": 282,
+  "decode_tok": 51
+ },
+ {
+  "ms": 1369.0,
+  "prefill_tok": 246,
+  "decode_tok": 67
+ },
+ {
+  "ms": 2649.0,
+  "prefill_tok": 291,
+  "decode_tok": 267
+ },
+ {
+  "ms": 1351.0,
+  "prefill_tok": 252,
+  "decode_tok": 53
+ },
+ {
+  "ms": 1789.0,
+  "prefill_tok": 300,
+  "decode_tok": 92
+ },
+ {
+  "ms": 1696.0,
+  "prefill_tok": 254,
+  "decode_tok": 116
+ },
+ {
+  "ms": 2170.0,
+  "prefill_tok": 314,
+  "decode_tok": 159
+ },
+ {
+  "ms": 2723.0,
+  "prefill_tok": 333,
+  "decode_tok": 242
+ },
+ {
+  "ms": 1928.0,
+  "prefill_tok": 269,
+  "decode_tok": 146
+ },
+ {
+  "ms": 1787.0,
+  "prefill_tok": 289,
+  "decode_tok": 102
+ },
+ {
+  "ms": 2023.0,
+  "prefill_tok": 300,
+  "decode_tok": 125
+ },
+ {
+  "ms": 1631.0,
+  "prefill_tok": 262,
+  "decode_tok": 89
+ },
+ {
+  "ms": 1866.0,
+  "prefill_tok": 273,
+  "decode_tok": 132
+ },
+ {
+  "ms": 1161.0,
+  "prefill_tok": 256,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1775.0,
+  "prefill_tok": 298,
+  "decode_tok": 92
+ },
+ {
+  "ms": 2291.0,
+  "prefill_tok": 298,
+  "decode_tok": 191
+ },
+ {
+  "ms": 1984.0,
+  "prefill_tok": 300,
+  "decode_tok": 129
+ },
+ {
+  "ms": 1148.0,
+  "prefill_tok": 202,
+  "decode_tok": 64
+ },
+ {
+  "ms": 1491.0,
+  "prefill_tok": 253,
+  "decode_tok": 81
+ },
+ {
+  "ms": 1737.0,
+  "prefill_tok": 298,
+  "decode_tok": 90
+ },
+ {
+  "ms": 2060.0,
+  "prefill_tok": 300,
+  "decode_tok": 145
+ },
+ {
+  "ms": 2776.0,
+  "prefill_tok": 342,
+  "decode_tok": 239
+ },
+ {
+  "ms": 2002.0,
+  "prefill_tok": 307,
+  "decode_tok": 132
+ },
+ {
+  "ms": 1318.0,
+  "prefill_tok": 286,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1557.0,
+  "prefill_tok": 308,
+  "decode_tok": 45
+ },
+ {
+  "ms": 1389.0,
+  "prefill_tok": 207,
+  "decode_tok": 100
+ },
+ {
+  "ms": 1839.0,
+  "prefill_tok": 252,
+  "decode_tok": 146
+ },
+ {
+  "ms": 1271.0,
+  "prefill_tok": 268,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2728.0,
+  "prefill_tok": 351,
+  "decode_tok": 222
+ },
+ {
+  "ms": 2578.0,
+  "prefill_tok": 317,
+  "decode_tok": 232
+ },
+ {
+  "ms": 3133.0,
+  "prefill_tok": 357,
+  "decode_tok": 299
+ },
+ {
+  "ms": 1188.0,
+  "prefill_tok": 255,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1942.0,
+  "prefill_tok": 305,
+  "decode_tok": 116
+ },
+ {
+  "ms": 2357.0,
+  "prefill_tok": 332,
+  "decode_tok": 178
+ },
+ {
+  "ms": 1385.0,
+  "prefill_tok": 253,
+  "decode_tok": 61
+ },
+ {
+  "ms": 1826.0,
+  "prefill_tok": 301,
+  "decode_tok": 98
+ },
+ {
+  "ms": 2352.0,
+  "prefill_tok": 322,
+  "decode_tok": 179
+ },
+ {
+  "ms": 1956.0,
+  "prefill_tok": 298,
+  "decode_tok": 123
+ },
+ {
+  "ms": 1441.0,
+  "prefill_tok": 285,
+  "decode_tok": 45
+ },
+ {
+  "ms": 2489.0,
+  "prefill_tok": 296,
+  "decode_tok": 231
+ },
+ {
+  "ms": 1862.0,
+  "prefill_tok": 262,
+  "decode_tok": 142
+ },
+ {
+  "ms": 1303.0,
+  "prefill_tok": 271,
+  "decode_tok": 29
+ },
+ {
+  "ms": 2429.0,
+  "prefill_tok": 339,
+  "decode_tok": 173
+ },
+ {
+  "ms": 1198.0,
+  "prefill_tok": 261,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2548.0,
+  "prefill_tok": 321,
+  "decode_tok": 221
+ },
+ {
+  "ms": 1742.0,
+  "prefill_tok": 297,
+  "decode_tok": 89
+ },
+ {
+  "ms": 1620.0,
+  "prefill_tok": 270,
+  "decode_tok": 87
+ },
+ {
+  "ms": 1679.0,
+  "prefill_tok": 329,
+  "decode_tok": 44
+ },
+ {
+  "ms": 1430.0,
+  "prefill_tok": 274,
+  "decode_tok": 46
+ },
+ {
+  "ms": 1434.0,
+  "prefill_tok": 275,
+  "decode_tok": 51
+ },
+ {
+  "ms": 2144.0,
+  "prefill_tok": 285,
+  "decode_tok": 176
+ },
+ {
+  "ms": 1583.0,
+  "prefill_tok": 262,
+  "decode_tok": 92
+ },
+ {
+  "ms": 2459.0,
+  "prefill_tok": 321,
+  "decode_tok": 201
+ },
+ {
+  "ms": 1867.0,
+  "prefill_tok": 260,
+  "decode_tok": 142
+ },
+ {
+  "ms": 1521.0,
+  "prefill_tok": 290,
+  "decode_tok": 49
+ },
+ {
+  "ms": 1736.0,
+  "prefill_tok": 263,
+  "decode_tok": 120
+ },
+ {
+  "ms": 2299.0,
+  "prefill_tok": 305,
+  "decode_tok": 186
+ },
+ {
+  "ms": 1526.0,
+  "prefill_tok": 281,
+  "decode_tok": 61
+ },
+ {
+  "ms": 2071.0,
+  "prefill_tok": 262,
+  "decode_tok": 179
+ },
+ {
+  "ms": 1724.0,
+  "prefill_tok": 257,
+  "decode_tok": 117
+ },
+ {
+  "ms": 1117.0,
+  "prefill_tok": 205,
+  "decode_tok": 52
+ },
+ {
+  "ms": 2836.0,
+  "prefill_tok": 318,
+  "decode_tok": 277
+ },
+ {
+  "ms": 3036.0,
+  "prefill_tok": 337,
+  "decode_tok": 247
+ },
+ {
+  "ms": 2443.0,
+  "prefill_tok": 329,
+  "decode_tok": 107
+ },
+ {
+  "ms": 1656.0,
+  "prefill_tok": 282,
+  "decode_tok": 82
+ },
+ {
+  "ms": 1814.0,
+  "prefill_tok": 299,
+  "decode_tok": 107
+ },
+ {
+  "ms": 1517.0,
+  "prefill_tok": 256,
+  "decode_tok": 81
+ },
+ {
+  "ms": 1963.0,
+  "prefill_tok": 273,
+  "decode_tok": 149
+ },
+ {
+  "ms": 1238.0,
+  "prefill_tok": 198,
+  "decode_tok": 79
+ },
+ {
+  "ms": 1302.0,
+  "prefill_tok": 278,
+  "decode_tok": 18
+ },
+ {
+  "ms": 1185.0,
+  "prefill_tok": 256,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2973.0,
+  "prefill_tok": 333,
+  "decode_tok": 289
+ },
+ {
+  "ms": 2191.0,
+  "prefill_tok": 295,
+  "decode_tok": 171
+ },
+ {
+  "ms": 1857.0,
+  "prefill_tok": 303,
+  "decode_tok": 101
+ },
+ {
+  "ms": 2297.0,
+  "prefill_tok": 316,
+  "decode_tok": 174
+ },
+ {
+  "ms": 2133.0,
+  "prefill_tok": 274,
+  "decode_tok": 181
+ },
+ {
+  "ms": 2362.0,
+  "prefill_tok": 336,
+  "decode_tok": 171
+ },
+ {
+  "ms": 2508.0,
+  "prefill_tok": 337,
+  "decode_tok": 200
+ },
+ {
+  "ms": 1899.0,
+  "prefill_tok": 306,
+  "decode_tok": 107
+ },
+ {
+  "ms": 1225.0,
+  "prefill_tok": 262,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2089.0,
+  "prefill_tok": 319,
+  "decode_tok": 132
+ },
+ {
+  "ms": 2262.0,
+  "prefill_tok": 296,
+  "decode_tok": 190
+ },
+ {
+  "ms": 1099.0,
+  "prefill_tok": 213,
+  "decode_tok": 41
+ },
+ {
+  "ms": 1566.0,
+  "prefill_tok": 266,
+  "decode_tok": 86
+ },
+ {
+  "ms": 1252.0,
+  "prefill_tok": 197,
+  "decode_tok": 81
+ },
+ {
+  "ms": 1102.0,
+  "prefill_tok": 240,
+  "decode_tok": 18
+ },
+ {
+  "ms": 2472.0,
+  "prefill_tok": 331,
+  "decode_tok": 192
+ },
+ {
+  "ms": 1730.0,
+  "prefill_tok": 293,
+  "decode_tok": 93
+ },
+ {
+  "ms": 2146.0,
+  "prefill_tok": 253,
+  "decode_tok": 203
+ },
+ {
+  "ms": 1911.0,
+  "prefill_tok": 301,
+  "decode_tok": 116
+ },
+ {
+  "ms": 1488.0,
+  "prefill_tok": 253,
+  "decode_tok": 81
+ },
+ {
+  "ms": 1602.0,
+  "prefill_tok": 274,
+  "decode_tok": 80
+ },
+ {
+  "ms": 2048.0,
+  "prefill_tok": 313,
+  "decode_tok": 130
+ },
+ {
+  "ms": 1355.0,
+  "prefill_tok": 247,
+  "decode_tok": 63
+ }
+]

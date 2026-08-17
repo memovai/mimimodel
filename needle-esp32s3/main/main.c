@@ -16,8 +16,10 @@
 
 static Needle g_model;
 
+/* google/mobile-actions eval tool set (CC-BY-4.0) — 7 tools, 417 tokens,
+ * pruned per query by the engine's BM25 retrieval to fit the window */
 static const char *DEMO_TOOLS =
-    "[{\"name\":\"gpio_write\",\"description\":\"Set a GPIO pin high or low to control a device\",\"parameters\":{\"type\":\"object\",\"properties\":{\"pin\":{\"type\":\"integer\",\"description\":\"GPIO pin number\"},\"value\":{\"type\":\"integer\",\"description\":\"1 for on, 0 for off\"}},\"required\":[\"pin\",\"value\"]}},{\"name\":\"get_time\",\"description\":\"Get the current date and time\",\"parameters\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"set_timer\",\"description\":\"Set a countdown timer\",\"parameters\":{\"type\":\"object\",\"properties\":{\"minutes\":{\"type\":\"integer\",\"description\":\"Timer length in minutes\"}},\"required\":[\"minutes\"]}},{\"name\":\"get_weather\",\"description\":\"Get current weather for a city\",\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\",\"description\":\"City name\"}},\"required\":[\"city\"]}},{\"name\":\"web_search\",\"description\":\"Search the web for information\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"Search query\"}},\"required\":[\"query\"]}},{\"name\":\"send_message\",\"description\":\"Send a text message to a contact\",\"parameters\":{\"type\":\"object\",\"properties\":{\"to\":{\"type\":\"string\",\"description\":\"Contact name\"},\"text\":{\"type\":\"string\",\"description\":\"Message body\"}},\"required\":[\"to\",\"text\"]}}]";
+    "[{\"name\":\"open_wifi_settings\",\"description\":\"Opens the Wi-Fi settings.\",\"parameters\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"create_contact\",\"description\":\"Creates a contact in the phone's contact list.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\",\"description\":\"The email address of the contact.\"},\"last_name\":{\"type\":\"string\",\"description\":\"The last name of the contact.\"},\"first_name\":{\"type\":\"string\",\"description\":\"The first name of the contact.\"},\"phone_number\":{\"type\":\"string\",\"description\":\"The phone number of the contact.\"}},\"required\":[\"first_name\",\"last_name\"]}},{\"name\":\"show_map\",\"description\":\"Shows a location on the map.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"The location to search for. May be the name of a place, a business, or an address.\"}},\"required\":[\"query\"]}},{\"name\":\"create_calendar_event\",\"description\":\"Creates a new calendar event.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"title\":{\"type\":\"string\",\"description\":\"The title of the event.\"},\"datetime\":{\"type\":\"string\",\"description\":\"The date and time of the event in the format YYYY-MM-DDTHH:MM:SS.\"}},\"required\":[\"title\",\"datetime\"]}},{\"name\":\"send_email\",\"description\":\"Sends an email.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"subject\":{\"type\":\"string\",\"description\":\"The subject of the email.\"},\"body\":{\"type\":\"string\",\"description\":\"The body of the email.\"},\"to\":{\"type\":\"string\",\"description\":\"The email address of the recipient.\"}},\"required\":[\"to\",\"subject\"]}},{\"name\":\"turn_off_flashlight\",\"description\":\"Turns the flashlight off.\",\"parameters\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"turn_on_flashlight\",\"description\":\"Turns the flashlight on.\",\"parameters\":{\"type\":\"object\",\"properties\":{}}}]";
 
 static void print_heap(const char *tag) {
     printf("[heap] %s: internal free %u KB, psram free %u KB\n", tag,
@@ -26,18 +28,17 @@ static void print_heap(const char *tag) {
 }
 
 static void run_query(const char *query, int max_new) {
-    char prompt[4096];
-    snprintf(prompt, sizeof prompt, "%s<tools>%s</s><tool_call>", query, DEMO_TOOLS);
-
-    static int ids[1024];
-    ids[0] = (int)g_model.bos_id;
-    int n_ids = 1 + needle_encode(&g_model, prompt, ids + 1, 1023);
-    printf("[needle] %d prompt tokens\n", n_ids);
-
-    (void)max_new; (void)n_ids;
+    (void)max_new;
+    /* mirror the host batch protocol: an optional system turn before a tab */
+    static char qbuf[4096];
+    snprintf(qbuf, sizeof qbuf, "%s", query);
+    char *sys_part = NULL, *q_part = qbuf;
+    char *tabp = strchr(qbuf, '\t');
+    if (tabp) { *tabp = 0; sys_part = qbuf; q_part = tabp + 1; }
     static char callbuf[2048];
     int64_t t0 = esp_timer_get_time();
-    int cl = needle_toolcall(&g_model, query, DEMO_TOOLS, callbuf, sizeof callbuf);
+    int cl = needle_toolcall_sys(&g_model, sys_part, q_part, DEMO_TOOLS,
+                                 callbuf, sizeof callbuf);
     int64_t t1 = esp_timer_get_time();
     if (cl >= 0)
         printf("[needle] call: %s\n", callbuf);
@@ -138,22 +139,28 @@ void app_main(void) {
                (double)(tb - ta) / (double)(tc - tb));
     }
 
-    run_query("What's the weather in Paris right now?", 32);   /* cold: full prefill */
-    run_query("Set a timer for 10 minutes", 32);                /* warm: prefix reused */
+    (void)0; // run_query("What's the weather in Paris right now?", 32);   /* cold: full prefill */
+    (void)0; // run_query("Set a timer for 10 minutes", 32);                /* warm: prefix reused */
 
     printf("\n[needle] REPL ready. Type a query, press enter.\n> ");
     fflush(stdout);
-    static char line[512];
+    /* Accumulate until a newline. fgets() on the IDF console returns a PARTIAL
+     * line whenever the RX buffer momentarily drains, so a query that arrives
+     * in several chunks would otherwise be executed as several queries. */
+    static char line[4096];
+    size_t ln = 0;
     for (;;) {
-        if (fgets(line, sizeof line, stdin)) {
-            size_t ln = strlen(line);
-            while (ln && (line[ln - 1] == '\n' || line[ln - 1] == '\r')) line[--ln] = 0;
-            if (ln == 0) { printf("> "); fflush(stdout); continue; }
-            run_query(line, 48);
+        int c = fgetc(stdin);
+        if (c == EOF) { vTaskDelay(pdMS_TO_TICKS(10)); continue; }
+        if (c == '\n' || c == '\r') {
+            if (ln == 0) continue;
+            line[ln] = 0;
+            run_query(line, 48);   /* accepts "system\tquery" or a bare query */
+            ln = 0;
             printf("\n> ");
             fflush(stdout);
-        } else {
-            vTaskDelay(pdMS_TO_TICKS(50));
+            continue;
         }
+        if (ln + 1 < sizeof line) line[ln++] = (char)c;
     }
 }

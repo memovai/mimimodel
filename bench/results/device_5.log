@@ -1,0 +1,35 @@
+host reference computed for 5 cases
+waiting for the board to boot...
+board ready
+
+[1/5] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-15T17:35:19 D...
+      device: [{"name":"create_contact","arguments":{"last_name":"Lena Petrova","first_name":"Petrova","   (device saw None prompt tokens)
+      want  : [{"name": "create_contact", "arguments": {"email": "lena.petrova.design@webmail.com", "pho
+      361s | name OK | host-parity OK
+
+[2/5] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T05:43:19 D...
+      device: [{"name":"send_email","arguments":{"subject":"Update on Q4 Report","body":"I've uploaded t   (device saw None prompt tokens)
+      want  : [{"name": "send_email", "arguments": {"body": "I've uploaded the revised figures to the sh
+      295s | name OK | host-parity OK
+
+[3/5] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-04-03T01:25:42 D...
+      device: [{"name":"create_contact","arguments":{"email":"a.sharma@examplemail.co.in","first_name":"   (device saw None prompt tokens)
+      want  : [{"name": "create_contact", "arguments": {"last_name": "Sharma", "phone_number": "+91 9876
+      341s | name OK | host-parity OK
+
+[4/5] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-05-08T12:00:26 D...
+      device: [{"name":"create_calendar_event","arguments":{"title":"Team Lunch with Marketing","datetim   (device saw None prompt tokens)
+      want  : [{"name": "create_calendar_event", "arguments": {"datetime": "2025-05-13T13:30:00", "title
+      285s | name OK | host-parity OK
+
+[5/5] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-16T14:46:41 D...
+      device: [{"name":"send_email","arguments":{"to":"kenji.tanaka@corpmail.jp","subject":"Revised Q3 B   (device saw None prompt tokens)
+      want  : [{"name": "send_email", "arguments": {"body": "Please review the updated budget sheet for 
+      384s | name OK | host-parity OK
+
+=== device results · 5 cases ===
+tool name correct : 5/5
+name+args exact   : 3/5
+matches host      : 5/5
+seconds per case  : median 342, min 285, max 384
+-> bench/results/device_final.json

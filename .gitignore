@@ -20,4 +20,6 @@ needle-esp32s3/dependencies.lock
 # local tooling
 .gstack/
 bench/results.json
+bench/.ma_queries.*.txt
+bench/mobile_actions.jsonl
 .DS_Store

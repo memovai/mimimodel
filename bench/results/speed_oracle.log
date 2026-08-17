@@ -1,0 +1,7 @@
+
+=== official closed-source engine · 200 calls ===
+latency   : median     587 ms   p90     774 ms   total 121 s
+prefill   : median    1408 tok/s
+decode    : median     797 tok/s
+peak RAM  : 163 MB
+-> bench/results/speed_oracle.json

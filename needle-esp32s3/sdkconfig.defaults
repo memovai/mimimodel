@@ -31,4 +31,10 @@ CONFIG_ESP_TASK_WDT_INIT=n
 # larger cache helps streaming 13.7MB of weights per token from flash
 CONFIG_ESP32S3_DATA_CACHE_64KB=y
 CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y
-CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# Console. printf/stdin only ever reach the PRIMARY console (a secondary one
+# mirrors ESP_LOG but not stdio), so this has to match the board:
+#   native-USB boards  -> CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+#   USB-UART bridge    -> CONFIG_ESP_CONSOLE_UART_DEFAULT=y   (this default)
+# `esptool flash_id` prints "USB mode: USB-Serial/JTAG" on the former only.
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y

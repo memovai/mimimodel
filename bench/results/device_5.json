@@ -1,0 +1,188 @@
+[
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-15T17:35:19 Day of week is Sunday",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "lena.petrova.design@webmail.com",
+     "phone_number": "+359 888 123 456",
+     "first_name": "Lena",
+     "last_name": "Petrova"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 360.7
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T05:43:19 Day of week is Monday",
+  "want": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "subject": "Update on Q4 Report",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Update on Q4 Report",
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Update on Q4 Report",
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 295.2
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-04-03T01:25:42 Day of week is Thursd",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Sharma",
+     "phone_number": "+91 98765 43210",
+     "first_name": "Anya",
+     "email": "anya.sharma@examplemail.co.in"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@examplemail.co.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@examplemail.co.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 341.5
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-05-08T12:00:26 Day of week is Thursd",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "datetime": "2025-05-13T13:30:00",
+     "title": "Team Lunch with Marketing"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Lunch with Marketing",
+     "datetime": "2025-05-13T13:30:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Lunch with Marketing",
+     "datetime": "2025-05-13T13:30:00"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 285.3
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-16T14:46:41 Day of week is Friday",
+  "want": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes.",
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures",
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes."
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures",
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes."
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 384.0
+ }
+]

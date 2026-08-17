@@ -1,0 +1,10 @@
+loaded: 27 layers, d_model 512, vocab 8192, kv_window 256
+batch: 961 queries in 1765.8 s (1.84 s/query)
+
+=== google/mobile-actions eval · this engine · 961 cases ===
+accuracy (ordered strict exact, all 961): 384/961 (40.0%)   name acc 575/961 (59.8%)
+  1-call (640): exact 361 (56.4%)   names 543 (84.8%)
+  2-call (320): exact  23 (7.2%)   names  32 (10.0%)
+  3-call (  1): exact   0 (0.0%)   names   0 (0.0%)
+latency: median 1759 ms, first call 2047 ms (cold — prefix cache fills), p90 2225 ms
+per-case results -> bench/results/ours_final_961.json

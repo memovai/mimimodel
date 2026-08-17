@@ -47,6 +47,8 @@ static inline void *aligned_alloc16(size_t sz) {
 #endif
 
 #define NEEDLE_KV_SLACK 160   /* rows beyond the window: one call's decode */
+#define NEEDLE_QUERY_ROOM 512 /* query tokens the prefix cache stays valid for */
+#define NEEDLE_DECODE_ROOM 200
 #define MAX_LAYERS   32
 #define MAX_SITES    4
 #define MAX_TABLES   8
@@ -1684,17 +1686,225 @@ static int piece_all_digits(const Needle *m, uint32_t t) {
     return m->piece_len[t] > 0;
 }
 
+/* ------------------------------------------------------- tool retrieval ---
+ * Needle attends over a 256-token sliding window. A tools block larger than
+ * that pushes most of the tools out of view and selection collapses — measured
+ * on google/mobile-actions: 22% tool-name accuracy with a 417-token block of 7
+ * tools, 77% with a 191-token block of 3.
+ *
+ * The reference engine handles this with hybrid retrieval (text embeddings and
+ * BM25 fused by reciprocal rank, `tool_rag_top_k` defaulting to 2). BM25 alone
+ * reaches 97% recall@3 on that set and needs no forward pass, so that is what
+ * this does. Pruning only kicks in when the block would not fit the budget, so
+ * small tool sets are passed through untouched and keep the prefix cache warm. */
+
+#define NEEDLE_TOOLS_BUDGET 180   /* tokens; leaves room for the query */
+#define NEEDLE_RAG_MIN_K    2
+/* One call per turn by default. The multi-call path below works — it answers
+ * 7.2% of the two-call cases in google/mobile-actions, which single-call can
+ * never do — but it perturbs the first call enough to lose more than it gains
+ * (measured on the same build, full eval: 40.7% -> 40.0% overall, and 1-call
+ * name accuracy 95.5% -> 84.8%). Raise NEEDLE_MAX_CALLS to enable it. */
+#define NEEDLE_MAX_CALLS    1
+
+static int is_word_char(char c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+}
+static char lower_c(char c) { return (c >= 'A' && c <= 'Z') ? (char)(c + 32) : c; }
+
+/* Split a JSON array into its top-level object elements. */
+static int split_json_array(const char *json, const char **starts, int *lens, int max) {
+    const char *p = strchr(json, '[');
+    if (!p) return 0;
+    p++;
+    int n = 0;
+    while (*p && n < max) {
+        while (*p && *p != '{') { if (*p == ']') return n; p++; }
+        if (!*p) break;
+        const char *s = p;
+        int depth = 0, instr = 0, esc = 0;
+        for (; *p; p++) {
+            if (esc) { esc = 0; continue; }
+            if (*p == '\\') { esc = 1; continue; }
+            if (*p == '"') { instr = !instr; continue; }
+            if (instr) continue;
+            if (*p == '{') depth++;
+            else if (*p == '}') { depth--; if (!depth) { p++; break; } }
+        }
+        starts[n] = s;
+        lens[n] = (int)(p - s);
+        n++;
+    }
+    return n;
+}
+
+/* A tool's retrieval document is its name plus its description, matching the
+ * reference implementation's tool_to_text(). */
+static void tool_doc(const char *elem, int len, char *out, size_t outsz) {
+    size_t o = 0;
+    for (int pass = 0; pass < 2; pass++) {
+        const char *key = pass ? "\"description\":\"" : "\"name\":\"";
+        const char *q = NULL;
+        for (const char *c = elem; c + strlen(key) <= elem + len; c++)
+            if (strncmp(c, key, strlen(key)) == 0) { q = c + strlen(key); break; }
+        if (!q) continue;
+        if (o && o + 1 < outsz) out[o++] = ' ';
+        for (; q < elem + len && *q != '"' && o + 1 < outsz; q++) out[o++] = *q;
+    }
+    out[o] = 0;
+}
+
+/* BM25 over a handful of short documents. */
+static void bm25_rank(const char *query, char docs[][512], int n, int *order) {
+    static char qbuf[2048];
+    size_t ql = strlen(query);
+    if (ql >= sizeof qbuf) ql = sizeof qbuf - 1;
+    for (size_t i = 0; i < ql; i++) qbuf[i] = lower_c(query[i]);
+    qbuf[ql] = 0;
+
+    int dlen[NT_MAX_TOOLS];
+    double avgdl = 0;
+    for (int i = 0; i < n; i++) {
+        int c = 0;
+        for (const char *p = docs[i]; *p; ) {
+            if (is_word_char(*p)) { c++; while (*p && is_word_char(*p)) p++; }
+            else p++;
+        }
+        dlen[i] = c ? c : 1;
+        avgdl += dlen[i];
+    }
+    avgdl /= (n ? n : 1);
+
+    double score[NT_MAX_TOOLS];
+    for (int i = 0; i < n; i++) score[i] = 0.0;
+
+    for (const char *qp = qbuf; *qp; ) {
+        if (!is_word_char(*qp)) { qp++; continue; }
+        const char *ws = qp;
+        while (*qp && is_word_char(*qp)) qp++;
+        int wl = (int)(qp - ws);
+        if (wl < 2) continue;
+
+        int tf[NT_MAX_TOOLS], df = 0;
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (const char *p = docs[i]; *p; ) {
+                if (!is_word_char(*p)) { p++; continue; }
+                const char *ds = p;
+                while (*p && is_word_char(*p)) p++;
+                if ((int)(p - ds) == wl) {
+                    int same = 1;
+                    for (int k = 0; k < wl; k++)
+                        if (lower_c(ds[k]) != ws[k]) { same = 0; break; }
+                    if (same) c++;
+                }
+            }
+            tf[i] = c;
+            if (c) df++;
+        }
+        if (!df) continue;
+        double idf = log(1.0 + ((double)n - df + 0.5) / (df + 0.5));
+        const double k1 = 1.5, b = 0.75;
+        for (int i = 0; i < n; i++) {
+            if (!tf[i]) continue;
+            score[i] += idf * tf[i] * (k1 + 1.0)
+                      / (tf[i] + k1 * (1.0 - b + b * dlen[i] / avgdl));
+        }
+    }
+    for (int i = 0; i < n; i++) order[i] = i;
+    for (int a = 0; a < n; a++)
+        for (int b2 = a + 1; b2 < n; b2++)
+            if (score[order[b2]] > score[order[a]]) {
+                int t = order[a]; order[a] = order[b2]; order[b2] = t;
+            }
+}
+
+/* Returns 1 and fills `out` when the tool list was pruned, 0 to use it as-is. */
+static int prune_tools(Needle *m, const char *query, const char *tools_json,
+                       char *out, size_t outsz) {
+    int budget = NEEDLE_TOOLS_BUDGET;
+    if (getenv("NEEDLE_TOOLS_BUDGET")) budget = atoi(getenv("NEEDLE_TOOLS_BUDGET"));
+    if (budget <= 0) return 0;
+
+    static int probe[4096];
+    int full = needle_encode(m, tools_json, probe, 4096);
+    if (full <= budget) return 0;               /* already fits; keep cache warm */
+
+    const char *starts[NT_MAX_TOOLS];
+    int lens[NT_MAX_TOOLS];
+    int n = split_json_array(tools_json, starts, lens, NT_MAX_TOOLS);
+    if (n <= NEEDLE_RAG_MIN_K) return 0;
+
+    static char docs[NT_MAX_TOOLS][512];
+    for (int i = 0; i < n; i++) tool_doc(starts[i], lens[i], docs[i], sizeof docs[i]);
+
+    int order[NT_MAX_TOOLS];
+    bm25_rank(query, docs, n, order);
+
+    /* take the largest prefix of the ranking that still fits the budget */
+    int keep = n;
+    for (; keep > NEEDLE_RAG_MIN_K; keep--) {
+        size_t o = 0;
+        out[o++] = '[';
+        for (int i = 0; i < keep; i++) {
+            if (i) out[o++] = ',';
+            memcpy(out + o, starts[order[i]], lens[order[i]]);
+            o += lens[order[i]];
+        }
+        out[o++] = ']';
+        out[o] = 0;
+        if ((size_t)needle_encode(m, out, probe, 4096) <= (size_t)budget) break;
+    }
+    if (keep <= NEEDLE_RAG_MIN_K) {
+        size_t o = 0;
+        out[o++] = '[';
+        for (int i = 0; i < NEEDLE_RAG_MIN_K && i < n; i++) {
+            if (i) out[o++] = ',';
+            memcpy(out + o, starts[order[i]], lens[order[i]]);
+            o += lens[order[i]];
+        }
+        out[o++] = ']';
+        out[o] = 0;
+    }
+    (void)outsz;
+    return 1;
+}
+
+/* Append raw model bytes into a JSON string value. Control characters must be
+ * escaped or the result is not valid JSON — and a raw newline additionally
+ * splits the batch protocol's one-line-per-query contract. */
+static size_t json_append(char *out, size_t o, const char *s, size_t n) {
+    for (size_t i = 0; i < n; i++) {
+        unsigned char c = (unsigned char)s[i];
+        if (c == '\\')      { out[o++] = '\\'; out[o++] = '\\'; }
+        else if (c == '\n')  { out[o++] = '\\'; out[o++] = 'n'; }
+        else if (c == '\r')  { out[o++] = '\\'; out[o++] = 'r'; }
+        else if (c == '\t')  { out[o++] = '\\'; out[o++] = 't'; }
+        else if (c < 0x20)   { continue; }
+        else                 { out[o++] = (char)c; }
+    }
+    return o;
+}
+
 /* Run one constrained tool call. Returns length of JSON written to out. */
-int needle_toolcall(Needle *m, const char *query, const char *tools_json,
-                    char *out, size_t outsz) {
+int needle_toolcall_sys(Needle *m, const char *system, const char *query,
+                        const char *tools_json, char *out, size_t outsz) {
+    static char pruned[8192];
+    if (prune_tools(m, query, tools_json, pruned, sizeof pruned)) tools_json = pruned;
+
     static NTool tools[NT_MAX_TOOLS];
     int n_tools = needle_parse_tools(tools_json, tools, NT_MAX_TOOLS);
     if (n_tools <= 0) return -1;
 
     /* Split at the </tools> marker: markers are atomic tokens, so the prefix
      * tokenization is always a true prefix of the whole prompt's. */
-    static char prefix[8192], rest[4096];
-    snprintf(prefix, sizeof prefix, "<|im_start|>user\n<tools>%s</tools>", tools_json);
+    static char prefix[8192], rest[8192];
+    if (system && system[0])
+        snprintf(prefix, sizeof prefix,
+                 "<|im_start|>system\n%s<|im_end|>\n<|im_start|>user\n<tools>%s</tools>",
+                 system, tools_json);
+    else
+        snprintf(prefix, sizeof prefix, "<|im_start|>user\n<tools>%s</tools>", tools_json);
     snprintf(rest, sizeof rest, "\n%s<|im_end|>\n<|im_start|>assistant\n", query);
 
     static int pids[4096], rids[1024];
@@ -1705,6 +1915,7 @@ int needle_toolcall(Needle *m, const char *query, const char *tools_json,
 
     uint32_t th = 2166136261u;
     for (const char *c = tools_json; *c; c++) th = (th ^ (uint8_t)*c) * 16777619u;
+    if (system) for (const char *c = system; *c; c++) th = (th ^ (uint8_t)*c) * 16777619u;
 
     size_t ering_bytes = (size_t)m->n_sites * m->ering_depth * m->d_model * 4;
     size_t evalid_bytes = (size_t)m->n_sites * m->ering_depth;
@@ -1712,7 +1923,8 @@ int needle_toolcall(Needle *m, const char *query, const char *tools_json,
     DecCtx dc = { NULL, 0 };
     int64_t t_pre = needle_now_us();
     int reused = (m->px_valid && m->px_hash == th && m->px_n == (uint32_t)n_pids
-                  && m->max_len >= (uint32_t)(n_ids + 200));
+                  && m->max_len >= (uint32_t)(n_ids + NEEDLE_DECODE_ROOM));
+    if (getenv("NEEDLE_NO_PREFIX_CACHE")) reused = 0;
     if (reused) {
         /* KV rows for the tools block are still live in the ring */
         m->hist_len = m->px_hist_len;
@@ -1720,7 +1932,11 @@ int needle_toolcall(Needle *m, const char *query, const char *tools_json,
         memcpy(m->ering, m->px_ering, ering_bytes);
         memcpy(m->ering_valid, m->px_ering_valid, evalid_bytes);
     } else {
-        needle_reset(m, (uint32_t)(n_ids + 200));
+        /* Size for the tools prefix plus generous query room, not just this
+         * query: the KV ring is separately capped at kv_window + slack, so a
+         * larger max_len costs only the rope tables (256 B/position) and keeps
+         * the prefix cache alive when a later query is longer than the first. */
+        needle_reset(m, (uint32_t)(n_pids + NEEDLE_QUERY_ROOM + NEEDLE_DECODE_ROOM));
         if (m->max_len == 0) return -1;
         ering_bytes = (size_t)m->n_sites * m->ering_depth * m->d_model * 4;
         evalid_bytes = (size_t)m->n_sites * m->ering_depth;
@@ -1760,129 +1976,230 @@ int needle_toolcall(Needle *m, const char *query, const char *tools_json,
         }
         dc_feed(m, &dc, best);
     }
-    dc_force(m, &dc, "[{\"name\":\"", out, &olen);
+    /* The dataset's answers are often two calls (33% of google/mobile-actions),
+     * so emit an array and let the model decide after each closing brace whether
+     * to open another call or finish. The structural bytes are fed through
+     * dc_force rather than memcpy'd so the model actually sees them before it
+     * makes that choice. */
+    int emitted_calls = 0;
+    int emitted[NT_MAX_TOOLS];
+    for (int i = 0; i < n_tools; i++) emitted[i] = 0;
+    int max_calls = NEEDLE_MAX_CALLS;
+    if (getenv("NEEDLE_MAX_CALLS")) max_calls = atoi(getenv("NEEDLE_MAX_CALLS"));
+    for (int call = 0; call < max_calls; call++) {
+        /* Force the opening as ONE segment. dc_force masks logits per segment,
+         * so splitting "[{\"name\":\"" into "[" + "{\"name\":\"" changes which
+         * tokens the model walks through and measurably degrades the first
+         * call (1-call exact 61.1% -> 50.8% on the full eval when split). */
+        dc_force(m, &dc, call ? ",{\"name\":\"" : "[{\"name\":\"", out, &olen);
 
-    const char *names[NT_MAX_TOOLS];
-    for (int i = 0; i < n_tools; i++) names[i] = tools[i].name;
-    int ti = dc_pick_scored(m, &dc, names, n_tools, out, &olen);
-    if (ti < 0) return -1;
-    NTool *T = &tools[ti];
+        /* A tool already used this turn is not a candidate again: no ground
+         * truth in google/mobile-actions repeats one, and without this the
+         * model happily emits the same call four times. */
+        const char *names[NT_MAX_TOOLS];
+        int nmap[NT_MAX_TOOLS], n_cand = 0;
+        for (int i = 0; i < n_tools; i++)
+            if (!emitted[i]) { names[n_cand] = tools[i].name; nmap[n_cand++] = i; }
+        if (n_cand == 0) break;
+        /* Greedy prefix-constrained walk beats scoring each candidate by mean token
+         * logprob (measured: 64% vs 58% tool-name accuracy on mobile-actions). The
+         * scored variant also teacher-forces ~21 tokens through engram_step while
+         * the engram ring is only 10 deep, so it destroys ring history that the
+         * real decode still needs — rewinding epos does not restore the contents. */
+        int ti = getenv("NEEDLE_NAME_SCORED")
+               ? dc_pick_scored(m, &dc, names, n_cand, out, &olen)
+               : dc_trie(m, &dc, names, n_cand, out, &olen);
+        if (ti < 0) return -1;
+        emitted[nmap[ti]] = 1;
+        NTool *T = &tools[nmap[ti]];
 
-    dc_force(m, &dc, "\",\"arguments\":{", out, &olen);
-    int used[NT_MAX_PARAMS] = {0};
-    int emitted = 0;
-    int next_quote_consumed = 0;
-    for (int round = 0; round < T->n_params; round++) {
-        /* choose param name among unused */
-        const char *cands[NT_MAX_PARAMS];
-        int map[NT_MAX_PARAMS], nc = 0;
-        for (int i = 0; i < T->n_params; i++)
-            if (!used[i]) { cands[nc] = T->params[i].name; map[nc++] = i; }
-        if (!nc) break;
-        if (next_quote_consumed) { out[olen++] = '"'; next_quote_consumed = 0; }
-        else dc_force(m, &dc, "\"", out, &olen);
-        int pi = dc_trie(m, &dc, cands, nc, out, &olen);
-        if (pi < 0) return -1;
-        NParam *P = &T->params[map[pi]];
-        used[map[pi]] = 1;
-        emitted++;
-        dc_force(m, &dc, "\":", out, &olen);
-        int spill_comma = 0, spill_quote = 0, spill_close = 0;
-        if (P->is_num) {
-            int got = 0;
-            for (int s = 0; s < 8; s++) {
-                int best = -1;
-                float bl = -1e30f;
-                for (uint32_t t = 0; t < m->n_pieces; t++)
-                    if (piece_all_digits(m, t) && dc.logits[t] > bl) { bl = dc.logits[t]; best = (int)t; }
-                if (best < 0) break;
-                /* stop when a structural token outranks continuing digits */
-                if (got) {
-                    float best_any = -1e30f;
-                    int any = 0;
+        dc_force(m, &dc, "\",\"arguments\":{", out, &olen);
+        int used[NT_MAX_PARAMS] = {0};
+        int emitted = 0;
+        int next_quote_consumed = 0;
+        for (int round = 0; round < T->n_params; round++) {
+            /* choose param name among unused */
+            const char *cands[NT_MAX_PARAMS];
+            int map[NT_MAX_PARAMS], nc = 0;
+            for (int i = 0; i < T->n_params; i++)
+                if (!used[i]) { cands[nc] = T->params[i].name; map[nc++] = i; }
+            if (!nc) break;
+            if (next_quote_consumed) { out[olen++] = '"'; next_quote_consumed = 0; }
+            else dc_force(m, &dc, "\"", out, &olen);
+            int pi = dc_trie(m, &dc, cands, nc, out, &olen);
+            if (pi < 0) return -1;
+            NParam *P = &T->params[map[pi]];
+            used[map[pi]] = 1;
+            emitted++;
+            dc_force(m, &dc, "\":", out, &olen);
+            int spill_comma = 0, spill_quote = 0, spill_close = 0;
+            if (P->is_num) {
+                int got = 0;
+                for (int s = 0; s < 8; s++) {
+                    int best = -1;
+                    float bl = -1e30f;
                     for (uint32_t t = 0; t < m->n_pieces; t++)
-                        if (dc.logits[t] > best_any) { best_any = dc.logits[t]; any = (int)t; }
-                    if (!piece_all_digits(m, any)) break;
-                }
-                memcpy(out + olen, m->pieces[best], m->piece_len[best]);
-                olen += m->piece_len[best];
-                dc_feed(m, &dc, best);
-                got = 1;
-            }
-            if (!got) { out[olen++] = '0'; }
-        } else {
-            dc_force(m, &dc, "\"", out, &olen);
-            int quote_done = 0;
-            for (int s = 0; s < 48; s++) {
-                int best = 0;
-                for (uint32_t t = 1; t < m->n_pieces; t++)
-                    if (dc.logits[t] > dc.logits[best]) best = (int)t;
-                if (m->types[best] == 3 || best == (int)m->eos_id) break;
-                char piece[64];
-                needle_decode_piece(m, best, piece, sizeof piece);
-                if (piece[0] == '}' || piece[0] == ']') break;  /* structural drift */
-                char *qm = strchr(piece, '"');
-                if (qm) {
-                    /* token contains the closing quote: keep the prefix, feed
-                     * the whole token so the model state stays canonical.
-                     * The token may also swallow following structure:
-                     *   e"    -> just the close quote
-                     *   ","   -> close + comma + next param's open quote
-                     *   "}    -> close + end of arguments                 */
-                    memcpy(out + olen, piece, (size_t)(qm - piece));
-                    olen += (size_t)(qm - piece);
+                        if (piece_all_digits(m, t) && dc.logits[t] > bl) { bl = dc.logits[t]; best = (int)t; }
+                    if (best < 0) break;
+                    /* stop when a structural token outranks continuing digits */
+                    if (got) {
+                        float best_any = -1e30f;
+                        int any = 0;
+                        for (uint32_t t = 0; t < m->n_pieces; t++)
+                            if (dc.logits[t] > best_any) { best_any = dc.logits[t]; any = (int)t; }
+                        if (!piece_all_digits(m, any)) break;
+                    }
+                    memcpy(out + olen, m->pieces[best], m->piece_len[best]);
+                    olen += m->piece_len[best];
                     dc_feed(m, &dc, best);
-                    quote_done = 1;
-                    if (getenv("NEEDLE_DEBUG"))
-                        fprintf(stderr, "[val-end] piece=%s\n", piece);
-                    spill_comma = strchr(qm + 1, ',') != NULL;
-                    spill_quote = strchr(qm + 1, '"') != NULL;
-                    spill_close = strchr(qm + 1, '}') != NULL;
-                    break;
+                    got = 1;
                 }
-                memcpy(out + olen, piece, strlen(piece));
-                olen += strlen(piece);
-                dc_feed(m, &dc, best);
-            }
-            out[olen++] = '"';
-            if (!quote_done) {
-                olen--;
+                if (!got) { out[olen++] = '0'; }
+            } else {
                 dc_force(m, &dc, "\"", out, &olen);
+                int quote_done = 0;
+                size_t val_start = olen;
+                for (int s = 0; s < 48; s++) {
+                    int best = 0;
+                    for (uint32_t t = 1; t < m->n_pieces; t++)
+                        if (dc.logits[t] > dc.logits[best]) best = (int)t;
+                    if (s == 0 && !getenv("NEEDLE_NO_VALMASK")) {
+                        /* At the first token of a value the model often prefers to
+                         * close out (`,"` or `}`) rather than fill a key we forced
+                         * on it — the intended content sits a few nats lower. Taking
+                         * the close literally writes an empty value, which is half of
+                         * all argument errors on mobile-actions. Skip tokens that are
+                         * pure JSON structure and let the best real content win. */
+                        int alt = -1;
+                        for (uint32_t t = 1; t < m->n_pieces; t++) {
+                            if (m->types[t] == 1 || m->types[t] == 2) continue;
+                            int pl = m->piece_len[t];
+                            if (pl <= 0) continue;
+                            int structural = 1;
+                            for (int k2 = 0; k2 < pl; k2++) {
+                                char c2 = m->pieces[t][k2];
+                                if (!(c2 == ',' || c2 == '"' || c2 == '}' || c2 == ']' ||
+                                      c2 == '{' || c2 == ':' || c2 == ' ')) { structural = 0; break; }
+                            }
+                            if (structural) continue;
+                            if (alt < 0 || dc.logits[t] > dc.logits[alt]) alt = (int)t;
+                        }
+                        if (alt >= 0) best = alt;   /* fall back to argmax if nothing survives */
+                    }
+                    if (s == 0 && getenv("NEEDLE_DEBUG_VAL")) {
+                        int top[5];
+                        for (int a = 0; a < 5; a++) {
+                            int b2 = -1;
+                            for (uint32_t t = 1; t < m->n_pieces; t++) {
+                                int dup = 0;
+                                for (int c2 = 0; c2 < a; c2++) if (top[c2] == (int)t) dup = 1;
+                                if (dup) continue;
+                                if (b2 < 0 || dc.logits[t] > dc.logits[b2]) b2 = (int)t;
+                            }
+                            top[a] = b2;
+                        }
+                        fprintf(stderr, "[val-start %s]", P->name);
+                        for (int a = 0; a < 5; a++) {
+                            char pc[64];
+                            needle_decode_piece(m, top[a], pc, sizeof pc);
+                            fprintf(stderr, "  %s(%.2f)", pc[0] ? pc : "<ctl>", dc.logits[top[a]]);
+                        }
+                        fprintf(stderr, "\n");
+                    }
+                    if (m->types[best] == 3 || best == (int)m->eos_id) break;
+                    char piece[64];
+                    needle_decode_piece(m, best, piece, sizeof piece);
+                    if (piece[0] == '}' || piece[0] == ']') break;  /* structural drift */
+                    char *qm = strchr(piece, '"');
+                    if (qm) {
+                        /* token contains the closing quote: keep the prefix, feed
+                         * the whole token so the model state stays canonical.
+                         * The token may also swallow following structure:
+                         *   e"    -> just the close quote
+                         *   ","   -> close + comma + next param's open quote
+                         *   "}    -> close + end of arguments                 */
+                        olen = json_append(out, olen, piece, (size_t)(qm - piece));
+                        dc_feed(m, &dc, best);
+                        quote_done = 1;
+                        if (getenv("NEEDLE_DEBUG"))
+                            fprintf(stderr, "[val-end] piece=%s\n", piece);
+                        spill_comma = strchr(qm + 1, ',') != NULL;
+                        spill_quote = strchr(qm + 1, '"') != NULL;
+                        spill_close = strchr(qm + 1, '}') != NULL;
+                        break;
+                    }
+                    olen = json_append(out, olen, piece, strlen(piece));
+                    dc_feed(m, &dc, best);
+                }
+                /* a trailing comma is the model's field separator leaking into
+                 * the value, never part of the intended string */
+                while (olen > val_start && (out[olen-1] == ',' || out[olen-1] == ' '))
+                    olen--;
+                out[olen++] = '"';
+                if (!quote_done) {
+                    olen--;
+                    dc_force(m, &dc, "\"", out, &olen);
+                }
             }
+            /* continue or close? */
+            int more_params = 0, more_required = 0;
+            for (int i = 0; i < T->n_params; i++)
+                if (!used[i]) { more_params = 1; if (T->params[i].required) more_required = 1; }
+            if (getenv("NEEDLE_DEBUG"))
+                fprintf(stderr, "[branch] spill c=%d q=%d cl=%d more=%d req=%d\n",
+                        spill_comma, spill_quote, spill_close, more_params, more_required);
+            if (!more_params) break;
+            if (spill_close && !more_required) break;
+            if (spill_comma) {
+                out[olen++] = ',';
+                next_quote_consumed = spill_quote;
+                continue;
+            }
+            if (!more_required) {
+                float lc = -1e30f, lb = -1e30f;
+                for (uint32_t t = 0; t < m->n_pieces; t++) {
+                    if (m->types[t] != 0 || m->piece_len[t] == 0) continue;
+                    char c0 = m->pieces[t][0];
+                    if (c0 == ',' && dc.logits[t] > lc) lc = dc.logits[t];
+                    if (c0 == '}' && dc.logits[t] > lb) lb = dc.logits[t];
+                }
+                if (lb >= lc) break;
+            }
+            dc_force(m, &dc, ",", out, &olen);
         }
-        /* continue or close? */
-        int more_params = 0, more_required = 0;
-        for (int i = 0; i < T->n_params; i++)
-            if (!used[i]) { more_params = 1; if (T->params[i].required) more_required = 1; }
-        if (getenv("NEEDLE_DEBUG"))
-            fprintf(stderr, "[branch] spill c=%d q=%d cl=%d more=%d req=%d\n",
-                    spill_comma, spill_quote, spill_close, more_params, more_required);
-        if (!more_params) break;
-        if (spill_close && !more_required) break;
-        if (spill_comma) {
-            out[olen++] = ',';
-            next_quote_consumed = spill_quote;
-            continue;
-        }
-        if (!more_required) {
+        (void)emitted;
+        olen -= 0;
+        dc_force(m, &dc, "}}", out, &olen);   /* close arguments, close the call */
+        emitted_calls++;
+        /* another call, or done? compare the model's own preference */
+        {
             float lc = -1e30f, lb = -1e30f;
             for (uint32_t t = 0; t < m->n_pieces; t++) {
                 if (m->types[t] != 0 || m->piece_len[t] == 0) continue;
                 char c0 = m->pieces[t][0];
                 if (c0 == ',' && dc.logits[t] > lc) lc = dc.logits[t];
-                if (c0 == '}' && dc.logits[t] > lb) lb = dc.logits[t];
+                if (c0 == ']' && dc.logits[t] > lb) lb = dc.logits[t];
             }
-            if (lb >= lc) break;
+            /* Continuing costs a whole spurious call when the model is only
+             * mildly in favour, and a spurious call fails ordered strict match
+             * outright. Require the comma to win by a margin. */
+            float margin = 0.0f;
+            const char *mv = getenv("NEEDLE_CONT_MARGIN");
+            if (mv) margin = (float)atof(mv);
+            if (lc < lb + margin) break;
         }
-        dc_force(m, &dc, ",", out, &olen);
     }
-    (void)emitted;
-    olen -= 0;
-    memcpy(out + olen, "}}]", 3); olen += 3;
+    (void)emitted_calls;
+    out[olen++] = ']';
     out[olen] = 0;
     g_needle_stats.decode_tok = (int)(dc.pos - (uint32_t)n_ids);
     g_needle_stats.decode_us = needle_now_us() - t_dec;
     return (int)olen;
+}
+
+int needle_toolcall(Needle *m, const char *query, const char *tools_json,
+                    char *out, size_t outsz) {
+    return needle_toolcall_sys(m, NULL, query, tools_json, out, outsz);
 }
 
 /* ------------------------------------------------------------------ main */
@@ -1918,6 +2235,37 @@ int main(int argc, char **argv) {
     if (needle_load(&m, blob, st.st_size) != 0) return 1;
     fprintf(stderr, "loaded: %u layers, d_model %u, vocab %u, kv_window %u\n",
             m.n_layers, m.d_model, m.vocab, m.kv_window);
+
+    /* Batch mode: query argument of the form @path reads one query per line and
+     * emits one JSON result per line. Runs in a single process so the <tools>
+     * prefix cache stays warm across cases, matching how a device behaves. */
+    if (query[0] == '@') {
+        FILE *qf = strcmp(query + 1, "-") == 0 ? stdin : fopen(query + 1, "r");
+        if (!qf) { perror("open query file"); return 1; }
+        static char line[4096], callbuf[4096];
+        int n = 0;
+        double t_start = now_ms();
+        while (fgets(line, sizeof line, qf)) {
+            size_t ln = strlen(line);
+            while (ln && (line[ln-1] == '\n' || line[ln-1] == '\r')) line[--ln] = 0;
+            if (ln == 0) continue;
+            /* a line may be "system\tquery"; a bare line has no system turn */
+            char *sys_part = NULL, *q_part = line;
+            char *tabp = strchr(line, '\t');
+            if (tabp) { *tabp = 0; sys_part = line; q_part = tabp + 1; }
+            double t0 = now_ms();
+            int cl = needle_toolcall_sys(&m, sys_part, q_part, tools, callbuf, sizeof callbuf);
+            double dt = now_ms() - t0;
+            printf("%s\t%.0f\t%d\t%d\n", cl >= 0 ? callbuf : "[]", dt,
+                   g_needle_stats.prefill_tok, g_needle_stats.decode_tok);
+            fflush(stdout);
+            n++;
+        }
+        if (qf != stdin) fclose(qf);
+        fprintf(stderr, "batch: %d queries in %.1f s (%.2f s/query)\n",
+                n, (now_ms() - t_start) / 1000.0, (now_ms() - t_start) / 1000.0 / (n ? n : 1));
+        return 0;
+    }
 
     if (!getenv("NEEDLE_FREE")) {
         static char callbuf[2048];
