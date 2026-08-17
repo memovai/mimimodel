@@ -25,7 +25,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2061.0,
+  "ms": 2050.0,
   "n_expected": 1
  },
  {
@@ -52,7 +52,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1687.0,
+  "ms": 1678.0,
   "n_expected": 1
  },
  {
@@ -80,7 +80,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1950.0,
+  "ms": 1947.0,
   "n_expected": 1
  },
  {
@@ -105,7 +105,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1632.0,
+  "ms": 1631.0,
   "n_expected": 1
  },
  {
@@ -132,7 +132,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2190.0,
+  "ms": 2182.0,
   "n_expected": 1
  },
  {
@@ -153,17 +153,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Sunnyvale Library"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1528.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1391.0,
   "n_expected": 2
  },
  {
@@ -186,7 +180,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1249.0,
+  "ms": 1246.0,
   "n_expected": 1
  },
  {
@@ -211,7 +205,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1341.0,
+  "ms": 1335.0,
   "n_expected": 1
  },
  {
@@ -263,7 +257,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1100.0,
+  "ms": 1094.0,
   "n_expected": 1
  },
  {
@@ -292,7 +286,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2085.0,
+  "ms": 2080.0,
   "n_expected": 1
  },
  {
@@ -315,7 +309,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1454.0,
+  "ms": 1447.0,
   "n_expected": 1
  },
  {
@@ -336,17 +330,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "public library on Elm Street"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1621.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1481.0,
   "n_expected": 2
  },
  {
@@ -373,7 +361,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1680.0,
+  "ms": 1678.0,
   "n_expected": 1
  },
  {
@@ -406,7 +394,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2057.0,
+  "ms": 2058.0,
   "n_expected": 2
  },
  {
@@ -428,18 +416,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Call Ana about the proposal",
-     "datetime": "2026-01-21T15:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1709.0,
+  "ms": 1446.0,
   "n_expected": 2
  },
  {
@@ -461,18 +442,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Morning Run",
-     "datetime": "2026-02-04T06:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1773.0,
+  "ms": 1542.0,
   "n_expected": 2
  },
  {
@@ -507,7 +481,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2164.0,
+  "ms": 2158.0,
   "n_expected": 2
  },
  {
@@ -536,7 +510,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2179.0,
+  "ms": 2136.0,
   "n_expected": 1
  },
  {
@@ -555,7 +529,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1174.0,
+  "ms": 1175.0,
   "n_expected": 1
  },
  {
@@ -582,17 +556,11 @@
      "title": "Meeting with Dr. Chen",
      "datetime": "2026-07-08 10:30"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "City Medical Building"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1891.0,
+  "ms": 1767.0,
   "n_expected": 2
  },
  {
@@ -622,7 +590,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1934.0,
+  "ms": 1929.0,
   "n_expected": 2
  },
  {
@@ -647,7 +615,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1662.0,
+  "ms": 1660.0,
   "n_expected": 1
  },
  {
@@ -674,7 +642,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1841.0,
+  "ms": 1835.0,
   "n_expected": 1
  },
  {
@@ -693,7 +661,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1077.0,
+  "ms": 1070.0,
   "n_expected": 1
  },
  {
@@ -727,7 +695,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1911.0,
+  "ms": 1910.0,
   "n_expected": 2
  },
  {
@@ -755,7 +723,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1887.0,
+  "ms": 1892.0,
   "n_expected": 1
  },
  {
@@ -778,7 +746,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1581.0,
+  "ms": 1576.0,
   "n_expected": 1
  },
  {
@@ -801,7 +769,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1343.0,
+  "ms": 1334.0,
   "n_expected": 1
  },
  {
@@ -826,7 +794,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1566.0,
+  "ms": 1565.0,
   "n_expected": 1
  },
  {
@@ -849,19 +817,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "elara.jones@fictionalmail.com",
-     "subject": "Dog Sitting Arrangement",
-     "body": "I can watch Buster on Tuesday, but not Wednesday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1981.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1626.0,
   "n_expected": 2
  },
  {
@@ -886,7 +846,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1920.0,
+  "ms": 1919.0,
   "n_expected": 1
  },
  {
@@ -911,7 +871,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1757.0,
+  "ms": 1749.0,
   "n_expected": 1
  },
  {
@@ -936,7 +896,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1853.0,
+  "ms": 1849.0,
   "n_expected": 1
  },
  {
@@ -961,7 +921,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1799.0,
+  "ms": 1796.0,
   "n_expected": 1
  },
  {
@@ -986,7 +946,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1322.0,
+  "ms": 1314.0,
   "n_expected": 1
  },
  {
@@ -1013,7 +973,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2389.0,
+  "ms": 2380.0,
   "n_expected": 1
  },
  {
@@ -1035,18 +995,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Q2 Marketing Strategy",
-     "datetime": "2025-03-27T16:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1664.0,
+  "ms": 1444.0,
   "n_expected": 2
  },
  {
@@ -1069,7 +1022,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1396.0,
+  "ms": 1388.0,
   "n_expected": 1
  },
  {
@@ -1088,7 +1041,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1087.0,
+  "ms": 1085.0,
   "n_expected": 1
  },
  {
@@ -1117,7 +1070,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2213.0,
+  "ms": 2212.0,
   "n_expected": 1
  },
  {
@@ -1136,7 +1089,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1208.0,
+  "ms": 1206.0,
   "n_expected": 1
  },
  {
@@ -1163,7 +1116,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2200.0,
+  "ms": 2192.0,
   "n_expected": 1
  },
  {
@@ -1182,7 +1135,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1145.0,
+  "ms": 1150.0,
   "n_expected": 1
  },
  {
@@ -1205,7 +1158,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1102.0,
+  "ms": 1096.0,
   "n_expected": 1
  },
  {
@@ -1228,20 +1181,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "phone_number": "+34 912 345 678",
-     "email": "create_contact",
-     "first_name": "create_contact",
-     "last_name": "create_contact"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1988.0,
+  "ms": 1591.0,
   "n_expected": 2
  },
  {
@@ -1263,22 +1207,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "create_calendar_event",
-     "datetime": "title"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1973.0,
+  "ms": 1549.0,
   "n_expected": 2
  },
  {
@@ -1301,19 +1234,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "kenji.tanaka@hospitalmail.org",
-     "subject": "Follow-up Appointment",
-     "body": "I confirm I will be there for the 3 PM appointment on Thursday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2070.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1717.0,
   "n_expected": 2
  },
  {
@@ -1332,7 +1257,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 956.0,
+  "ms": 954.0,
   "n_expected": 1
  },
  {
@@ -1351,7 +1276,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1106.0,
+  "ms": 1101.0,
   "n_expected": 1
  },
  {
@@ -1379,7 +1304,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1991.0,
+  "ms": 1989.0,
   "n_expected": 1
  },
  {
@@ -1400,17 +1325,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Grand View Conference Center"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1563.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1419.0,
   "n_expected": 2
  },
  {
@@ -1431,7 +1350,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1503.0,
+  "ms": 1499.0,
   "n_expected": 1
  },
  {
@@ -1456,7 +1375,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1506.0,
+  "ms": 1507.0,
   "n_expected": 1
  },
  {
@@ -1498,7 +1417,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1158.0,
+  "ms": 1157.0,
   "n_expected": 1
  },
  {
@@ -1523,7 +1442,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1814.0,
+  "ms": 1803.0,
   "n_expected": 1
  },
  {
@@ -1542,7 +1461,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1346.0,
+  "ms": 1352.0,
   "n_expected": 1
  },
  {
@@ -1569,7 +1488,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2013.0,
+  "ms": 1981.0,
   "n_expected": 1
  },
  {
@@ -1597,7 +1516,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2009.0,
+  "ms": 1911.0,
   "n_expected": 1
  },
  {
@@ -1624,7 +1543,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2011.0,
+  "ms": 1857.0,
   "n_expected": 1
  },
  {
@@ -1655,7 +1574,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2220.0,
+  "ms": 2077.0,
   "n_expected": 2
  },
  {
@@ -1680,7 +1599,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1835.0,
+  "ms": 1648.0,
   "n_expected": 1
  },
  {
@@ -1699,7 +1618,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1424.0,
+  "ms": 1238.0,
   "n_expected": 1
  },
  {
@@ -1722,19 +1641,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "anaya.khanna@globalcorp.net",
-     "subject": "Tool: send_email",
-     "body": "I've uploaded the latest figures to the shared drive. Please review them before the meeting."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2436.0,
+  "ms": 1874.0,
   "n_expected": 2
  },
  {
@@ -1763,7 +1674,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2141.0,
+  "ms": 2000.0,
   "n_expected": 1
  },
  {
@@ -1785,18 +1696,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Follow-up",
-     "datetime": "2024-11-25T11:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1943.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1545.0,
   "n_expected": 2
  },
  {
@@ -1819,7 +1723,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1600.0,
+  "ms": 1456.0,
   "n_expected": 1
  },
  {
@@ -1844,7 +1748,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1978.0,
+  "ms": 1676.0,
   "n_expected": 1
  },
  {
@@ -1871,17 +1775,11 @@
      "title": "Meeting with Priya",
      "datetime": "2024-02-01T16:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Café Latté, 78 King Street East, Toronto"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2303.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1891.0,
   "n_expected": 2
  },
  {
@@ -1906,7 +1804,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1853.0,
+  "ms": 1689.0,
   "n_expected": 1
  },
  {
@@ -1933,7 +1831,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2568.0,
+  "ms": 2356.0,
   "n_expected": 1
  },
  {
@@ -1961,7 +1859,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2287.0,
+  "ms": 1991.0,
   "n_expected": 1
  },
  {
@@ -1986,7 +1884,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2067.0,
+  "ms": 1750.0,
   "n_expected": 1
  },
  {
@@ -2021,7 +1919,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2353.0,
+  "ms": 2136.0,
   "n_expected": 2
  },
  {
@@ -2050,7 +1948,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2198.0,
+  "ms": 1995.0,
   "n_expected": 1
  },
  {
@@ -2072,18 +1970,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Alpha Kickoff",
-     "datetime": "2026-12-07T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1946.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1533.0,
   "n_expected": 2
  },
  {
@@ -2115,18 +2006,11 @@
      "first_name": "null",
      "last_name": "null"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Alpha Kickoff",
-     "datetime": "2025-03-01T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2914.0,
+  "ms": 2200.0,
   "n_expected": 2
  },
  {
@@ -2151,7 +2035,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2251.0,
+  "ms": 1842.0,
   "n_expected": 1
  },
  {
@@ -2178,7 +2062,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2464.0,
+  "ms": 2212.0,
   "n_expected": 1
  },
  {
@@ -2197,7 +2081,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1195.0,
+  "ms": 1069.0,
   "n_expected": 1
  },
  {
@@ -2216,7 +2100,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1218.0,
+  "ms": 1084.0,
   "n_expected": 1
  },
  {
@@ -2235,7 +2119,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1265.0,
+  "ms": 1092.0,
   "n_expected": 1
  },
  {
@@ -2261,18 +2145,11 @@
     "arguments": {
      "query": "Pasadena Community Garden"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Volunteer Shift",
-     "datetime": "next Saturday at 9:30 AM"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2241.0,
+  "ms": 1692.0,
   "n_expected": 2
  },
  {
@@ -2293,17 +2170,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Green Bean Coffee Shop"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1813.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1494.0,
   "n_expected": 2
  },
  {
@@ -2326,7 +2197,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1097.0,
+  "ms": 1026.0,
   "n_expected": 1
  },
  {
@@ -2353,7 +2224,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1765.0,
+  "ms": 1699.0,
   "n_expected": 1
  },
  {
@@ -2378,7 +2249,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1960.0,
+  "ms": 1799.0,
   "n_expected": 1
  },
  {
@@ -2400,18 +2271,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Review Prep",
-     "datetime": "2026-07-21T09:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2174.0,
+  "ms": 1660.0,
   "n_expected": 2
  },
  {
@@ -2430,7 +2294,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1397.0,
+  "ms": 1187.0,
   "n_expected": 1
  },
  {
@@ -2449,7 +2313,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1314.0,
+  "ms": 1186.0,
   "n_expected": 1
  },
  {
@@ -2468,7 +2332,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1286.0,
+  "ms": 1169.0,
   "n_expected": 1
  },
  {
@@ -2491,7 +2355,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1264.0,
+  "ms": 1168.0,
   "n_expected": 1
  },
  {
@@ -2513,18 +2377,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Follow-up",
-     "datetime": "2026-03-10T14:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1767.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1403.0,
   "n_expected": 2
  },
  {
@@ -2543,7 +2400,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1283.0,
+  "ms": 1173.0,
   "n_expected": 1
  },
  {
@@ -2579,7 +2436,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2794.0,
+  "ms": 2385.0,
   "n_expected": 2
  },
  {
@@ -2601,18 +2458,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Budget Meeting",
-     "datetime": "2026-09-18T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2144.0,
+  "ms": 1700.0,
   "n_expected": 2
  },
  {
@@ -2639,7 +2489,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1743.0,
+  "ms": 1592.0,
   "n_expected": 1
  },
  {
@@ -2662,7 +2512,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1285.0,
+  "ms": 1192.0,
   "n_expected": 1
  },
  {
@@ -2685,18 +2535,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "Elias Müller",
-     "subject": "Running late"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1981.0,
+  "ms": 1661.0,
   "n_expected": 2
  },
  {
@@ -2724,7 +2567,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2353.0,
+  "ms": 2077.0,
   "n_expected": 1
  },
  {
@@ -2758,7 +2601,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1931.0,
+  "ms": 1685.0,
   "n_expected": 2
  },
  {
@@ -2783,7 +2626,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1899.0,
+  "ms": 1752.0,
   "n_expected": 1
  },
  {
@@ -2810,7 +2653,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1822.0,
+  "ms": 1704.0,
   "n_expected": 1
  },
  {
@@ -2835,7 +2678,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1408.0,
+  "ms": 1315.0,
   "n_expected": 1
  },
  {
@@ -2868,7 +2711,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2363.0,
+  "ms": 2122.0,
   "n_expected": 2
  },
  {
@@ -2898,7 +2741,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1656.0,
+  "ms": 1438.0,
   "n_expected": 2
  },
  {
@@ -2921,7 +2764,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1469.0,
+  "ms": 1343.0,
   "n_expected": 1
  },
  {
@@ -2945,20 +2788,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "elias.stavros@bizmail.com",
-     "phone_number": "907-555-2233",
-     "first_name": "Elias",
-     "last_name": "Stavros"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2143.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1667.0,
   "n_expected": 2
  },
  {
@@ -2977,7 +2811,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1383.0,
+  "ms": 1296.0,
   "n_expected": 1
  },
  {
@@ -3002,7 +2836,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1848.0,
+  "ms": 1726.0,
   "n_expected": 1
  },
  {
@@ -3023,17 +2857,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Tokyo Imperial Palace"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1713.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1380.0,
   "n_expected": 2
  },
  {
@@ -3060,7 +2888,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2427.0,
+  "ms": 2138.0,
   "n_expected": 1
  },
  {
@@ -3092,18 +2920,11 @@
      "first_name": "null",
      "last_name": "null"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Follow-up",
-     "datetime": "next Monday at 10 AM"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2590.0,
+  "ms": 2149.0,
   "n_expected": 2
  },
  {
@@ -3132,7 +2953,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1912.0,
+  "ms": 1811.0,
   "n_expected": 1
  },
  {
@@ -3157,7 +2978,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1824.0,
+  "ms": 1726.0,
   "n_expected": 1
  },
  {
@@ -3185,7 +3006,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2090.0,
+  "ms": 1864.0,
   "n_expected": 1
  },
  {
@@ -3208,7 +3029,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1619.0,
+  "ms": 1199.0,
   "n_expected": 1
  },
  {
@@ -3233,7 +3054,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2438.0,
+  "ms": 1807.0,
   "n_expected": 1
  },
  {
@@ -3252,7 +3073,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1230.0,
+  "ms": 1135.0,
   "n_expected": 1
  },
  {
@@ -3277,7 +3098,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1799.0,
+  "ms": 1713.0,
   "n_expected": 1
  },
  {
@@ -3301,25 +3122,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "null"
-    }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2268.0,
+  "ms": 1751.0,
   "n_expected": 2
  },
  {
@@ -3345,18 +3152,11 @@
     "arguments": {
      "query": "Global Tech Summit"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Summit Registration",
-     "datetime": "tomorrow at 9:00 AM"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2175.0,
+  "ms": 1697.0,
   "n_expected": 2
  },
  {
@@ -3379,7 +3179,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1097.0,
+  "ms": 1000.0,
   "n_expected": 1
  },
  {
@@ -3402,7 +3202,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1523.0,
+  "ms": 1448.0,
   "n_expected": 1
  },
  {
@@ -3429,7 +3229,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1794.0,
+  "ms": 1728.0,
   "n_expected": 1
  },
  {
@@ -3458,7 +3258,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2107.0,
+  "ms": 2069.0,
   "n_expected": 1
  },
  {
@@ -3494,7 +3294,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2506.0,
+  "ms": 2286.0,
   "n_expected": 2
  },
  {
@@ -3523,7 +3323,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2375.0,
+  "ms": 2033.0,
   "n_expected": 1
  },
  {
@@ -3542,7 +3342,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1357.0,
+  "ms": 1294.0,
   "n_expected": 1
  },
  {
@@ -3572,7 +3372,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1612.0,
+  "ms": 1615.0,
   "n_expected": 2
  },
  {
@@ -3595,7 +3395,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1242.0,
+  "ms": 1204.0,
   "n_expected": 1
  },
  {
@@ -3617,22 +3417,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Alpha Review",
-     "datetime": "2026-07-21T11:00:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1873.0,
+  "ms": 1486.0,
   "n_expected": 2
  },
  {
@@ -3651,7 +3440,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1318.0,
+  "ms": 1223.0,
   "n_expected": 1
  },
  {
@@ -3685,7 +3474,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2654.0,
+  "ms": 2356.0,
   "n_expected": 2
  },
  {
@@ -3708,19 +3497,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "elena.vasquez@techwaveintl.com",
-     "subject": "Tool: send_email",
-     "body": "I've uploaded the latest figures to the shared drive. Let me know if you have any questions."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2469.0,
+  "ms": 1892.0,
   "n_expected": 2
  },
  {
@@ -3756,7 +3537,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2654.0,
+  "ms": 2661.0,
   "n_expected": 2
  },
  {
@@ -3775,7 +3556,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1197.0,
+  "ms": 1156.0,
   "n_expected": 1
  },
  {
@@ -3804,7 +3585,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2353.0,
+  "ms": 2135.0,
   "n_expected": 1
  },
  {
@@ -3837,7 +3618,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2292.0,
+  "ms": 2151.0,
   "n_expected": 2
  },
  {
@@ -3860,7 +3641,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1414.0,
+  "ms": 1362.0,
   "n_expected": 1
  },
  {
@@ -3885,7 +3666,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1861.0,
+  "ms": 1832.0,
   "n_expected": 1
  },
  {
@@ -3912,7 +3693,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2410.0,
+  "ms": 2382.0,
   "n_expected": 1
  },
  {
@@ -3941,7 +3722,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2358.0,
+  "ms": 2125.0,
   "n_expected": 1
  },
  {
@@ -3964,7 +3745,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1446.0,
+  "ms": 1379.0,
   "n_expected": 1
  },
  {
@@ -3991,7 +3772,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2071.0,
+  "ms": 1983.0,
   "n_expected": 1
  },
  {
@@ -4013,18 +3794,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dentist Checkup",
-     "datetime": "2024-07-16T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1895.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1618.0,
   "n_expected": 2
  },
  {
@@ -4051,7 +3825,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1632.0,
+  "ms": 1678.0,
   "n_expected": 1
  },
  {
@@ -4087,7 +3861,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2669.0,
+  "ms": 2460.0,
   "n_expected": 2
  },
  {
@@ -4106,7 +3880,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1285.0,
+  "ms": 1196.0,
   "n_expected": 1
  },
  {
@@ -4137,7 +3911,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2164.0,
+  "ms": 2089.0,
   "n_expected": 2
  },
  {
@@ -4162,7 +3936,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1832.0,
+  "ms": 1734.0,
   "n_expected": 1
  },
  {
@@ -4183,17 +3957,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "nearest sushi restaurant"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1763.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1511.0,
   "n_expected": 2
  },
  {
@@ -4220,7 +3988,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2091.0,
+  "ms": 1996.0,
   "n_expected": 1
  },
  {
@@ -4239,7 +4007,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1577.0,
+  "ms": 1408.0,
   "n_expected": 1
  },
  {
@@ -4264,7 +4032,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1522.0,
+  "ms": 1461.0,
   "n_expected": 1
  },
  {
@@ -4286,18 +4054,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Follow-up Call",
-     "datetime": "2024-02-28T09:15:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2065.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1740.0,
   "n_expected": 2
  },
  {
@@ -4320,7 +4081,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1653.0,
+  "ms": 1579.0,
   "n_expected": 1
  },
  {
@@ -4347,7 +4108,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2480.0,
+  "ms": 2413.0,
   "n_expected": 1
  },
  {
@@ -4369,18 +4130,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Yoga Class",
-     "datetime": "2026-08-30T18:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1965.0,
+  "ms": 1886.0,
   "n_expected": 2
  },
  {
@@ -4410,7 +4164,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1623.0,
+  "ms": 2255.0,
   "n_expected": 2
  },
  {
@@ -4435,7 +4189,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1803.0,
+  "ms": 2476.0,
   "n_expected": 1
  },
  {
@@ -4461,18 +4215,11 @@
     "arguments": {
      "query": "Aki Sushi Bar at 14 Rue du Cherche-Midi, Paris"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner with Camila",
-     "datetime": "next Friday at 7:30 PM"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2211.0,
+  "ms": 2701.0,
   "n_expected": 2
  },
  {
@@ -4491,7 +4238,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1570.0,
+  "ms": 2347.0,
   "n_expected": 1
  },
  {
@@ -4513,22 +4260,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "create_calendar_event",
-     "datetime": "create_calendar_event"
-    }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2282.0,
+  "ms": 2262.0,
   "n_expected": 2
  },
  {
@@ -4549,17 +4285,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "O'Malley's Irish Pub"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1869.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2144.0,
   "n_expected": 2
  },
  {
@@ -4582,7 +4312,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1018.0,
+  "ms": 1375.0,
   "n_expected": 1
  },
  {
@@ -4618,7 +4348,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2251.0,
+  "ms": 3115.0,
   "n_expected": 2
  },
  {
@@ -4650,18 +4380,11 @@
      "first_name": "Mei",
      "last_name": "Lin"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Kickoff",
-     "datetime": "2025-07-11T16:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2695.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 3224.0,
   "n_expected": 2
  },
  {
@@ -4688,7 +4411,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2136.0,
+  "ms": 2793.0,
   "n_expected": 1
  },
  {
@@ -4715,7 +4438,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1823.0,
+  "ms": 2301.0,
   "n_expected": 1
  },
  {
@@ -4739,24 +4462,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "aditya.sharma@techsphere.in",
-     "phone_number": "07700 900221",
-     "first_name": "Aditya Sharma",
-     "last_name": "Aditya Sharma"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2384.0,
+  "ms": 2621.0,
   "n_expected": 2
  },
  {
@@ -4779,7 +4489,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1574.0,
+  "ms": 2096.0,
   "n_expected": 1
  },
  {
@@ -4801,22 +4511,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Vet Appointment",
-     "datetime": "2026-03-06T15:00:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1994.0,
+  "ms": 2281.0,
   "n_expected": 2
  },
  {
@@ -4839,7 +4538,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1276.0,
+  "ms": 1689.0,
   "n_expected": 1
  },
  {
@@ -4858,7 +4557,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1420.0,
+  "ms": 1764.0,
   "n_expected": 1
  },
  {
@@ -4877,7 +4576,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1317.0,
+  "ms": 1679.0,
   "n_expected": 1
  },
  {
@@ -4910,7 +4609,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2489.0,
+  "ms": 3388.0,
   "n_expected": 2
  },
  {
@@ -4938,7 +4637,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1988.0,
+  "ms": 2705.0,
   "n_expected": 1
  },
  {
@@ -4963,7 +4662,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1911.0,
+  "ms": 2578.0,
   "n_expected": 1
  },
  {
@@ -4996,7 +4695,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2362.0,
+  "ms": 3154.0,
   "n_expected": 2
  },
  {
@@ -5020,22 +4719,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Gallery Visit",
-     "datetime": "2024-03-03T14:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2093.0,
+  "ms": 2235.0,
   "n_expected": 2
  },
  {
@@ -5071,7 +4759,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2471.0,
+  "ms": 3283.0,
   "n_expected": 2
  },
  {
@@ -5097,22 +4785,11 @@
     "arguments": {
      "query": "Artisan Collective"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Artisan Collective",
-     "datetime": "2026-03-08T11:00:00"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2506.0,
+  "ms": 2502.0,
   "n_expected": 2
  },
  {
@@ -5137,7 +4814,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1981.0,
+  "ms": 1914.0,
   "n_expected": 1
  },
  {
@@ -5156,7 +4833,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1332.0,
+  "ms": 1171.0,
   "n_expected": 1
  },
  {
@@ -5183,7 +4860,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2505.0,
+  "ms": 2344.0,
   "n_expected": 1
  },
  {
@@ -5209,22 +4886,11 @@
     "arguments": {
      "query": "Café Lumière"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Lunch with Samira",
-     "datetime": "Friday at 1:00 PM"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2157.0,
+  "ms": 1754.0,
   "n_expected": 2
  },
  {
@@ -5266,7 +4932,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1636.0,
+  "ms": 1593.0,
   "n_expected": 1
  },
  {
@@ -5289,7 +4955,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1286.0,
+  "ms": 1260.0,
   "n_expected": 1
  },
  {
@@ -5308,7 +4974,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1220.0,
+  "ms": 1092.0,
   "n_expected": 1
  },
  {
@@ -5342,7 +5008,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2540.0,
+  "ms": 2297.0,
   "n_expected": 2
  },
  {
@@ -5367,7 +5033,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1788.0,
+  "ms": 1742.0,
   "n_expected": 1
  },
  {
@@ -5388,17 +5054,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "nearest laundromat"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1654.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1440.0,
   "n_expected": 2
  },
  {
@@ -5423,7 +5083,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1886.0,
+  "ms": 1790.0,
   "n_expected": 1
  },
  {
@@ -5446,7 +5106,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1601.0,
+  "ms": 1515.0,
   "n_expected": 1
  },
  {
@@ -5473,7 +5133,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1764.0,
+  "ms": 1593.0,
   "n_expected": 1
  },
  {
@@ -5500,7 +5160,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2155.0,
+  "ms": 2025.0,
   "n_expected": 1
  },
  {
@@ -5523,7 +5183,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1401.0,
+  "ms": 1340.0,
   "n_expected": 1
  },
  {
@@ -5558,7 +5218,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2176.0,
+  "ms": 2058.0,
   "n_expected": 2
  },
  {
@@ -5585,7 +5245,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2641.0,
+  "ms": 2461.0,
   "n_expected": 1
  },
  {
@@ -5604,7 +5264,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1418.0,
+  "ms": 1370.0,
   "n_expected": 1
  },
  {
@@ -5633,7 +5293,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2388.0,
+  "ms": 2228.0,
   "n_expected": 1
  },
  {
@@ -5666,7 +5326,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2242.0,
+  "ms": 2152.0,
   "n_expected": 2
  },
  {
@@ -5688,18 +5348,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Call the dentist",
-     "datetime": "2026-07-30T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1683.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1364.0,
   "n_expected": 2
  },
  {
@@ -5718,7 +5371,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1219.0,
+  "ms": 1146.0,
   "n_expected": 1
  },
  {
@@ -5745,7 +5398,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2344.0,
+  "ms": 2115.0,
   "n_expected": 1
  },
  {
@@ -5771,18 +5424,11 @@
     "arguments": {
      "query": "Mirasol Bakery at 450 N 3rd St, San Jose"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Pick up custom cake",
-     "datetime": "2026-09-19T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2328.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1914.0,
   "n_expected": 2
  },
  {
@@ -5806,7 +5452,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1832.0,
+  "ms": 1711.0,
   "n_expected": 1
  },
  {
@@ -5835,7 +5481,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2555.0,
+  "ms": 2419.0,
   "n_expected": 1
  },
  {
@@ -5854,7 +5500,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1180.0,
+  "ms": 1110.0,
   "n_expected": 1
  },
  {
@@ -5881,7 +5527,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2323.0,
+  "ms": 2084.0,
   "n_expected": 1
  },
  {
@@ -5904,7 +5550,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1694.0,
+  "ms": 1588.0,
   "n_expected": 1
  },
  {
@@ -5923,7 +5569,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1195.0,
+  "ms": 1172.0,
   "n_expected": 1
  },
  {
@@ -5948,7 +5594,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1952.0,
+  "ms": 1874.0,
   "n_expected": 1
  },
  {
@@ -5973,7 +5619,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1957.0,
+  "ms": 1860.0,
   "n_expected": 1
  },
  {
@@ -6002,7 +5648,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2235.0,
+  "ms": 2059.0,
   "n_expected": 1
  },
  {
@@ -6027,7 +5673,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1995.0,
+  "ms": 1765.0,
   "n_expected": 1
  },
  {
@@ -6052,7 +5698,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1787.0,
+  "ms": 1767.0,
   "n_expected": 1
  },
  {
@@ -6079,7 +5725,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2050.0,
+  "ms": 1992.0,
   "n_expected": 1
  },
  {
@@ -6108,7 +5754,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2273.0,
+  "ms": 2165.0,
   "n_expected": 1
  },
  {
@@ -6142,7 +5788,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2527.0,
+  "ms": 2300.0,
   "n_expected": 2
  },
  {
@@ -6167,7 +5813,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2207.0,
+  "ms": 1991.0,
   "n_expected": 1
  },
  {
@@ -6194,7 +5840,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1935.0,
+  "ms": 1966.0,
   "n_expected": 1
  },
  {
@@ -6213,7 +5859,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1191.0,
+  "ms": 1176.0,
   "n_expected": 1
  },
  {
@@ -6240,7 +5886,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2281.0,
+  "ms": 2201.0,
   "n_expected": 1
  },
  {
@@ -6263,7 +5909,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1437.0,
+  "ms": 1363.0,
   "n_expected": 1
  },
  {
@@ -6291,7 +5937,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2183.0,
+  "ms": 1942.0,
   "n_expected": 1
  },
  {
@@ -6324,7 +5970,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2339.0,
+  "ms": 2197.0,
   "n_expected": 2
  },
  {
@@ -6351,7 +5997,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2173.0,
+  "ms": 2185.0,
   "n_expected": 1
  },
  {
@@ -6373,18 +6019,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Marketing Strategy Session",
-     "datetime": "2026-03-03T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2013.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1705.0,
   "n_expected": 2
  },
  {
@@ -6417,7 +6056,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2245.0,
+  "ms": 2095.0,
   "n_expected": 2
  },
  {
@@ -6444,7 +6083,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2377.0,
+  "ms": 2129.0,
   "n_expected": 1
  },
  {
@@ -6466,18 +6105,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Lunch",
-     "datetime": "2027-02-13T13:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1712.0,
+  "ms": 1413.0,
   "n_expected": 2
  },
  {
@@ -6504,21 +6136,11 @@
      "title": "Client Dinner",
      "datetime": "2025-01-05T19:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "query"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2097.0,
+  "ms": 1901.0,
   "n_expected": 2
  },
  {
@@ -6551,7 +6173,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2248.0,
+  "ms": 2174.0,
   "n_expected": 2
  },
  {
@@ -6579,7 +6201,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1710.0,
+  "ms": 1600.0,
   "n_expected": 1
  },
  {
@@ -6608,7 +6230,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2316.0,
+  "ms": 2070.0,
   "n_expected": 1
  },
  {
@@ -6629,7 +6251,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1637.0,
+  "ms": 1556.0,
   "n_expected": 1
  },
  {
@@ -6659,7 +6281,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1516.0,
+  "ms": 1489.0,
   "n_expected": 2
  },
  {
@@ -6682,7 +6304,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1123.0,
+  "ms": 1161.0,
   "n_expected": 1
  },
  {
@@ -6701,7 +6323,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1334.0,
+  "ms": 1316.0,
   "n_expected": 1
  },
  {
@@ -6724,7 +6346,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1435.0,
+  "ms": 1379.0,
   "n_expected": 1
  },
  {
@@ -6757,7 +6379,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2231.0,
+  "ms": 2012.0,
   "n_expected": 2
  },
  {
@@ -6791,7 +6413,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1884.0,
+  "ms": 1701.0,
   "n_expected": 2
  },
  {
@@ -6813,18 +6435,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Kickoff",
-     "datetime": "2024-05-10T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1838.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1564.0,
   "n_expected": 2
  },
  {
@@ -6847,7 +6462,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1054.0,
+  "ms": 1037.0,
   "n_expected": 1
  },
  {
@@ -6870,7 +6485,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1357.0,
+  "ms": 1391.0,
   "n_expected": 1
  },
  {
@@ -6893,7 +6508,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1459.0,
+  "ms": 1428.0,
   "n_expected": 1
  },
  {
@@ -6921,7 +6536,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2060.0,
+  "ms": 1898.0,
   "n_expected": 1
  },
  {
@@ -6949,7 +6564,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2190.0,
+  "ms": 1978.0,
   "n_expected": 1
  },
  {
@@ -6986,7 +6601,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2409.0,
+  "ms": 2331.0,
   "n_expected": 2
  },
  {
@@ -7008,18 +6623,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Library Study Session",
-     "datetime": "2024-05-21T15:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1800.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1505.0,
   "n_expected": 2
  },
  {
@@ -7046,7 +6654,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1818.0,
+  "ms": 1823.0,
   "n_expected": 1
  },
  {
@@ -7082,7 +6690,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2613.0,
+  "ms": 2402.0,
   "n_expected": 2
  },
  {
@@ -7107,7 +6715,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2027.0,
+  "ms": 1832.0,
   "n_expected": 1
  },
  {
@@ -7136,7 +6744,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2120.0,
+  "ms": 2030.0,
   "n_expected": 1
  },
  {
@@ -7158,18 +6766,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Follow-up",
-     "datetime": "2027-02-29T16:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1912.0,
+  "ms": 1580.0,
   "n_expected": 2
  },
  {
@@ -7190,17 +6791,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Artisan Coffee Roasters"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1782.0,
+  "ms": 1659.0,
   "n_expected": 2
  },
  {
@@ -7225,7 +6820,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1906.0,
+  "ms": 1747.0,
   "n_expected": 1
  },
  {
@@ -7244,7 +6839,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1233.0,
+  "ms": 1112.0,
   "n_expected": 1
  },
  {
@@ -7272,7 +6867,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2040.0,
+  "ms": 1961.0,
   "n_expected": 1
  },
  {
@@ -7299,7 +6894,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2071.0,
+  "ms": 2094.0,
   "n_expected": 1
  },
  {
@@ -7322,7 +6917,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1431.0,
+  "ms": 1385.0,
   "n_expected": 1
  },
  {
@@ -7345,7 +6940,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1475.0,
+  "ms": 1456.0,
   "n_expected": 1
  },
  {
@@ -7381,7 +6976,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2653.0,
+  "ms": 2374.0,
   "n_expected": 2
  },
  {
@@ -7400,7 +6995,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1320.0,
+  "ms": 1239.0,
   "n_expected": 1
  },
  {
@@ -7432,7 +7027,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2059.0,
+  "ms": 2000.0,
   "n_expected": 2
  },
  {
@@ -7455,7 +7050,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1421.0,
+  "ms": 1374.0,
   "n_expected": 1
  },
  {
@@ -7489,7 +7084,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2945.0,
+  "ms": 2912.0,
   "n_expected": 2
  },
  {
@@ -7512,19 +7107,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "anika.singh@gmail.com",
-     "subject": "Updated meeting agenda",
-     "body": "Please review the new agenda attached to my previous email before our call on Tuesday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2285.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1733.0,
   "n_expected": 2
  },
  {
@@ -7549,7 +7136,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1971.0,
+  "ms": 1856.0,
   "n_expected": 1
  },
  {
@@ -7572,7 +7159,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1377.0,
+  "ms": 1339.0,
   "n_expected": 1
  },
  {
@@ -7594,18 +7181,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Gomez Presentation Draft",
-     "datetime": "2026-02-19T14:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1890.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1584.0,
   "n_expected": 2
  },
  {
@@ -7632,7 +7212,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2223.0,
+  "ms": 2140.0,
   "n_expected": 1
  },
  {
@@ -7655,19 +7235,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "javier.ortega@techcorp.com",
-     "subject": "Tool->",
-     "body": "The final report draft is ready for your review."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2136.0,
+  "ms": 1731.0,
   "n_expected": 2
  },
  {
@@ -7686,7 +7258,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1304.0,
+  "ms": 1187.0,
   "n_expected": 1
  },
  {
@@ -7711,7 +7283,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1938.0,
+  "ms": 1874.0,
   "n_expected": 1
  },
  {
@@ -7747,7 +7319,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2388.0,
+  "ms": 2317.0,
   "n_expected": 2
  },
  {
@@ -7772,7 +7344,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1891.0,
+  "ms": 1812.0,
   "n_expected": 1
  },
  {
@@ -7798,7 +7370,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2185.0,
+  "ms": 2037.0,
   "n_expected": 1
  },
  {
@@ -7823,7 +7395,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2049.0,
+  "ms": 1954.0,
   "n_expected": 1
  },
  {
@@ -7848,7 +7420,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1892.0,
+  "ms": 1826.0,
   "n_expected": 1
  },
  {
@@ -7876,7 +7448,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1665.0,
+  "ms": 1626.0,
   "n_expected": 1
  },
  {
@@ -7899,19 +7471,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "maria.santos@consultingcorp.com",
-     "subject": "Quarterly Report Draft",
-     "body": "Please review the attached draft and provide feedback by end of day Friday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2246.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1674.0,
   "n_expected": 2
  },
  {
@@ -7939,7 +7503,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2358.0,
+  "ms": 2153.0,
   "n_expected": 1
  },
  {
@@ -7958,7 +7522,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1305.0,
+  "ms": 1210.0,
   "n_expected": 1
  },
  {
@@ -7985,7 +7549,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2202.0,
+  "ms": 2176.0,
   "n_expected": 1
  },
  {
@@ -8010,15 +7574,11 @@
      "title": "Client Presentation Prep",
      "datetime": "2026-10-05T14:00:00"
     }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1836.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1719.0,
   "n_expected": 2
  },
  {
@@ -8052,7 +7612,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2625.0,
+  "ms": 2534.0,
   "n_expected": 2
  },
  {
@@ -8077,7 +7637,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1816.0,
+  "ms": 1681.0,
   "n_expected": 1
  },
  {
@@ -8104,7 +7664,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1805.0,
+  "ms": 1886.0,
   "n_expected": 1
  },
  {
@@ -8133,19 +7693,11 @@
      "title": "Project Kickoff Meeting",
      "datetime": "2027-02-29T14:00:00"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "elena.p@innovatech.com",
-     "subject": "Meeting Location Confirmation",
-     "body": "I have scheduled the meeting for Wednesday. Please confirm you have the meeting invite."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2563.0,
+  "ms": 2509.0,
   "n_expected": 2
  },
  {
@@ -8174,7 +7726,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2172.0,
+  "ms": 2107.0,
   "n_expected": 1
  },
  {
@@ -8207,7 +7759,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2287.0,
+  "ms": 2191.0,
   "n_expected": 2
  },
  {
@@ -8226,7 +7778,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1054.0,
+  "ms": 979.0,
   "n_expected": 1
  },
  {
@@ -8252,18 +7804,11 @@
     "arguments": {
      "query": "The Golden Swan Bistro"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Reservation at The Golden Swan Bistro",
-     "datetime": "2026-09-13T19:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2339.0,
+  "ms": 1849.0,
   "n_expected": 2
  },
  {
@@ -8286,15 +7831,11 @@
      "subject": "Meeting Rescheduled",
      "body": "The weekly planning meeting is now set for Monday at 10 AM instead of Tuesday. Please confirm you received this."
     }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": false,
-  "exact_ok": false,
-  "ms": 2344.0,
+  "name_ok": true,
+  "exact_ok": true,
+  "ms": 2178.0,
   "n_expected": 1
  },
  {
@@ -8321,7 +7862,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1794.0,
+  "ms": 1762.0,
   "n_expected": 1
  },
  {
@@ -8349,7 +7890,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2006.0,
+  "ms": 1952.0,
   "n_expected": 1
  },
  {
@@ -8379,18 +7920,11 @@
      "subject": "Meeting Update",
      "body": "Hi Elena, I've scheduled our meeting for Monday. Please check your calendar. See you then!"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Q3 Project Review",
-     "datetime": "2024-07-15T11:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2733.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2212.0,
   "n_expected": 2
  },
  {
@@ -8417,7 +7951,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2250.0,
+  "ms": 2057.0,
   "n_expected": 1
  },
  {
@@ -8444,7 +7978,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2256.0,
+  "ms": 2303.0,
   "n_expected": 1
  },
  {
@@ -8475,7 +8009,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2127.0,
+  "ms": 2078.0,
   "n_expected": 2
  },
  {
@@ -8503,7 +8037,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2129.0,
+  "ms": 2071.0,
   "n_expected": 1
  },
  {
@@ -8528,7 +8062,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1962.0,
+  "ms": 1750.0,
   "n_expected": 1
  },
  {
@@ -8554,18 +8088,11 @@
     "arguments": {
      "query": "La Causa Peruvian Cuisine"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner Reservation",
-     "datetime": "2026-10-10T19:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2342.0,
+  "ms": 1910.0,
   "n_expected": 2
  },
  {
@@ -8599,7 +8126,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2525.0,
+  "ms": 2556.0,
   "n_expected": 2
  },
  {
@@ -8624,7 +8151,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1851.0,
+  "ms": 1817.0,
   "n_expected": 1
  },
  {
@@ -8651,7 +8178,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2198.0,
+  "ms": 2078.0,
   "n_expected": 1
  },
  {
@@ -8670,7 +8197,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1307.0,
+  "ms": 1176.0,
   "n_expected": 1
  },
  {
@@ -8695,7 +8222,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2105.0,
+  "ms": 1952.0,
   "n_expected": 1
  },
  {
@@ -8720,7 +8247,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1890.0,
+  "ms": 1887.0,
   "n_expected": 1
  },
  {
@@ -8747,7 +8274,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1879.0,
+  "ms": 1872.0,
   "n_expected": 1
  },
  {
@@ -8770,7 +8297,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1500.0,
+  "ms": 1461.0,
   "n_expected": 1
  },
  {
@@ -8793,18 +8320,11 @@
      "first_name": "Amara",
      "last_name": "Ndlovu"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "amara.ndlovu@zmail.co.za",
-     "subject": "Team-request"
-    }
    }
   ],
-  "name_ok": false,
+  "name_ok": true,
   "exact_ok": false,
-  "ms": 2313.0,
+  "ms": 1899.0,
   "n_expected": 1
  },
  {
@@ -8839,7 +8359,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2281.0,
+  "ms": 2085.0,
   "n_expected": 2
  },
  {
@@ -8866,7 +8386,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1575.0,
+  "ms": 1541.0,
   "n_expected": 1
  },
  {
@@ -8888,18 +8408,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Budget Meeting",
-     "datetime": "2026-11-27T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1855.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1659.0,
   "n_expected": 2
  },
  {
@@ -8928,7 +8441,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2197.0,
+  "ms": 2179.0,
   "n_expected": 1
  },
  {
@@ -8953,7 +8466,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1838.0,
+  "ms": 1806.0,
   "n_expected": 1
  },
  {
@@ -8972,7 +8485,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1351.0,
+  "ms": 1240.0,
   "n_expected": 1
  },
  {
@@ -8997,7 +8510,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1884.0,
+  "ms": 1772.0,
   "n_expected": 1
  },
  {
@@ -9016,7 +8529,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 967.0,
+  "ms": 935.0,
   "n_expected": 1
  },
  {
@@ -9039,7 +8552,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1428.0,
+  "ms": 1422.0,
   "n_expected": 1
  },
  {
@@ -9066,7 +8579,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2416.0,
+  "ms": 2432.0,
   "n_expected": 1
  },
  {
@@ -9085,7 +8598,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1164.0,
+  "ms": 1138.0,
   "n_expected": 1
  },
  {
@@ -9113,7 +8626,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1987.0,
+  "ms": 1803.0,
   "n_expected": 1
  },
  {
@@ -9132,7 +8645,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1328.0,
+  "ms": 1209.0,
   "n_expected": 1
  },
  {
@@ -9151,7 +8664,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1284.0,
+  "ms": 1233.0,
   "n_expected": 1
  },
  {
@@ -9178,7 +8691,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2303.0,
+  "ms": 2266.0,
   "n_expected": 1
  },
  {
@@ -9203,7 +8716,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1980.0,
+  "ms": 2015.0,
   "n_expected": 1
  },
  {
@@ -9226,22 +8739,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "Anjali Sharma",
-     "subject": "Project Update"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2018.0,
+  "ms": 1645.0,
   "n_expected": 2
  },
  {
@@ -9275,7 +8777,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2651.0,
+  "ms": 2441.0,
   "n_expected": 2
  },
  {
@@ -9298,7 +8800,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1537.0,
+  "ms": 1490.0,
   "n_expected": 1
  },
  {
@@ -9323,7 +8825,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1778.0,
+  "ms": 1736.0,
   "n_expected": 1
  },
  {
@@ -9346,19 +8848,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "juan.perez@constructoraatlas.mx",
-     "subject": "Project Milestones Update",
-     "body": "The foundation work is 80% complete and we are on schedule for the November 1st deadline."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2196.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1857.0,
   "n_expected": 2
  },
  {
@@ -9386,7 +8880,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2322.0,
+  "ms": 2224.0,
   "n_expected": 1
  },
  {
@@ -9414,7 +8908,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2093.0,
+  "ms": 1926.0,
   "n_expected": 1
  },
  {
@@ -9437,7 +8931,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1600.0,
+  "ms": 1527.0,
   "n_expected": 1
  },
  {
@@ -9463,18 +8957,11 @@
     "arguments": {
      "query": "La Trattoria Toscana"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner Reservation",
-     "datetime": "2025-01-15T19:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2106.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1834.0,
   "n_expected": 2
  },
  {
@@ -9500,22 +8987,11 @@
     "arguments": {
      "query": "query"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "create_calendar_event",
-     "datetime": ";"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2275.0,
+  "ms": 1844.0,
   "n_expected": 2
  },
  {
@@ -9538,7 +9014,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1661.0,
+  "ms": 1626.0,
   "n_expected": 1
  },
  {
@@ -9572,7 +9048,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2401.0,
+  "ms": 2405.0,
   "n_expected": 2
  },
  {
@@ -9599,7 +9075,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1549.0,
+  "ms": 1653.0,
   "n_expected": 1
  },
  {
@@ -9626,7 +9102,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2109.0,
+  "ms": 2091.0,
   "n_expected": 1
  },
  {
@@ -9653,7 +9129,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2296.0,
+  "ms": 2255.0,
   "n_expected": 1
  },
  {
@@ -9679,7 +9155,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1501.0,
+  "ms": 1512.0,
   "n_expected": 2
  },
  {
@@ -9704,15 +9180,11 @@
      "title": "Lunch with Karim",
      "datetime": "2025-01-29T12:30:00"
     }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1823.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1584.0,
   "n_expected": 2
  },
  {
@@ -9734,18 +9206,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Lunch Planning Session",
-     "datetime": "2024-08-16T13:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1986.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1641.0,
   "n_expected": 2
  },
  {
@@ -9770,7 +9235,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1411.0,
+  "ms": 1396.0,
   "n_expected": 1
  },
  {
@@ -9789,7 +9254,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1224.0,
+  "ms": 1179.0,
   "n_expected": 1
  },
  {
@@ -9815,18 +9280,11 @@
     "arguments": {
      "query": "Annual Tech Expo"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Expo Opening",
-     "datetime": "2025-08-06T09:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1900.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1615.0,
   "n_expected": 2
  },
  {
@@ -9851,7 +9309,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2093.0,
+  "ms": 2124.0,
   "n_expected": 1
  },
  {
@@ -9876,7 +9334,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2022.0,
+  "ms": 1978.0,
   "n_expected": 1
  },
  {
@@ -9899,7 +9357,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1662.0,
+  "ms": 1706.0,
   "n_expected": 1
  },
  {
@@ -9922,7 +9380,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1306.0,
+  "ms": 1438.0,
   "n_expected": 1
  },
  {
@@ -9949,15 +9407,11 @@
      "subject": "Office Supplies Order",
      "body": "I need a restock of A4 paper and highlighters ASAP."
     }
-   },
-   {
-    "name": "open_wifi_settings",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2276.0,
+  "ms": 2205.0,
   "n_expected": 2
  },
  {
@@ -9980,7 +9434,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1745.0,
+  "ms": 1677.0,
   "n_expected": 1
  },
  {
@@ -10003,7 +9457,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1317.0,
+  "ms": 1296.0,
   "n_expected": 1
  },
  {
@@ -10032,7 +9486,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1791.0,
+  "ms": 1658.0,
   "n_expected": 1
  },
  {
@@ -10054,18 +9508,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Review Prep",
-     "datetime": "2025-07-22T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1905.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1579.0,
   "n_expected": 2
  },
  {
@@ -10091,22 +9538,11 @@
     "arguments": {
      "query": "Digital Futures Center"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "UX Design Workshop",
-     "datetime": "next Wednesday at 2:00 PM"
-    }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2288.0,
+  "ms": 1857.0,
   "n_expected": 2
  },
  {
@@ -10135,7 +9571,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1847.0,
+  "ms": 1776.0,
   "n_expected": 1
  },
  {
@@ -10171,7 +9607,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2386.0,
+  "ms": 2251.0,
   "n_expected": 2
  },
  {
@@ -10193,18 +9629,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Call Dr. Chen",
-     "datetime": "2024-08-12T09:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2393.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1547.0,
   "n_expected": 2
  },
  {
@@ -10226,18 +9655,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dentist Appointment",
-     "datetime": "2024-05-02T09:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1909.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1580.0,
   "n_expected": 2
  },
  {
@@ -10272,7 +9694,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2067.0,
+  "ms": 2088.0,
   "n_expected": 3
  },
  {
@@ -10301,7 +9723,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2092.0,
+  "ms": 2067.0,
   "n_expected": 1
  },
  {
@@ -10331,7 +9753,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1492.0,
+  "ms": 1454.0,
   "n_expected": 2
  },
  {
@@ -10354,19 +9776,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "julian.vazquez@corpmail.biz",
-     "subject": "Meeting Room Change",
-     "body": "The team sync has been moved to Conference Room Beta at 1 PM."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2312.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1812.0,
   "n_expected": 2
  },
  {
@@ -10389,7 +9803,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1224.0,
+  "ms": 1249.0,
   "n_expected": 1
  },
  {
@@ -10410,17 +9824,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "National Gallery of Art"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1596.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1447.0,
   "n_expected": 2
  },
  {
@@ -10447,7 +9855,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1778.0,
+  "ms": 1792.0,
   "n_expected": 1
  },
  {
@@ -10476,7 +9884,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2049.0,
+  "ms": 2043.0,
   "n_expected": 1
  },
  {
@@ -10499,7 +9907,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1522.0,
+  "ms": 1478.0,
   "n_expected": 1
  },
  {
@@ -10521,18 +9929,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Budget Planning Meeting",
-     "datetime": "2026-04-01T16:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1943.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1571.0,
   "n_expected": 2
  },
  {
@@ -10559,7 +9960,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2306.0,
+  "ms": 2366.0,
   "n_expected": 1
  },
  {
@@ -10589,7 +9990,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1541.0,
+  "ms": 1546.0,
   "n_expected": 2
  },
  {
@@ -10617,7 +10018,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1581.0,
+  "ms": 1606.0,
   "n_expected": 1
  },
  {
@@ -10642,7 +10043,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1871.0,
+  "ms": 1857.0,
   "n_expected": 1
  },
  {
@@ -10665,19 +10066,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "elena.rod@corpmail.com",
-     "subject": "Quarterly Report Draft",
-     "body": "Elena, please review the attached draft and send me your comments by end of day Monday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2427.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1902.0,
   "n_expected": 2
  },
  {
@@ -10704,7 +10097,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2407.0,
+  "ms": 2441.0,
   "n_expected": 1
  },
  {
@@ -10727,7 +10120,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1267.0,
+  "ms": 1291.0,
   "n_expected": 1
  },
  {
@@ -10752,15 +10145,11 @@
      "title": "Project Status Meeting",
      "datetime": "2026-12-15T11:30:00"
     }
-   },
-   {
-    "name": "open_wifi_settings",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1622.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1576.0,
   "n_expected": 2
  },
  {
@@ -10788,7 +10177,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1910.0,
+  "ms": 1909.0,
   "n_expected": 2
  },
  {
@@ -10807,7 +10196,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1334.0,
+  "ms": 1292.0,
   "n_expected": 1
  },
  {
@@ -10832,7 +10221,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2005.0,
+  "ms": 1870.0,
   "n_expected": 1
  },
  {
@@ -10860,7 +10249,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2071.0,
+  "ms": 2129.0,
   "n_expected": 1
  },
  {
@@ -10882,22 +10271,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "turn_off_flashlight",
-     "datetime": "2026-03-08T18:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1977.0,
+  "ms": 1605.0,
   "n_expected": 2
  },
  {
@@ -10919,22 +10297,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Annual Report Draft",
-     "datetime": "2024-05-13T09:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2050.0,
+  "ms": 1759.0,
   "n_expected": 2
  },
  {
@@ -10962,7 +10329,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1355.0,
+  "ms": 1347.0,
   "n_expected": 2
  },
  {
@@ -10981,7 +10348,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1235.0,
+  "ms": 1167.0,
   "n_expected": 1
  },
  {
@@ -11000,7 +10367,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1196.0,
+  "ms": 1113.0,
   "n_expected": 1
  },
  {
@@ -11021,17 +10388,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "nearest gas station"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1635.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1436.0,
   "n_expected": 2
  },
  {
@@ -11054,7 +10415,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1418.0,
+  "ms": 1485.0,
   "n_expected": 1
  },
  {
@@ -11083,7 +10444,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2089.0,
+  "ms": 2145.0,
   "n_expected": 1
  },
  {
@@ -11111,7 +10472,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2059.0,
+  "ms": 2085.0,
   "n_expected": 1
  },
  {
@@ -11133,22 +10494,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync-Up",
-     "datetime": "2026-03-05T16:00:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1936.0,
+  "ms": 1550.0,
   "n_expected": 2
  },
  {
@@ -11173,7 +10523,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1794.0,
+  "ms": 1665.0,
   "n_expected": 1
  },
  {
@@ -11192,7 +10542,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1320.0,
+  "ms": 1303.0,
   "n_expected": 1
  },
  {
@@ -11217,7 +10567,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1746.0,
+  "ms": 1848.0,
   "n_expected": 1
  },
  {
@@ -11236,7 +10586,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1156.0,
+  "ms": 1186.0,
   "n_expected": 1
  },
  {
@@ -11263,7 +10613,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2241.0,
+  "ms": 2276.0,
   "n_expected": 1
  },
  {
@@ -11290,21 +10640,11 @@
      "title": "Project Kickoff Meeting",
      "datetime": "2026-01-16T09:00:00"
     }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Tech Solutions HQ"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2270.0,
+  "ms": 1917.0,
   "n_expected": 2
  },
  {
@@ -11329,7 +10669,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1991.0,
+  "ms": 1865.0,
   "n_expected": 1
  },
  {
@@ -11360,7 +10700,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2080.0,
+  "ms": 2100.0,
   "n_expected": 2
  },
  {
@@ -11384,20 +10724,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "first_name": "Kenji Tanaka",
-     "phone_number": "403-555-1201",
-     "email": "kenji.tanaka@designstudios.net",
-     "last_name": "first_name"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2158.0,
+  "ms": 1828.0,
   "n_expected": 2
  },
  {
@@ -11420,7 +10751,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1221.0,
+  "ms": 1238.0,
   "n_expected": 1
  },
  {
@@ -11445,7 +10776,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1881.0,
+  "ms": 1855.0,
   "n_expected": 1
  },
  {
@@ -11466,17 +10797,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Café Lumière"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1713.0,
+  "ms": 1446.0,
   "n_expected": 2
  },
  {
@@ -11495,7 +10820,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1213.0,
+  "ms": 1130.0,
   "n_expected": 1
  },
  {
@@ -11522,7 +10847,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2359.0,
+  "ms": 2490.0,
   "n_expected": 1
  },
  {
@@ -11545,19 +10870,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "jian.li@techsolutions.net",
-     "subject": "Q3 Budget Review",
-     "body": "Please review the attached budget proposal before our meeting on Thursday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2008.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1777.0,
   "n_expected": 2
  },
  {
@@ -11576,7 +10893,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1093.0,
+  "ms": 1105.0,
   "n_expected": 1
  },
  {
@@ -11610,7 +10927,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1824.0,
+  "ms": 1811.0,
   "n_expected": 2
  },
  {
@@ -11637,7 +10954,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2355.0,
+  "ms": 2204.0,
   "n_expected": 1
  },
  {
@@ -11660,7 +10977,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1406.0,
+  "ms": 1364.0,
   "n_expected": 1
  },
  {
@@ -11686,22 +11003,11 @@
     "arguments": {
      "query": "Tulfa"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Tulfa",
-     "datetime": "Tulfa"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2338.0,
+  "ms": 1967.0,
   "n_expected": 2
  },
  {
@@ -11737,7 +11043,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2445.0,
+  "ms": 2519.0,
   "n_expected": 2
  },
  {
@@ -11766,7 +11072,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2165.0,
+  "ms": 2130.0,
   "n_expected": 1
  },
  {
@@ -11800,7 +11106,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2822.0,
+  "ms": 2643.0,
   "n_expected": 2
  },
  {
@@ -11823,7 +11129,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1454.0,
+  "ms": 1442.0,
   "n_expected": 1
  },
  {
@@ -11842,19 +11148,11 @@
     "arguments": {
      "query": "Galápagos Restaurant"
     }
-   },
-   {
-    "name": "open_wifi_settings",
-    "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": false,
+  "name_ok": true,
   "exact_ok": false,
-  "ms": 1712.0,
+  "ms": 1605.0,
   "n_expected": 1
  },
  {
@@ -11889,7 +11187,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1946.0,
+  "ms": 2039.0,
   "n_expected": 2
  },
  {
@@ -11913,20 +11211,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "last_name": "null",
-     "phone_number": "+420 777 987 654",
-     "email": "zuzana.novak@example.cz",
-     "first_name": "null"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2243.0,
+  "ms": 1814.0,
   "n_expected": 2
  },
  {
@@ -11957,7 +11246,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2139.0,
+  "ms": 2001.0,
   "n_expected": 2
  },
  {
@@ -11979,18 +11268,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Pick up laundry",
-     "datetime": "2024-10-24T17:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1843.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1562.0,
   "n_expected": 2
  },
  {
@@ -12013,7 +11295,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1510.0,
+  "ms": 1503.0,
   "n_expected": 1
  },
  {
@@ -12036,7 +11318,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1623.0,
+  "ms": 1761.0,
   "n_expected": 1
  },
  {
@@ -12055,7 +11337,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1178.0,
+  "ms": 1226.0,
   "n_expected": 1
  },
  {
@@ -12080,7 +11362,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1932.0,
+  "ms": 1889.0,
   "n_expected": 1
  },
  {
@@ -12108,7 +11390,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2322.0,
+  "ms": 2201.0,
   "n_expected": 1
  },
  {
@@ -12132,17 +11414,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "East Gate Medical Center"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1749.0,
+  "ms": 1571.0,
   "n_expected": 2
  },
  {
@@ -12165,7 +11441,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1307.0,
+  "ms": 1311.0,
   "n_expected": 1
  },
  {
@@ -12190,7 +11466,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1814.0,
+  "ms": 1922.0,
   "n_expected": 1
  },
  {
@@ -12213,7 +11489,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1533.0,
+  "ms": 1585.0,
   "n_expected": 1
  },
  {
@@ -12242,7 +11518,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2238.0,
+  "ms": 2140.0,
   "n_expected": 1
  },
  {
@@ -12261,7 +11537,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1439.0,
+  "ms": 1380.0,
   "n_expected": 1
  },
  {
@@ -12297,7 +11573,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2565.0,
+  "ms": 2530.0,
   "n_expected": 2
  },
  {
@@ -12316,7 +11592,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1173.0,
+  "ms": 1184.0,
   "n_expected": 1
  },
  {
@@ -12339,7 +11615,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1181.0,
+  "ms": 1247.0,
   "n_expected": 1
  },
  {
@@ -12358,7 +11634,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1107.0,
+  "ms": 1184.0,
   "n_expected": 1
  },
  {
@@ -12383,7 +11659,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1862.0,
+  "ms": 1893.0,
   "n_expected": 1
  },
  {
@@ -12410,15 +11686,11 @@
      "subject": "Transvel Confirmation",
      "body": "Just confirming my arrival time is 11 AM tomorrow."
     }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2392.0,
+  "ms": 2108.0,
   "n_expected": 2
  },
  {
@@ -12446,7 +11718,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2079.0,
+  "ms": 2038.0,
   "n_expected": 1
  },
  {
@@ -12482,7 +11754,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2541.0,
+  "ms": 2672.0,
   "n_expected": 2
  },
  {
@@ -12510,7 +11782,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1634.0,
+  "ms": 1720.0,
   "n_expected": 1
  },
  {
@@ -12533,19 +11805,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "kenji.sato@global-pharma.jp",
-     "subject": "Protocol Draft 3 Ready",
-     "body": "Kenji, the final draft of the Phase 3 protocol is attached. Please review the safety section ASAP. Thanks."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2397.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1841.0,
   "n_expected": 2
  },
  {
@@ -12578,7 +11842,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2518.0,
+  "ms": 2446.0,
   "n_expected": 2
  },
  {
@@ -12605,7 +11869,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2031.0,
+  "ms": 2010.0,
   "n_expected": 1
  },
  {
@@ -12624,7 +11888,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1179.0,
+  "ms": 1269.0,
   "n_expected": 1
  },
  {
@@ -12649,7 +11913,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1913.0,
+  "ms": 2061.0,
   "n_expected": 1
  },
  {
@@ -12671,18 +11935,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync Meeting",
-     "datetime": "2025-05-29T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1881.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1581.0,
   "n_expected": 2
  },
  {
@@ -12701,7 +11958,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1275.0,
+  "ms": 1206.0,
   "n_expected": 1
  },
  {
@@ -12734,7 +11991,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2421.0,
+  "ms": 2349.0,
   "n_expected": 2
  },
  {
@@ -12756,18 +12013,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Review",
-     "datetime": "2025-02-24T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1759.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1544.0,
   "n_expected": 2
  },
  {
@@ -12794,7 +12044,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2202.0,
+  "ms": 2263.0,
   "n_expected": 1
  },
  {
@@ -12821,7 +12071,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2318.0,
+  "ms": 2340.0,
   "n_expected": 1
  },
  {
@@ -12844,7 +12094,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1288.0,
+  "ms": 1227.0,
   "n_expected": 1
  },
  {
@@ -12866,18 +12116,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Annual Check-up",
-     "datetime": "2025-05-19T14:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1813.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1514.0,
   "n_expected": 2
  },
  {
@@ -12913,7 +12156,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2334.0,
+  "ms": 2367.0,
   "n_expected": 2
  },
  {
@@ -12949,7 +12192,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2352.0,
+  "ms": 2401.0,
   "n_expected": 2
  },
  {
@@ -12972,7 +12215,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1196.0,
+  "ms": 1251.0,
   "n_expected": 1
  },
  {
@@ -12991,7 +12234,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1256.0,
+  "ms": 1200.0,
   "n_expected": 1
  },
  {
@@ -13018,7 +12261,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2339.0,
+  "ms": 2258.0,
   "n_expected": 1
  },
  {
@@ -13047,7 +12290,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2060.0,
+  "ms": 2053.0,
   "n_expected": 1
  },
  {
@@ -13089,7 +12332,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1187.0,
+  "ms": 1189.0,
   "n_expected": 1
  },
  {
@@ -13116,7 +12359,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2196.0,
+  "ms": 2305.0,
   "n_expected": 1
  },
  {
@@ -13141,7 +12384,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1993.0,
+  "ms": 1912.0,
   "n_expected": 1
  },
  {
@@ -13172,7 +12415,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1606.0,
+  "ms": 1548.0,
   "n_expected": 2
  },
  {
@@ -13195,19 +12438,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "javier.gonzalez@conferencecenter.net",
-     "subject": "Registration Status",
-     "body": "I am here and waiting for the registration desk to open."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2507.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1795.0,
   "n_expected": 2
  },
  {
@@ -13234,7 +12469,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2510.0,
+  "ms": 1900.0,
   "n_expected": 1
  },
  {
@@ -13253,7 +12488,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1220.0,
+  "ms": 1207.0,
   "n_expected": 1
  },
  {
@@ -13286,7 +12521,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2101.0,
+  "ms": 2149.0,
   "n_expected": 2
  },
  {
@@ -13313,7 +12548,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2162.0,
+  "ms": 2275.0,
   "n_expected": 1
  },
  {
@@ -13336,7 +12571,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1221.0,
+  "ms": 1602.0,
   "n_expected": 1
  },
  {
@@ -13359,7 +12594,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1266.0,
+  "ms": 1474.0,
   "n_expected": 1
  },
  {
@@ -13386,7 +12621,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2069.0,
+  "ms": 2063.0,
   "n_expected": 1
  },
  {
@@ -13415,7 +12650,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2160.0,
+  "ms": 2188.0,
   "n_expected": 1
  },
  {
@@ -13444,19 +12679,11 @@
      "title": "Project Alpha Kickoff",
      "datetime": "2026-06-16T09:30:00"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "subject": "Kickoff Meeting Details",
-     "body": "David, confirming our kickoff meeting for Tuesday morning. I've blocked out 9:30 AM on the 16th in the calendar. Let me know if you have any conflicts.",
-     "to": "David,chen@bizpartners.net"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2847.0,
+  "ms": 2229.0,
   "n_expected": 2
  },
  {
@@ -13479,19 +12706,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "subject": "Q1 Budget Finalized",
-     "body": "The finance team confirmed the figures. The final Q1 budget is available on the internal portal.",
-     "to": "Chen.wei@futuretech.cn"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2081.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1701.0,
   "n_expected": 2
  },
  {
@@ -13510,7 +12729,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1154.0,
+  "ms": 1156.0,
   "n_expected": 1
  },
  {
@@ -13535,7 +12754,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1901.0,
+  "ms": 1898.0,
   "n_expected": 1
  },
  {
@@ -13560,7 +12779,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1700.0,
+  "ms": 1697.0,
   "n_expected": 1
  },
  {
@@ -13579,7 +12798,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1651.0,
+  "ms": 1221.0,
   "n_expected": 1
  },
  {
@@ -13598,7 +12817,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1367.0,
+  "ms": 1170.0,
   "n_expected": 1
  },
  {
@@ -13626,7 +12845,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2139.0,
+  "ms": 1994.0,
   "n_expected": 1
  },
  {
@@ -13658,7 +12877,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2117.0,
+  "ms": 2064.0,
   "n_expected": 2
  },
  {
@@ -13686,7 +12905,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2291.0,
+  "ms": 2554.0,
   "n_expected": 1
  },
  {
@@ -13705,7 +12924,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1328.0,
+  "ms": 1458.0,
   "n_expected": 1
  },
  {
@@ -13730,7 +12949,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1973.0,
+  "ms": 1969.0,
   "n_expected": 1
  },
  {
@@ -13753,7 +12972,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1424.0,
+  "ms": 1307.0,
   "n_expected": 1
  },
  {
@@ -13772,7 +12991,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1279.0,
+  "ms": 1269.0,
   "n_expected": 1
  },
  {
@@ -13805,7 +13024,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2196.0,
+  "ms": 2208.0,
   "n_expected": 2
  },
  {
@@ -13832,7 +13051,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2005.0,
+  "ms": 1999.0,
   "n_expected": 1
  },
  {
@@ -13859,7 +13078,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2581.0,
+  "ms": 2558.0,
   "n_expected": 1
  },
  {
@@ -13878,7 +13097,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1320.0,
+  "ms": 1332.0,
   "n_expected": 1
  },
  {
@@ -13903,7 +13122,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1822.0,
+  "ms": 1866.0,
   "n_expected": 1
  },
  {
@@ -13930,21 +13149,11 @@
      "title": "Meeting with Pierre Dubois",
      "datetime": "2026-07-21T10:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "address"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2438.0,
+  "ms": 2200.0,
   "n_expected": 2
  },
  {
@@ -13980,7 +13189,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 3274.0,
+  "ms": 3221.0,
   "n_expected": 2
  },
  {
@@ -13999,7 +13208,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1254.0,
+  "ms": 1268.0,
   "n_expected": 1
  },
  {
@@ -14018,7 +13227,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1328.0,
+  "ms": 1382.0,
   "n_expected": 1
  },
  {
@@ -14045,7 +13254,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1953.0,
+  "ms": 2216.0,
   "n_expected": 1
  },
  {
@@ -14068,7 +13277,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1308.0,
+  "ms": 1490.0,
   "n_expected": 1
  },
  {
@@ -14093,7 +13302,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1957.0,
+  "ms": 1976.0,
   "n_expected": 1
  },
  {
@@ -14120,7 +13329,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2396.0,
+  "ms": 2392.0,
   "n_expected": 1
  },
  {
@@ -14142,18 +13351,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Call ISP",
-     "datetime": "2026-07-21 14:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2298.0,
+  "ms": 2043.0,
   "n_expected": 2
  },
  {
@@ -14176,20 +13378,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "phone_number": "+44 20 7946 0885",
-     "email": "null",
-     "first_name": "null",
-     "last_name": "null"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2093.0,
+  "ms": 1725.0,
   "n_expected": 2
  },
  {
@@ -14216,7 +13409,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2622.0,
+  "ms": 2611.0,
   "n_expected": 1
  },
  {
@@ -14243,21 +13436,11 @@
      "title": "Annual Check-up",
      "datetime": "2026-06-02T15:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "null"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2406.0,
+  "ms": 2246.0,
   "n_expected": 2
  },
  {
@@ -14279,18 +13462,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Call with Dr. Elara",
-     "datetime": "2026-12-29T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2064.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1796.0,
   "n_expected": 2
  },
  {
@@ -14318,7 +13494,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2195.0,
+  "ms": 2216.0,
   "n_expected": 1
  },
  {
@@ -14347,7 +13523,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2311.0,
+  "ms": 2338.0,
   "n_expected": 1
  },
  {
@@ -14370,19 +13546,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "clarita.r@globalmail.net",
-     "subject": "Missing Q3 Report",
-     "body": "I can't seem to find the final Q3 report draft we discussed. Could you check if you have the latest version saved?"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2340.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1895.0,
   "n_expected": 2
  },
  {
@@ -14407,7 +13575,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2074.0,
+  "ms": 2057.0,
   "n_expected": 1
  },
  {
@@ -14432,7 +13600,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2011.0,
+  "ms": 2111.0,
   "n_expected": 1
  },
  {
@@ -14454,18 +13622,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Annual Robotics Meetup",
-     "datetime": "2026-10-25T14:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1995.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1784.0,
   "n_expected": 2
  },
  {
@@ -14489,7 +13650,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1237.0,
+  "ms": 1292.0,
   "n_expected": 1
  },
  {
@@ -14518,7 +13679,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2099.0,
+  "ms": 2191.0,
   "n_expected": 1
  },
  {
@@ -14537,7 +13698,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1266.0,
+  "ms": 1262.0,
   "n_expected": 1
  },
  {
@@ -14556,7 +13717,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1455.0,
+  "ms": 1400.0,
   "n_expected": 1
  },
  {
@@ -14575,7 +13736,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1316.0,
+  "ms": 1244.0,
   "n_expected": 1
  },
  {
@@ -14602,17 +13763,11 @@
      "title": "Client Lunch",
      "datetime": "2026-07-14T13:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Italian Place Ristorante"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2262.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2138.0,
   "n_expected": 2
  },
  {
@@ -14631,7 +13786,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1397.0,
+  "ms": 1564.0,
   "n_expected": 1
  },
  {
@@ -14658,7 +13813,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2285.0,
+  "ms": 3500.0,
   "n_expected": 1
  },
  {
@@ -14680,18 +13835,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Annual Project Review",
-     "datetime": "2026-09-22T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1917.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1742.0,
   "n_expected": 2
  },
  {
@@ -14716,7 +13864,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2046.0,
+  "ms": 2312.0,
   "n_expected": 1
  },
  {
@@ -14738,18 +13886,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Alpha Kickoff",
-     "datetime": "2026-05-30T14:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2201.0,
+  "ms": 2246.0,
   "n_expected": 2
  },
  {
@@ -14774,7 +13915,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1478.0,
+  "ms": 1500.0,
   "n_expected": 1
  },
  {
@@ -14799,7 +13940,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2008.0,
+  "ms": 2044.0,
   "n_expected": 1
  },
  {
@@ -14826,7 +13967,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2346.0,
+  "ms": 2401.0,
   "n_expected": 1
  },
  {
@@ -14854,7 +13995,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2525.0,
+  "ms": 2523.0,
   "n_expected": 1
  },
  {
@@ -14881,7 +14022,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1960.0,
+  "ms": 2041.0,
   "n_expected": 1
  },
  {
@@ -14904,7 +14045,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1030.0,
+  "ms": 1329.0,
   "n_expected": 1
  },
  {
@@ -14923,7 +14064,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1208.0,
+  "ms": 2068.0,
   "n_expected": 1
  },
  {
@@ -14951,7 +14092,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2226.0,
+  "ms": 2684.0,
   "n_expected": 1
  },
  {
@@ -14974,7 +14115,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1420.0,
+  "ms": 1514.0,
   "n_expected": 1
  },
  {
@@ -15001,7 +14142,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2302.0,
+  "ms": 2219.0,
   "n_expected": 1
  },
  {
@@ -15028,7 +14169,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1829.0,
+  "ms": 1863.0,
   "n_expected": 1
  },
  {
@@ -15053,7 +14194,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1859.0,
+  "ms": 1910.0,
   "n_expected": 1
  },
  {
@@ -15077,21 +14218,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Global Tech Hub, Berlin"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2044.0,
+  "ms": 1897.0,
   "n_expected": 2
  },
  {
@@ -15116,7 +14247,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1883.0,
+  "ms": 1958.0,
   "n_expected": 1
  },
  {
@@ -15135,7 +14266,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1296.0,
+  "ms": 1309.0,
   "n_expected": 1
  },
  {
@@ -15158,7 +14289,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1745.0,
+  "ms": 1668.0,
   "n_expected": 1
  },
  {
@@ -15187,7 +14318,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2287.0,
+  "ms": 2304.0,
   "n_expected": 1
  },
  {
@@ -15210,7 +14341,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1081.0,
+  "ms": 1091.0,
   "n_expected": 1
  },
  {
@@ -15235,7 +14366,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1911.0,
+  "ms": 1916.0,
   "n_expected": 1
  },
  {
@@ -15261,18 +14392,11 @@
     "arguments": {
      "query": "The Folly House at 45 King Street West, Toronto, ON"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Meeting with Elena",
-     "datetime": "2025-10-07T14:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2317.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2163.0,
   "n_expected": 2
  },
  {
@@ -15291,7 +14415,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1259.0,
+  "ms": 1240.0,
   "n_expected": 1
  },
  {
@@ -15313,18 +14437,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync-up",
-     "datetime": "2026-05-29T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1853.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1566.0,
   "n_expected": 2
  },
  {
@@ -15346,22 +14463,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Budget Review",
-     "datetime": "2025-11-25T11:00:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2031.0,
+  "ms": 1696.0,
   "n_expected": 2
  },
  {
@@ -15384,7 +14490,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1336.0,
+  "ms": 1349.0,
   "n_expected": 1
  },
  {
@@ -15406,18 +14512,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync Prep",
-     "datetime": "2026-04-09T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1807.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1579.0,
   "n_expected": 2
  },
  {
@@ -15440,7 +14539,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1371.0,
+  "ms": 1420.0,
   "n_expected": 1
  },
  {
@@ -15465,7 +14564,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1959.0,
+  "ms": 2047.0,
   "n_expected": 1
  },
  {
@@ -15488,7 +14587,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1586.0,
+  "ms": 1571.0,
   "n_expected": 1
  },
  {
@@ -15512,24 +14611,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "emilio.c@examplecorp.com",
-     "phone_number": "555-0192",
-     "first_name": "Emilio Costa",
-     "last_name": "Emilio Costa"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2369.0,
+  "ms": 1839.0,
   "n_expected": 2
  },
  {
@@ -15554,7 +14640,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2167.0,
+  "ms": 2139.0,
   "n_expected": 1
  },
  {
@@ -15582,7 +14668,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2344.0,
+  "ms": 2343.0,
   "n_expected": 1
  },
  {
@@ -15601,7 +14687,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1448.0,
+  "ms": 1451.0,
   "n_expected": 1
  },
  {
@@ -15623,18 +14709,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Alpha Kickoff",
-     "datetime": "2026-03-10T14:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1979.0,
+  "ms": 1705.0,
   "n_expected": 2
  },
  {
@@ -15659,7 +14738,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1888.0,
+  "ms": 1863.0,
   "n_expected": 1
  },
  {
@@ -15684,7 +14763,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1888.0,
+  "ms": 2030.0,
   "n_expected": 1
  },
  {
@@ -15703,7 +14782,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1479.0,
+  "ms": 1423.0,
   "n_expected": 1
  },
  {
@@ -15737,7 +14816,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2438.0,
+  "ms": 2405.0,
   "n_expected": 2
  },
  {
@@ -15766,7 +14845,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2358.0,
+  "ms": 2286.0,
   "n_expected": 1
  },
  {
@@ -15793,7 +14872,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1645.0,
+  "ms": 1575.0,
   "n_expected": 1
  },
  {
@@ -15816,7 +14895,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1048.0,
+  "ms": 1049.0,
   "n_expected": 1
  },
  {
@@ -15852,7 +14931,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1842.0,
+  "ms": 1812.0,
   "n_expected": 2
  },
  {
@@ -15871,7 +14950,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1345.0,
+  "ms": 1320.0,
   "n_expected": 1
  },
  {
@@ -15896,7 +14975,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1921.0,
+  "ms": 1916.0,
   "n_expected": 1
  },
  {
@@ -15919,19 +14998,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "ana.ivanova@techsolutions.com",
-     "subject": "Meeting reschedule",
-     "body": "I need to push our sync to tomorrow at 11 AM due to an unexpected emergency."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2876.0,
+  "ms": 1945.0,
   "n_expected": 2
  },
  {
@@ -15953,18 +15024,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Apartment Lease Signing",
-     "datetime": "2025-03-12T14:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2193.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1563.0,
   "n_expected": 2
  },
  {
@@ -15983,7 +15047,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1386.0,
+  "ms": 1382.0,
   "n_expected": 1
  },
  {
@@ -16009,18 +15073,11 @@
     "arguments": {
      "query": "Maison de la Pâtisserie"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "pick up the cake",
-     "datetime": "2026-07-21T16:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2211.0,
+  "ms": 1965.0,
   "n_expected": 2
  },
  {
@@ -16039,7 +15096,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1229.0,
+  "ms": 1204.0,
   "n_expected": 1
  },
  {
@@ -16062,19 +15119,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "julian.vos@techwave.nl",
-     "subject": "Meeting Reschedule",
-     "body": "I need to move our 11 AM meeting to 2 PM today. Please confirm if that works for you."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2429.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1840.0,
   "n_expected": 2
  },
  {
@@ -16101,7 +15150,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2504.0,
+  "ms": 2513.0,
   "n_expected": 1
  },
  {
@@ -16118,17 +15167,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "789 Ocean Boulevard, Sarasota, Florida"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1971.0,
+  "ms": 1665.0,
   "n_expected": 1
  },
  {
@@ -16155,7 +15198,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1950.0,
+  "ms": 1957.0,
   "n_expected": 1
  },
  {
@@ -16183,7 +15226,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2394.0,
+  "ms": 2281.0,
   "n_expected": 1
  },
  {
@@ -16217,7 +15260,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2671.0,
+  "ms": 2547.0,
   "n_expected": 2
  },
  {
@@ -16246,17 +15289,11 @@
      "last_name": "Javier Rodriguez",
      "first_name": "Javier Rodriguez"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Artisian Bakery Portland"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2283.0,
+  "ms": 2151.0,
   "n_expected": 2
  },
  {
@@ -16275,7 +15312,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1363.0,
+  "ms": 1356.0,
   "n_expected": 1
  },
  {
@@ -16302,7 +15339,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1948.0,
+  "ms": 1984.0,
   "n_expected": 1
  },
  {
@@ -16327,7 +15364,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1570.0,
+  "ms": 1500.0,
   "n_expected": 1
  },
  {
@@ -16346,7 +15383,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1395.0,
+  "ms": 1298.0,
   "n_expected": 1
  },
  {
@@ -16374,7 +15411,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2295.0,
+  "ms": 2333.0,
   "n_expected": 1
  },
  {
@@ -16397,19 +15434,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "clara.chen@mailservice.com",
-     "subject": "Meeting Rescheduled",
-     "body": "I need to move our 3 PM meeting to 4:30 PM today, January 11th."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2237.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1892.0,
   "n_expected": 2
  },
  {
@@ -16428,7 +15457,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1343.0,
+  "ms": 1316.0,
   "n_expected": 1
  },
  {
@@ -16451,7 +15480,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1615.0,
+  "ms": 1602.0,
   "n_expected": 1
  },
  {
@@ -16478,19 +15507,11 @@
     "arguments": {
      "query": "Café Del Mar at 7 Calle de la Montera, Madrid"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "javier.gomez@mail.es",
-     "subject": "New Meeting Spot",
-     "body": "Let's meet here tomorrow morning"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2651.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2144.0,
   "n_expected": 2
  },
  {
@@ -16515,7 +15536,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2039.0,
+  "ms": 2024.0,
   "n_expected": 1
  },
  {
@@ -16545,7 +15566,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1600.0,
+  "ms": 1816.0,
   "n_expected": 2
  },
  {
@@ -16564,7 +15585,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1417.0,
+  "ms": 1476.0,
   "n_expected": 1
  },
  {
@@ -16587,19 +15608,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "aisha.malik@zmail.com",
-     "subject": "Meeting confirmation",
-     "body": "I am confirming our 3 PM meeting tomorrow."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2096.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1720.0,
   "n_expected": 2
  },
  {
@@ -16633,7 +15646,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2702.0,
+  "ms": 2664.0,
   "n_expected": 2
  },
  {
@@ -16656,7 +15669,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1553.0,
+  "ms": 2151.0,
   "n_expected": 1
  },
  {
@@ -16675,7 +15688,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1333.0,
+  "ms": 1422.0,
   "n_expected": 1
  },
  {
@@ -16698,7 +15711,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1013.0,
+  "ms": 988.0,
   "n_expected": 1
  },
  {
@@ -16725,17 +15738,11 @@
      "title": "Dr. Chen follow-up",
      "datetime": "2026-09-12T09:15:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "305 Madison Avenue, New York City"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2379.0,
+  "ms": 2007.0,
   "n_expected": 2
  },
  {
@@ -16760,7 +15767,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1991.0,
+  "ms": 1941.0,
   "n_expected": 1
  },
  {
@@ -16785,7 +15792,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2065.0,
+  "ms": 1907.0,
   "n_expected": 1
  },
  {
@@ -16812,7 +15819,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2623.0,
+  "ms": 2476.0,
   "n_expected": 1
  },
  {
@@ -16848,7 +15855,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2535.0,
+  "ms": 2620.0,
   "n_expected": 2
  },
  {
@@ -16882,7 +15889,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2517.0,
+  "ms": 2522.0,
   "n_expected": 2
  },
  {
@@ -16907,7 +15914,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2078.0,
+  "ms": 2025.0,
   "n_expected": 1
  },
  {
@@ -16926,7 +15933,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1234.0,
+  "ms": 1204.0,
   "n_expected": 1
  },
  {
@@ -16945,7 +15952,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1321.0,
+  "ms": 1320.0,
   "n_expected": 1
  },
  {
@@ -16972,7 +15979,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2013.0,
+  "ms": 2248.0,
   "n_expected": 1
  },
  {
@@ -17000,7 +16007,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2191.0,
+  "ms": 2890.0,
   "n_expected": 1
  },
  {
@@ -17019,7 +16026,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1037.0,
+  "ms": 1155.0,
   "n_expected": 1
  },
  {
@@ -17046,7 +16053,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2057.0,
+  "ms": 2066.0,
   "n_expected": 1
  },
  {
@@ -17069,15 +16076,11 @@
      "subject": "Quick question about the upcoming presentation",
      "body": "Can you confirm if you have finalized the slides for Monday's meeting? Let me know if you need any help."
     }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": false,
-  "exact_ok": false,
-  "ms": 2595.0,
+  "name_ok": true,
+  "exact_ok": true,
+  "ms": 2502.0,
   "n_expected": 1
  },
  {
@@ -17104,7 +16107,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2418.0,
+  "ms": 2909.0,
   "n_expected": 1
  },
  {
@@ -17139,7 +16142,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2923.0,
+  "ms": 3104.0,
   "n_expected": 2
  },
  {
@@ -17158,7 +16161,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1046.0,
+  "ms": 1134.0,
   "n_expected": 1
  },
  {
@@ -17185,7 +16188,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2270.0,
+  "ms": 2228.0,
   "n_expected": 1
  },
  {
@@ -17209,20 +16212,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "ktanaka@techcorp.jp",
-     "phone_number": "555-0198",
-     "last_name": "Kenji Tanaka",
-     "first_name": "Kenji Tanaka"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2095.0,
+  "ms": 1806.0,
   "n_expected": 2
  },
  {
@@ -17241,7 +16235,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1301.0,
+  "ms": 1342.0,
   "n_expected": 1
  },
  {
@@ -17263,18 +16257,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Order parts for replacement",
-     "datetime": "2026-07-21T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1986.0,
+  "ms": 1786.0,
   "n_expected": 2
  },
  {
@@ -17296,18 +16283,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner with Elias and Sofia",
-     "datetime": "2026-05-30T20:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2003.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1877.0,
   "n_expected": 2
  },
  {
@@ -17341,7 +16321,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2250.0,
+  "ms": 2303.0,
   "n_expected": 2
  },
  {
@@ -17360,7 +16340,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1279.0,
+  "ms": 1307.0,
   "n_expected": 1
  },
  {
@@ -17388,7 +16368,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2134.0,
+  "ms": 2240.0,
   "n_expected": 1
  },
  {
@@ -17407,7 +16387,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1371.0,
+  "ms": 1463.0,
   "n_expected": 1
  },
  {
@@ -17426,7 +16406,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1233.0,
+  "ms": 1277.0,
   "n_expected": 1
  },
  {
@@ -17453,21 +16433,11 @@
      "title": "Meeting with Anya",
      "datetime": "2026-06-24 15:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "query"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2167.0,
+  "ms": 2065.0,
   "n_expected": 2
  },
  {
@@ -17496,7 +16466,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2267.0,
+  "ms": 2263.0,
   "n_expected": 1
  },
  {
@@ -17525,7 +16495,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2296.0,
+  "ms": 2423.0,
   "n_expected": 1
  },
  {
@@ -17548,7 +16518,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1392.0,
+  "ms": 1493.0,
   "n_expected": 1
  },
  {
@@ -17584,7 +16554,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2469.0,
+  "ms": 2668.0,
   "n_expected": 2
  },
  {
@@ -17603,7 +16573,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1348.0,
+  "ms": 1447.0,
   "n_expected": 1
  },
  {
@@ -17631,7 +16601,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2298.0,
+  "ms": 2279.0,
   "n_expected": 1
  },
  {
@@ -17650,7 +16620,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1178.0,
+  "ms": 1222.0,
   "n_expected": 1
  },
  {
@@ -17675,7 +16645,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1911.0,
+  "ms": 2033.0,
   "n_expected": 1
  },
  {
@@ -17700,7 +16670,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1991.0,
+  "ms": 2098.0,
   "n_expected": 1
  },
  {
@@ -17731,7 +16701,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2279.0,
+  "ms": 2433.0,
   "n_expected": 2
  },
  {
@@ -17755,20 +16725,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "phone_number": "999-001-3456",
-     "email": "kenji.tanaka@corpmail.jp",
-     "first_name": "first_name",
-     "last_name": "first_name"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2452.0,
+  "ms": 1961.0,
   "n_expected": 2
  },
  {
@@ -17787,7 +16748,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1207.0,
+  "ms": 1187.0,
   "n_expected": 1
  },
  {
@@ -17843,7 +16804,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2412.0,
+  "ms": 2583.0,
   "n_expected": 1
  },
  {
@@ -17872,7 +16833,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2136.0,
+  "ms": 2287.0,
   "n_expected": 1
  },
  {
@@ -17891,7 +16852,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1198.0,
+  "ms": 1237.0,
   "n_expected": 1
  },
  {
@@ -17918,17 +16879,11 @@
      "title": "Check-up with Dr. Patel",
      "datetime": "2025-05-02T10:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "1205 Willow Creek Rd"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2285.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2091.0,
   "n_expected": 2
  },
  {
@@ -17955,7 +16910,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2266.0,
+  "ms": 2404.0,
   "n_expected": 1
  },
  {
@@ -17983,7 +16938,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2027.0,
+  "ms": 2246.0,
   "n_expected": 1
  },
  {
@@ -18008,7 +16963,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1860.0,
+  "ms": 2001.0,
   "n_expected": 1
  },
  {
@@ -18031,7 +16986,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1495.0,
+  "ms": 1543.0,
   "n_expected": 1
  },
  {
@@ -18056,7 +17011,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2114.0,
+  "ms": 2073.0,
   "n_expected": 1
  },
  {
@@ -18078,18 +17033,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Meetup with Ben",
-     "datetime": "2026-06-03T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2118.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1942.0,
   "n_expected": 2
  },
  {
@@ -18111,18 +17059,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Q3 Budget",
-     "datetime": "2026-07-01T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1822.0,
+  "ms": 1682.0,
   "n_expected": 2
  },
  {
@@ -18149,17 +17090,11 @@
      "title": "Client Review Meeting",
      "datetime": "2026-07-21T14:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Grand Hyatt Dubai"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2049.0,
+  "ms": 2009.0,
   "n_expected": 2
  },
  {
@@ -18193,7 +17128,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2192.0,
+  "ms": 2282.0,
   "n_expected": 2
  },
  {
@@ -18215,18 +17150,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dr. Chen",
-     "datetime": "2026-04-20T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1949.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1636.0,
   "n_expected": 2
  },
  {
@@ -18253,7 +17181,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2363.0,
+  "ms": 2464.0,
   "n_expected": 1
  },
  {
@@ -18276,7 +17204,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1240.0,
+  "ms": 1328.0,
   "n_expected": 1
  },
  {
@@ -18299,7 +17227,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 947.0,
+  "ms": 983.0,
   "n_expected": 1
  },
  {
@@ -18324,7 +17252,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1993.0,
+  "ms": 2123.0,
   "n_expected": 1
  },
  {
@@ -18358,7 +17286,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2384.0,
+  "ms": 2411.0,
   "n_expected": 2
  },
  {
@@ -18385,7 +17313,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1892.0,
+  "ms": 1903.0,
   "n_expected": 1
  },
  {
@@ -18414,7 +17342,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2238.0,
+  "ms": 2353.0,
   "n_expected": 1
  },
  {
@@ -18437,7 +17365,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1462.0,
+  "ms": 1540.0,
   "n_expected": 1
  },
  {
@@ -18462,7 +17390,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1859.0,
+  "ms": 1988.0,
   "n_expected": 1
  },
  {
@@ -18496,7 +17424,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2351.0,
+  "ms": 2435.0,
   "n_expected": 2
  },
  {
@@ -18523,7 +17451,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2543.0,
+  "ms": 2572.0,
   "n_expected": 1
  },
  {
@@ -18550,7 +17478,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2266.0,
+  "ms": 2358.0,
   "n_expected": 1
  },
  {
@@ -18577,7 +17505,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2140.0,
+  "ms": 2266.0,
   "n_expected": 1
  },
  {
@@ -18599,22 +17527,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "turn_off_flashlight",
-     "datetime": "2026-07-21T13:00:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2018.0,
+  "ms": 1617.0,
   "n_expected": 2
  },
  {
@@ -18643,7 +17560,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2271.0,
+  "ms": 2244.0,
   "n_expected": 1
  },
  {
@@ -18670,19 +17587,11 @@
     "arguments": {
      "query": "Acme Tech Solutions"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "subject": "null",
-     "body": "null",
-     "to": "null"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2155.0,
+  "ms": 2008.0,
   "n_expected": 2
  },
  {
@@ -18709,7 +17618,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1580.0,
+  "ms": 1672.0,
   "n_expected": 1
  },
  {
@@ -18732,7 +17641,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1596.0,
+  "ms": 1707.0,
   "n_expected": 1
  },
  {
@@ -18761,7 +17670,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2139.0,
+  "ms": 2269.0,
   "n_expected": 1
  },
  {
@@ -18783,18 +17692,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync with Kai Tanaka",
-     "datetime": "2025-05-16T16:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1779.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1729.0,
   "n_expected": 2
  },
  {
@@ -18821,7 +17723,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2698.0,
+  "ms": 2785.0,
   "n_expected": 1
  },
  {
@@ -18843,18 +17745,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Client Follow-up Call",
-     "datetime": "2024-07-23T11:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2088.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1910.0,
   "n_expected": 2
  },
  {
@@ -18877,7 +17772,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1024.0,
+  "ms": 1070.0,
   "n_expected": 1
  },
  {
@@ -18898,17 +17793,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "El Buen Sazón"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1647.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1617.0,
   "n_expected": 2
  },
  {
@@ -18933,7 +17822,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1717.0,
+  "ms": 1793.0,
   "n_expected": 1
  },
  {
@@ -18958,7 +17847,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2059.0,
+  "ms": 2046.0,
   "n_expected": 1
  },
  {
@@ -18983,7 +17872,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2032.0,
+  "ms": 2134.0,
   "n_expected": 1
  },
  {
@@ -19008,7 +17897,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1899.0,
+  "ms": 2004.0,
   "n_expected": 1
  },
  {
@@ -19035,7 +17924,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1690.0,
+  "ms": 1789.0,
   "n_expected": 1
  },
  {
@@ -19064,7 +17953,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2136.0,
+  "ms": 2334.0,
   "n_expected": 1
  },
  {
@@ -19088,19 +17977,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1853.0,
+  "ms": 1776.0,
   "n_expected": 2
  },
  {
@@ -19127,7 +18008,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2059.0,
+  "ms": 2095.0,
   "n_expected": 2
  },
  {
@@ -19152,7 +18033,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2063.0,
+  "ms": 2118.0,
   "n_expected": 1
  },
  {
@@ -19177,7 +18058,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1952.0,
+  "ms": 2164.0,
   "n_expected": 1
  },
  {
@@ -19196,7 +18077,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1123.0,
+  "ms": 1177.0,
   "n_expected": 1
  },
  {
@@ -19215,7 +18096,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1235.0,
+  "ms": 1270.0,
   "n_expected": 1
  },
  {
@@ -19234,7 +18115,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1400.0,
+  "ms": 1401.0,
   "n_expected": 1
  },
  {
@@ -19253,7 +18134,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1355.0,
+  "ms": 1313.0,
   "n_expected": 1
  },
  {
@@ -19272,7 +18153,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1281.0,
+  "ms": 1290.0,
   "n_expected": 1
  },
  {
@@ -19291,7 +18172,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1207.0,
+  "ms": 1228.0,
   "n_expected": 1
  },
  {
@@ -19314,7 +18195,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1296.0,
+  "ms": 1327.0,
   "n_expected": 1
  },
  {
@@ -19335,17 +18216,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "1420 El Dorado Ave, Oakland, CA"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1702.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1578.0,
   "n_expected": 2
  },
  {
@@ -19378,7 +18253,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2225.0,
+  "ms": 2267.0,
   "n_expected": 2
  },
  {
@@ -19403,7 +18278,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1483.0,
+  "ms": 1429.0,
   "n_expected": 1
  },
  {
@@ -19426,7 +18301,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1648.0,
+  "ms": 1696.0,
   "n_expected": 1
  },
  {
@@ -19449,7 +18324,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1354.0,
+  "ms": 1419.0,
   "n_expected": 1
  },
  {
@@ -19483,7 +18358,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2346.0,
+  "ms": 2529.0,
   "n_expected": 2
  },
  {
@@ -19516,7 +18391,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2379.0,
+  "ms": 2527.0,
   "n_expected": 2
  },
  {
@@ -19541,7 +18416,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1789.0,
+  "ms": 1813.0,
   "n_expected": 1
  },
  {
@@ -19566,7 +18441,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2028.0,
+  "ms": 1986.0,
   "n_expected": 1
  },
  {
@@ -19599,7 +18474,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2339.0,
+  "ms": 2370.0,
   "n_expected": 2
  },
  {
@@ -19632,7 +18507,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2231.0,
+  "ms": 2286.0,
   "n_expected": 2
  },
  {
@@ -19655,19 +18530,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "subject": "Project Update",
-     "body": "The quarterly report is finalized and attached.",
-     "to": "Aris.vassilakis@examplecorp.gr"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2044.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1715.0,
   "n_expected": 2
  },
  {
@@ -19690,7 +18557,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1550.0,
+  "ms": 1553.0,
   "n_expected": 1
  },
  {
@@ -19717,7 +18584,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2600.0,
+  "ms": 2557.0,
   "n_expected": 1
  },
  {
@@ -19740,7 +18607,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1270.0,
+  "ms": 1275.0,
   "n_expected": 1
  },
  {
@@ -19759,7 +18626,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1348.0,
+  "ms": 1427.0,
   "n_expected": 1
  },
  {
@@ -19782,7 +18649,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1343.0,
+  "ms": 1442.0,
   "n_expected": 1
  },
  {
@@ -19805,19 +18672,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "mateo.rossi@globanalytics.com",
-     "subject": "New Meeting Location",
-     "body": "The new location is 789 Pinecrest Drive, Toronto."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2245.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2005.0,
   "n_expected": 2
  },
  {
@@ -19836,7 +18695,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1315.0,
+  "ms": 1414.0,
   "n_expected": 1
  },
  {
@@ -19865,7 +18724,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2403.0,
+  "ms": 2710.0,
   "n_expected": 1
  },
  {
@@ -19892,7 +18751,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2432.0,
+  "ms": 2364.0,
   "n_expected": 1
  },
  {
@@ -19915,7 +18774,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1100.0,
+  "ms": 1156.0,
   "n_expected": 1
  },
  {
@@ -19942,7 +18801,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1845.0,
+  "ms": 1986.0,
   "n_expected": 1
  },
  {
@@ -19963,7 +18822,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1620.0,
+  "ms": 1668.0,
   "n_expected": 1
  },
  {
@@ -19982,7 +18841,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1003.0,
+  "ms": 995.0,
   "n_expected": 1
  },
  {
@@ -20011,7 +18870,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2285.0,
+  "ms": 2417.0,
   "n_expected": 1
  },
  {
@@ -20038,17 +18897,11 @@
      "title": "Client Presentation Prep",
      "datetime": "2026-02-10T11:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "315 Yonge Street, Toronto"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2222.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2108.0,
   "n_expected": 2
  },
  {
@@ -20074,18 +18927,11 @@
     "arguments": {
      "query": "La Luna Piena"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner with Sarah",
-     "datetime": "2026-01-18T19:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2255.0,
+  "ms": 2144.0,
   "n_expected": 2
  },
  {
@@ -20110,7 +18956,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1911.0,
+  "ms": 1980.0,
   "n_expected": 1
  },
  {
@@ -20135,7 +18981,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1939.0,
+  "ms": 2090.0,
   "n_expected": 1
  },
  {
@@ -20163,7 +19009,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1812.0,
+  "ms": 2075.0,
   "n_expected": 1
  },
  {
@@ -20188,7 +19034,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2060.0,
+  "ms": 2293.0,
   "n_expected": 1
  },
  {
@@ -20219,7 +19065,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2068.0,
+  "ms": 2320.0,
   "n_expected": 2
  },
  {
@@ -20241,18 +19087,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Budget Review",
-     "datetime": "2025-04-10T13:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1856.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1720.0,
   "n_expected": 2
  },
  {
@@ -20279,7 +19118,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1938.0,
+  "ms": 2212.0,
   "n_expected": 1
  },
  {
@@ -20303,17 +19142,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Café Lumière"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1868.0,
+  "ms": 1754.0,
   "n_expected": 2
  },
  {
@@ -20341,7 +19174,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2337.0,
+  "ms": 2718.0,
   "n_expected": 1
  },
  {
@@ -20360,7 +19193,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1305.0,
+  "ms": 1482.0,
   "n_expected": 1
  },
  {
@@ -20396,7 +19229,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2457.0,
+  "ms": 2462.0,
   "n_expected": 2
  },
  {
@@ -20429,7 +19262,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2232.0,
+  "ms": 2402.0,
   "n_expected": 2
  },
  {
@@ -20450,17 +19283,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "nearest pharmacy"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1770.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1676.0,
   "n_expected": 2
  },
  {
@@ -20485,7 +19312,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1836.0,
+  "ms": 1814.0,
   "n_expected": 1
  },
  {
@@ -20508,7 +19335,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1700.0,
+  "ms": 1735.0,
   "n_expected": 1
  },
  {
@@ -20535,7 +19362,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1725.0,
+  "ms": 1745.0,
   "n_expected": 1
  },
  {
@@ -20569,7 +19396,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2284.0,
+  "ms": 2333.0,
   "n_expected": 2
  },
  {
@@ -20594,7 +19421,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2059.0,
+  "ms": 2039.0,
   "n_expected": 1
  },
  {
@@ -20613,7 +19440,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1258.0,
+  "ms": 1251.0,
   "n_expected": 1
  },
  {
@@ -20640,7 +19467,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2165.0,
+  "ms": 2139.0,
   "n_expected": 1
  },
  {
@@ -20665,7 +19492,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1850.0,
+  "ms": 1911.0,
   "n_expected": 1
  },
  {
@@ -20688,7 +19515,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1755.0,
+  "ms": 1736.0,
   "n_expected": 1
  },
  {
@@ -20715,21 +19542,11 @@
      "title": "Annual Team Lunch",
      "datetime": "2024-05-31T13:00:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "location"
-    }
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2428.0,
+  "ms": 2226.0,
   "n_expected": 2
  },
  {
@@ -20748,7 +19565,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1322.0,
+  "ms": 1305.0,
   "n_expected": 1
  },
  {
@@ -20767,7 +19584,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1106.0,
+  "ms": 1098.0,
   "n_expected": 1
  },
  {
@@ -20795,7 +19612,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2153.0,
+  "ms": 2145.0,
   "n_expected": 1
  },
  {
@@ -20822,7 +19639,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1876.0,
+  "ms": 1930.0,
   "n_expected": 1
  },
  {
@@ -20866,7 +19683,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1841.0,
+  "ms": 1945.0,
   "n_expected": 1
  },
  {
@@ -20889,19 +19706,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "k.chen@techglobal.net",
-     "subject": "Project Update Status",
-     "body": "The required documentation has been uploaded to the shared drive."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2217.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1822.0,
   "n_expected": 2
  },
  {
@@ -20920,7 +19729,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1435.0,
+  "ms": 1572.0,
   "n_expected": 1
  },
  {
@@ -20947,7 +19756,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2342.0,
+  "ms": 2697.0,
   "n_expected": 1
  },
  {
@@ -20970,19 +19779,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "maria.silva@techcorp.com.br",
-     "subject": "Meeting Rescheduled",
-     "body": "Due to unforeseen circumstances, the meeting is moved to next Tuesday."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2147.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1840.0,
   "n_expected": 2
  },
  {
@@ -21004,18 +19805,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Meeting with CFO",
-     "datetime": "2026-07-21T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1874.0,
+  "ms": 2059.0,
   "n_expected": 2
  },
  {
@@ -21042,17 +19836,11 @@
      "title": "Project Review Meeting",
      "datetime": "2025-06-05T14:30:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Atlas Building, London EC1Y 1BE, UK"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2428.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2251.0,
   "n_expected": 2
  },
  {
@@ -21071,7 +19859,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1258.0,
+  "ms": 1255.0,
   "n_expected": 1
  },
  {
@@ -21094,19 +19882,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "ana.petrova@solartek.org",
-     "subject": "Q3 Budget Review",
-     "body": "The revised figures are attached, let me know if you have any questions."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2091.0,
+  "ms": 1925.0,
   "n_expected": 2
  },
  {
@@ -21129,7 +19909,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1335.0,
+  "ms": 1450.0,
   "n_expected": 1
  },
  {
@@ -21156,7 +19936,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2402.0,
+  "ms": 2484.0,
   "n_expected": 1
  },
  {
@@ -21181,7 +19961,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2120.0,
+  "ms": 2121.0,
   "n_expected": 1
  },
  {
@@ -21210,7 +19990,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2232.0,
+  "ms": 2399.0,
   "n_expected": 1
  },
  {
@@ -21233,7 +20013,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1223.0,
+  "ms": 1413.0,
   "n_expected": 1
  },
  {
@@ -21267,7 +20047,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2320.0,
+  "ms": 2655.0,
   "n_expected": 2
  },
  {
@@ -21303,7 +20083,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2549.0,
+  "ms": 2980.0,
   "n_expected": 2
  },
  {
@@ -21336,7 +20116,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2541.0,
+  "ms": 2990.0,
   "n_expected": 2
  },
  {
@@ -21363,7 +20143,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2361.0,
+  "ms": 2736.0,
   "n_expected": 1
  },
  {
@@ -21386,7 +20166,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1510.0,
+  "ms": 1725.0,
   "n_expected": 1
  },
  {
@@ -21412,22 +20192,11 @@
     "arguments": {
      "query": "La Pescaderia at 45 Main Street, Dublin"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Lunch with Eoin",
-     "datetime": "2025-11-05T13:00:00"
-    }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2506.0,
+  "ms": 2646.0,
   "n_expected": 2
  },
  {
@@ -21450,7 +20219,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1408.0,
+  "ms": 1963.0,
   "n_expected": 1
  },
  {
@@ -21472,18 +20241,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Dinner with the Patel Family",
-     "datetime": "2026-04-08T19:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2099.0,
+  "ms": 1909.0,
   "n_expected": 2
  },
  {
@@ -21509,7 +20271,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1539.0,
+  "ms": 1636.0,
   "n_expected": 2
  },
  {
@@ -21537,7 +20299,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2193.0,
+  "ms": 2378.0,
   "n_expected": 1
  },
  {
@@ -21566,7 +20328,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2403.0,
+  "ms": 2887.0,
   "n_expected": 1
  },
  {
@@ -21590,24 +20352,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "first_name": ";",
-     "phone_number": ";",
-     "last_name": ";",
-     "email": ";"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2485.0,
+  "ms": 2276.0,
   "n_expected": 2
  },
  {
@@ -21637,7 +20386,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1674.0,
+  "ms": 1665.0,
   "n_expected": 2
  },
  {
@@ -21661,25 +20410,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "The Olive Bistro"
-    }
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2182.0,
+  "ms": 2173.0,
   "n_expected": 2
  },
  {
@@ -21713,7 +20448,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1710.0,
+  "ms": 2789.0,
   "n_expected": 2
  },
  {
@@ -21738,7 +20473,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1651.0,
+  "ms": 2364.0,
   "n_expected": 1
  },
  {
@@ -21761,19 +20496,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "a.ivanova@techcorp.ru",
-     "subject": "Project Update",
-     "body": "I've uploaded the final draft to the shared drive."
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2183.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2124.0,
   "n_expected": 2
  },
  {
@@ -21804,7 +20531,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2285.0,
+  "ms": 2379.0,
   "n_expected": 2
  },
  {
@@ -21823,7 +20550,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1184.0,
+  "ms": 1332.0,
   "n_expected": 1
  },
  {
@@ -21857,7 +20584,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2176.0,
+  "ms": 2722.0,
   "n_expected": 2
  },
  {
@@ -21876,7 +20603,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1283.0,
+  "ms": 1424.0,
   "n_expected": 1
  },
  {
@@ -21898,18 +20625,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Pay November Rent",
-     "datetime": "2024-11-01T09:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1911.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2000.0,
   "n_expected": 2
  },
  {
@@ -21934,7 +20654,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2016.0,
+  "ms": 2308.0,
   "n_expected": 1
  },
  {
@@ -21967,7 +20687,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 3404.0,
+  "ms": 3572.0,
   "n_expected": 2
  },
  {
@@ -21992,7 +20712,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1896.0,
+  "ms": 2172.0,
   "n_expected": 1
  },
  {
@@ -22019,7 +20739,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1858.0,
+  "ms": 2252.0,
   "n_expected": 1
  },
  {
@@ -22041,18 +20761,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Check project status with Javier",
-     "datetime": "2025-09-02T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2125.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2067.0,
   "n_expected": 2
  },
  {
@@ -22079,7 +20792,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2553.0,
+  "ms": 2745.0,
   "n_expected": 1
  },
  {
@@ -22106,7 +20819,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2474.0,
+  "ms": 2844.0,
   "n_expected": 1
  },
  {
@@ -22125,7 +20838,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1132.0,
+  "ms": 1255.0,
   "n_expected": 1
  },
  {
@@ -22152,7 +20865,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1773.0,
+  "ms": 2070.0,
   "n_expected": 1
  },
  {
@@ -22177,7 +20890,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1672.0,
+  "ms": 2258.0,
   "n_expected": 1
  },
  {
@@ -22213,7 +20926,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2508.0,
+  "ms": 3006.0,
   "n_expected": 2
  },
  {
@@ -22238,7 +20951,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1877.0,
+  "ms": 2065.0,
   "n_expected": 1
  },
  {
@@ -22265,7 +20978,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1878.0,
+  "ms": 2186.0,
   "n_expected": 1
  },
  {
@@ -22297,18 +21010,11 @@
      "first_name": "Sanjay",
      "last_name": "Patel"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Review",
-     "datetime": "2024-10-17T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2683.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 3069.0,
   "n_expected": 2
  },
  {
@@ -22327,7 +21033,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1206.0,
+  "ms": 1499.0,
   "n_expected": 1
  },
  {
@@ -22346,7 +21052,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1292.0,
+  "ms": 1758.0,
   "n_expected": 1
  },
  {
@@ -22373,7 +21079,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2353.0,
+  "ms": 2648.0,
   "n_expected": 1
  },
  {
@@ -22407,7 +21113,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2304.0,
+  "ms": 3107.0,
   "n_expected": 2
  },
  {
@@ -22435,7 +21141,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1944.0,
+  "ms": 2604.0,
   "n_expected": 1
  },
  {
@@ -22464,7 +21170,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2173.0,
+  "ms": 2561.0,
   "n_expected": 1
  },
  {
@@ -22487,7 +21193,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1813.0,
+  "ms": 2132.0,
   "n_expected": 1
  },
  {
@@ -22514,7 +21220,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2518.0,
+  "ms": 2839.0,
   "n_expected": 1
  },
  {
@@ -22537,7 +21243,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1570.0,
+  "ms": 1717.0,
   "n_expected": 1
  },
  {
@@ -22565,7 +21271,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2037.0,
+  "ms": 2351.0,
   "n_expected": 1
  },
  {
@@ -22594,17 +21300,11 @@
      "subject": "Repair Update",
      "body": "The plumber finished the repairs this morning, thank you!"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Parque Fundidora"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2213.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2315.0,
   "n_expected": 2
  },
  {
@@ -22623,7 +21323,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1170.0,
+  "ms": 1296.0,
   "n_expected": 1
  },
  {
@@ -22646,7 +21346,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1334.0,
+  "ms": 1355.0,
   "n_expected": 1
  },
  {
@@ -22672,7 +21372,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2122.0,
+  "ms": 2413.0,
   "n_expected": 1
  },
  {
@@ -22707,7 +21407,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2553.0,
+  "ms": 2869.0,
   "n_expected": 2
  },
  {
@@ -22730,7 +21430,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1047.0,
+  "ms": 1197.0,
   "n_expected": 1
  },
  {
@@ -22757,7 +21457,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2300.0,
+  "ms": 2454.0,
   "n_expected": 1
  },
  {
@@ -22784,7 +21484,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2519.0,
+  "ms": 2602.0,
   "n_expected": 1
  },
  {
@@ -22810,7 +21510,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2154.0,
+  "ms": 2155.0,
   "n_expected": 1
  },
  {
@@ -22833,7 +21533,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1503.0,
+  "ms": 1554.0,
   "n_expected": 1
  },
  {
@@ -22860,7 +21560,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1681.0,
+  "ms": 1995.0,
   "n_expected": 1
  },
  {
@@ -22883,7 +21583,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1159.0,
+  "ms": 1438.0,
   "n_expected": 1
  },
  {
@@ -22908,7 +21608,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1883.0,
+  "ms": 2111.0,
   "n_expected": 1
  },
  {
@@ -22931,7 +21631,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1208.0,
+  "ms": 1359.0,
   "n_expected": 1
  },
  {
@@ -22954,7 +21654,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1299.0,
+  "ms": 1468.0,
   "n_expected": 1
  },
  {
@@ -22982,7 +21682,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2181.0,
+  "ms": 2387.0,
   "n_expected": 1
  },
  {
@@ -23001,7 +21701,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1214.0,
+  "ms": 1409.0,
   "n_expected": 1
  },
  {
@@ -23024,7 +21724,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1530.0,
+  "ms": 2092.0,
   "n_expected": 1
  },
  {
@@ -23049,7 +21749,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1757.0,
+  "ms": 2259.0,
   "n_expected": 1
  },
  {
@@ -23082,7 +21782,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2295.0,
+  "ms": 2660.0,
   "n_expected": 2
  },
  {
@@ -23115,7 +21815,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2375.0,
+  "ms": 3026.0,
   "n_expected": 2
  },
  {
@@ -23149,7 +21849,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2451.0,
+  "ms": 2755.0,
   "n_expected": 2
  },
  {
@@ -23186,7 +21886,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2665.0,
+  "ms": 3166.0,
   "n_expected": 2
  },
  {
@@ -23219,7 +21919,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2473.0,
+  "ms": 2870.0,
   "n_expected": 2
  },
  {
@@ -23248,7 +21948,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2399.0,
+  "ms": 2377.0,
   "n_expected": 1
  },
  {
@@ -23270,18 +21970,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "New HQ Orientation",
-     "datetime": "2024-12-30T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1916.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1517.0,
   "n_expected": 2
  },
  {
@@ -23300,7 +21993,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1494.0,
+  "ms": 1506.0,
   "n_expected": 1
  },
  {
@@ -23319,7 +22012,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1209.0,
+  "ms": 1261.0,
   "n_expected": 1
  },
  {
@@ -23340,7 +22033,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1606.0,
+  "ms": 1711.0,
   "n_expected": 1
  },
  {
@@ -23363,7 +22056,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1288.0,
+  "ms": 1399.0,
   "n_expected": 1
  },
  {
@@ -23382,7 +22075,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1478.0,
+  "ms": 1522.0,
   "n_expected": 1
  },
  {
@@ -23415,7 +22108,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2122.0,
+  "ms": 2297.0,
   "n_expected": 2
  },
  {
@@ -23442,7 +22135,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2489.0,
+  "ms": 3160.0,
   "n_expected": 1
  },
  {
@@ -23470,7 +22163,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1936.0,
+  "ms": 2383.0,
   "n_expected": 1
  },
  {
@@ -23489,7 +22182,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1012.0,
+  "ms": 1306.0,
   "n_expected": 1
  },
  {
@@ -23516,7 +22209,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2169.0,
+  "ms": 2439.0,
   "n_expected": 1
  },
  {
@@ -23543,7 +22236,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2486.0,
+  "ms": 2860.0,
   "n_expected": 1
  },
  {
@@ -23562,7 +22255,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1330.0,
+  "ms": 1476.0,
   "n_expected": 1
  },
  {
@@ -23581,7 +22274,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1232.0,
+  "ms": 1290.0,
   "n_expected": 1
  },
  {
@@ -23610,7 +22303,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2349.0,
+  "ms": 2695.0,
   "n_expected": 1
  },
  {
@@ -23640,7 +22333,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1531.0,
+  "ms": 1845.0,
   "n_expected": 2
  },
  {
@@ -23667,7 +22360,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2155.0,
+  "ms": 2316.0,
   "n_expected": 1
  },
  {
@@ -23694,7 +22387,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2235.0,
+  "ms": 2324.0,
   "n_expected": 1
  },
  {
@@ -23722,7 +22415,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2313.0,
+  "ms": 2540.0,
   "n_expected": 1
  },
  {
@@ -23751,7 +22444,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2184.0,
+  "ms": 2468.0,
   "n_expected": 1
  },
  {
@@ -23778,7 +22471,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2441.0,
+  "ms": 2854.0,
   "n_expected": 1
  },
  {
@@ -23803,7 +22496,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2007.0,
+  "ms": 2097.0,
   "n_expected": 1
  },
  {
@@ -23832,7 +22525,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2363.0,
+  "ms": 2539.0,
   "n_expected": 1
  },
  {
@@ -23855,7 +22548,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1572.0,
+  "ms": 1843.0,
   "n_expected": 1
  },
  {
@@ -23882,17 +22575,11 @@
      "title": "Orchestra Concert",
      "datetime": "2026-07-22T20:30:00"
     }
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Sala Nezahualcóyotl Mexico City"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2100.0,
+  "ms": 2017.0,
   "n_expected": 2
  },
  {
@@ -23917,7 +22604,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1765.0,
+  "ms": 1858.0,
   "n_expected": 1
  },
  {
@@ -23952,7 +22639,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2303.0,
+  "ms": 2429.0,
   "n_expected": 2
  },
  {
@@ -23988,7 +22675,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2509.0,
+  "ms": 2645.0,
   "n_expected": 2
  },
  {
@@ -24015,7 +22702,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2236.0,
+  "ms": 2522.0,
   "n_expected": 1
  },
  {
@@ -24034,7 +22721,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1222.0,
+  "ms": 1661.0,
   "n_expected": 1
  },
  {
@@ -24053,7 +22740,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1294.0,
+  "ms": 1384.0,
   "n_expected": 1
  },
  {
@@ -24075,18 +22762,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Check-in",
-     "datetime": "2025-07-07T10:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2016.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1701.0,
   "n_expected": 2
  },
  {
@@ -24112,7 +22792,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1341.0,
+  "ms": 1330.0,
   "n_expected": 2
  },
  {
@@ -24131,15 +22811,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1535.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1491.0,
   "n_expected": 2
  },
  {
@@ -24167,7 +22843,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2133.0,
+  "ms": 2346.0,
   "n_expected": 1
  },
  {
@@ -24194,7 +22870,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1783.0,
+  "ms": 2174.0,
   "n_expected": 1
  },
  {
@@ -24221,7 +22897,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1979.0,
+  "ms": 2180.0,
   "n_expected": 1
  },
  {
@@ -24240,7 +22916,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1342.0,
+  "ms": 1286.0,
   "n_expected": 1
  },
  {
@@ -24263,19 +22939,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "to": "Raj Patel",
-     "subject": "Meeting Reschedule",
-     "body": "Need to push our 2 PM sync to tomorrow morning. Details to follow."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2217.0,
+  "ms": 1950.0,
   "n_expected": 2
  },
  {
@@ -24294,7 +22962,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1251.0,
+  "ms": 1334.0,
   "n_expected": 1
  },
  {
@@ -24321,7 +22989,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1817.0,
+  "ms": 1830.0,
   "n_expected": 1
  },
  {
@@ -24343,18 +23011,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Project Review Meeting",
-     "datetime": "2026-07-21 14:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2596.0,
+  "ms": 1809.0,
   "n_expected": 2
  },
  {
@@ -24381,7 +23042,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2543.0,
+  "ms": 2575.0,
   "n_expected": 1
  },
  {
@@ -24404,18 +23065,11 @@
      "first_name": "Sofia",
      "last_name": "Chen"
     }
-   },
-   {
-    "name": "send_email",
-    "arguments": {
-     "subject": "sofia.chen@examplemail.com",
-     "to": "sofia.chen@examplemail.com"
-    }
    }
   ],
-  "name_ok": false,
+  "name_ok": true,
   "exact_ok": false,
-  "ms": 2295.0,
+  "ms": 2229.0,
   "n_expected": 1
  },
  {
@@ -24434,7 +23088,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1203.0,
+  "ms": 1361.0,
   "n_expected": 1
  },
  {
@@ -24461,7 +23115,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1717.0,
+  "ms": 1845.0,
   "n_expected": 1
  },
  {
@@ -24497,7 +23151,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2915.0,
+  "ms": 3066.0,
   "n_expected": 2
  },
  {
@@ -24531,7 +23185,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2528.0,
+  "ms": 2747.0,
   "n_expected": 2
  },
  {
@@ -24556,7 +23210,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2005.0,
+  "ms": 2078.0,
   "n_expected": 1
  },
  {
@@ -24580,20 +23234,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "elena.petrova@solarco.net",
-     "phone_number": "555-901-2345",
-     "first_name": "Elena Petrova",
-     "last_name": "Elena Petrova"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2307.0,
+  "ms": 2032.0,
   "n_expected": 2
  },
  {
@@ -24617,7 +23262,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1255.0,
+  "ms": 1380.0,
   "n_expected": 1
  },
  {
@@ -24642,7 +23287,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1941.0,
+  "ms": 2127.0,
   "n_expected": 1
  },
  {
@@ -24670,7 +23315,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2338.0,
+  "ms": 2526.0,
   "n_expected": 1
  },
  {
@@ -24692,18 +23337,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync-Up",
-     "datetime": "2026-06-21 10:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2046.0,
+  "ms": 1990.0,
   "n_expected": 2
  },
  {
@@ -24739,7 +23377,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2452.0,
+  "ms": 2583.0,
   "n_expected": 2
  },
  {
@@ -24762,20 +23400,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_contact",
-    "arguments": {
-     "email": "null",
-     "phone_number": "null",
-     "first_name": "null",
-     "last_name": "null"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2085.0,
+  "ms": 1899.0,
   "n_expected": 2
  },
  {
@@ -24797,18 +23426,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Review",
-     "datetime": "2026-07-21T11:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 1870.0,
+  "ms": 1684.0,
   "n_expected": 2
  },
  {
@@ -24841,7 +23463,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2329.0,
+  "ms": 2285.0,
   "n_expected": 2
  },
  {
@@ -24876,7 +23498,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2240.0,
+  "ms": 2390.0,
   "n_expected": 2
  },
  {
@@ -24903,15 +23525,11 @@
      "last_name": "Nkrumah",
      "phone_number": "604-555-8901"
     }
-   },
-   {
-    "name": "open_wifi_settings",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1906.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 2137.0,
   "n_expected": 2
  },
  {
@@ -24938,7 +23556,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1885.0,
+  "ms": 2562.0,
   "n_expected": 1
  },
  {
@@ -24968,7 +23586,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1573.0,
+  "ms": 1694.0,
   "n_expected": 2
  },
  {
@@ -24997,7 +23615,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2131.0,
+  "ms": 2170.0,
   "n_expected": 1
  },
  {
@@ -25016,7 +23634,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1387.0,
+  "ms": 1787.0,
   "n_expected": 1
  },
  {
@@ -25049,7 +23667,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2324.0,
+  "ms": 3812.0,
   "n_expected": 2
  },
  {
@@ -25072,7 +23690,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1579.0,
+  "ms": 2073.0,
   "n_expected": 1
  },
  {
@@ -25099,7 +23717,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2189.0,
+  "ms": 2694.0,
   "n_expected": 1
  },
  {
@@ -25124,7 +23742,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2018.0,
+  "ms": 2228.0,
   "n_expected": 1
  },
  {
@@ -25143,7 +23761,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1182.0,
+  "ms": 1251.0,
   "n_expected": 1
  },
  {
@@ -25166,7 +23784,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1587.0,
+  "ms": 1653.0,
   "n_expected": 1
  },
  {
@@ -25194,7 +23812,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2163.0,
+  "ms": 2709.0,
   "n_expected": 1
  },
  {
@@ -25219,7 +23837,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1786.0,
+  "ms": 2815.0,
   "n_expected": 1
  },
  {
@@ -25255,7 +23873,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 3314.0,
+  "ms": 3767.0,
   "n_expected": 2
  },
  {
@@ -25280,7 +23898,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2085.0,
+  "ms": 2022.0,
   "n_expected": 1
  },
  {
@@ -25308,7 +23926,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2275.0,
+  "ms": 2252.0,
   "n_expected": 1
  },
  {
@@ -25329,17 +23947,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Bluebird Bookstore 19 Elm Street"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1883.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1786.0,
   "n_expected": 2
  },
  {
@@ -25365,18 +23977,11 @@
     "arguments": {
      "query": "Avenida Grill"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Lunch",
-     "datetime": "2026-07-18T13:00:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2152.0,
+  "ms": 2080.0,
   "n_expected": 2
  },
  {
@@ -25398,18 +24003,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Team Sync",
-     "datetime": "2024-04-08T11:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 2034.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1850.0,
   "n_expected": 2
  },
  {
@@ -25434,7 +24032,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1977.0,
+  "ms": 1958.0,
   "n_expected": 1
  },
  {
@@ -25453,7 +24051,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1292.0,
+  "ms": 1343.0,
   "n_expected": 1
  },
  {
@@ -25472,15 +24070,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1444.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1408.0,
   "n_expected": 2
  },
  {
@@ -25515,7 +24109,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1778.0,
+  "ms": 1958.0,
   "n_expected": 2
  },
  {
@@ -25537,18 +24131,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Q3 Budget Proposal",
-     "datetime": "2024-08-23T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1950.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1874.0,
   "n_expected": 2
  },
  {
@@ -25567,7 +24154,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1425.0,
+  "ms": 1396.0,
   "n_expected": 1
  },
  {
@@ -25589,18 +24176,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Review Q1 Budget with Liam",
-     "datetime": "2024-04-01T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1846.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1615.0,
   "n_expected": 2
  },
  {
@@ -25636,7 +24216,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2509.0,
+  "ms": 2577.0,
   "n_expected": 2
  },
  {
@@ -25658,18 +24238,11 @@
    {
     "name": "turn_off_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Quarterly Investor Call",
-     "datetime": "2024-10-18T11:00:00"
-    }
    }
   ],
-  "name_ok": true,
-  "exact_ok": true,
-  "ms": 1863.0,
+  "name_ok": false,
+  "exact_ok": false,
+  "ms": 1702.0,
   "n_expected": 2
  },
  {
@@ -25702,7 +24275,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1572.0,
+  "ms": 1739.0,
   "n_expected": 2
  },
  {
@@ -25735,7 +24308,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1894.0,
+  "ms": 2080.0,
   "n_expected": 2
  },
  {
@@ -25765,7 +24338,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2232.0,
+  "ms": 2649.0,
   "n_expected": 2
  },
  {
@@ -25790,7 +24363,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1882.0,
+  "ms": 1857.0,
   "n_expected": 1
  },
  {
@@ -25817,7 +24390,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2162.0,
+  "ms": 2178.0,
   "n_expected": 1
  },
  {
@@ -25836,7 +24409,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1320.0,
+  "ms": 1433.0,
   "n_expected": 1
  },
  {
@@ -25867,18 +24440,11 @@
      "last_name": "Sharma",
      "phone_number": "+91 98765 43210"
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Follow-up Strategy Session",
-     "datetime": "2025-02-12T10:30:00"
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2639.0,
+  "ms": 2861.0,
   "n_expected": 2
  },
  {
@@ -25907,7 +24473,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1916.0,
+  "ms": 2097.0,
   "n_expected": 1
  },
  {
@@ -25930,7 +24496,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1566.0,
+  "ms": 1530.0,
   "n_expected": 1
  },
  {
@@ -25958,7 +24524,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2049.0,
+  "ms": 2033.0,
   "n_expected": 1
  },
  {
@@ -25983,7 +24549,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1694.0,
+  "ms": 1794.0,
   "n_expected": 1
  },
  {
@@ -26008,7 +24574,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2001.0,
+  "ms": 2049.0,
   "n_expected": 1
  },
  {
@@ -26031,7 +24597,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1707.0,
+  "ms": 1656.0,
   "n_expected": 1
  },
  {
@@ -26061,18 +24627,11 @@
      "subject": "Meeting Confirmation: Q4 Budget Review",
      "body": "Hi Anja, just confirming our meeting for the Q4 budget review this Friday at 2:00 PM."
     }
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Q4 Budget Review - Anja",
-     "datetime": "this Friday at 2:00 PM."
-    }
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2633.0,
+  "ms": 2359.0,
   "n_expected": 2
  },
  {
@@ -26096,25 +24655,11 @@
    {
     "name": "open_wifi_settings",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "turn_on_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "show_map",
-    "arguments": {
-     "query": "Café Sol, 45 Rue de la Victoire, Paris"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2775.0,
+  "ms": 1775.0,
   "n_expected": 2
  },
  {
@@ -26148,7 +24693,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 3094.0,
+  "ms": 2612.0,
   "n_expected": 2
  },
  {
@@ -26175,7 +24720,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 2175.0,
+  "ms": 2214.0,
   "n_expected": 1
  },
  {
@@ -26203,7 +24748,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2121.0,
+  "ms": 2113.0,
   "n_expected": 1
  },
  {
@@ -26225,22 +24770,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "Budget Review Call",
-     "datetime": "2026-12-26T11:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 1963.0,
+  "ms": 1691.0,
   "n_expected": 2
  },
  {
@@ -26269,7 +24803,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2250.0,
+  "ms": 2232.0,
   "n_expected": 1
  },
  {
@@ -26305,7 +24839,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2587.0,
+  "ms": 2590.0,
   "n_expected": 2
  },
  {
@@ -26333,7 +24867,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2080.0,
+  "ms": 2014.0,
   "n_expected": 1
  },
  {
@@ -26362,7 +24896,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2385.0,
+  "ms": 2390.0,
   "n_expected": 1
  },
  {
@@ -26381,7 +24915,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1376.0,
+  "ms": 1838.0,
   "n_expected": 1
  },
  {
@@ -26409,7 +24943,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 2002.0,
+  "ms": 2368.0,
   "n_expected": 1
  },
  {
@@ -26432,7 +24966,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1227.0,
+  "ms": 1301.0,
   "n_expected": 1
  },
  {
@@ -26455,7 +24989,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1598.0,
+  "ms": 1508.0,
   "n_expected": 1
  },
  {
@@ -26474,7 +25008,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1232.0,
+  "ms": 1177.0,
   "n_expected": 1
  },
  {
@@ -26496,22 +25030,11 @@
    {
     "name": "turn_on_flashlight",
     "arguments": {}
-   },
-   {
-    "name": "turn_off_flashlight",
-    "arguments": {}
-   },
-   {
-    "name": "create_calendar_event",
-    "arguments": {
-     "title": "turn_off_flashlight",
-     "datetime": "2026-07-21T10:30:00"
-    }
    }
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2167.0,
+  "ms": 1704.0,
   "n_expected": 2
  },
  {
@@ -26538,15 +25061,11 @@
      "subject": "Rent Confirmed",
      "body": "The rent has been successfully transferred to your account"
     }
-   },
-   {
-    "name": "open_wifi_settings",
-    "arguments": {}
    }
   ],
-  "name_ok": true,
+  "name_ok": false,
   "exact_ok": false,
-  "ms": 2219.0,
+  "ms": 2241.0,
   "n_expected": 2
  },
  {
@@ -26580,7 +25099,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2232.0,
+  "ms": 2457.0,
   "n_expected": 2
  },
  {
@@ -26603,7 +25122,7 @@
   ],
   "name_ok": true,
   "exact_ok": false,
-  "ms": 1539.0,
+  "ms": 1725.0,
   "n_expected": 1
  },
  {
@@ -26622,7 +25141,7 @@
   ],
   "name_ok": true,
   "exact_ok": true,
-  "ms": 1351.0,
+  "ms": 1415.0,
   "n_expected": 1
  },
  {
@@ -26658,7 +25177,7 @@
   ],
   "name_ok": false,
   "exact_ok": false,
-  "ms": 2699.0,
+  "ms": 2904.0,
   "n_expected": 2
  }
 ]

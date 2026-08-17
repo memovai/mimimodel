@@ -19,7 +19,7 @@ $ turn on pin 5
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
 | **Velocidad** | llamada en caliente **29 s** · en frío **241 s** · prefill 1,4 tok/s |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
-| **Precisión** | 40,7% en google/mobile-actions (961 casos, coincidencia estricta) — el motor oficial saca 71,3% |
+| **Precisión** | 50,4% en google/mobile-actions (961 casos, coincidencia estricta) — el motor oficial saca 76,9% |
 
 > **Honestidad por delante:** esto es unas 5 veces más lento que una API en la nube, no entiende
 > chino, si le saludas te llamará una herramienta igualmente, y queda bastante por debajo del
@@ -281,7 +281,7 @@ escribe una consulta y pulsa Enter.
 | `needle.c` | el motor: parser, kernels, tokenizador, decodificador restringido, CLI |
 | `needle_np.py` | implementación de referencia en numpy, validada contra la decodificación JAX oficial |
 | `needle-esp32s3/` | proyecto ESP-IDF (tabla de particiones, grabador de pesos, demo REPL) |
-| `bench/` | benchmark de 24 casos de llamada a herramientas, puntuado contra el motor oficial |
+| `bench/` | arneses de evaluación: precisión en google/mobile-actions, velocidad y el driver serie del ESP32-S3 ([docs](bench/README.md)) |
 
 ### Entorno de desarrollo
 
@@ -310,34 +310,47 @@ coincidir.
 
 | | este motor | motor oficial, mismos prompts | publicado |
 |---|---|---|---|
-| precisión | 40,7% | 71,3% | 63,7% |
-| precisión de nombre | 63,6% | 98,0% | 98,3% |
-| casos de 1 llamada (640) | 61,1% | 75,6% | 71,3% |
-| casos de 2 llamadas (320) | 0% | 62,5% | 48,4% |
-| latencia, mediana | 1820 ms | 587 ms | — |
-| prefill · decode | 154 · 64 tok/s | 1408 · 797 tok/s | — |
-| RSS máximo | 20 MB | 163 MB | — |
+| precisión | 50,4% | 76,9% | 63,7% |
+| precisión de nombre | 78,9% | 99,2% | 98,3% |
+| casos de 1 llamada (640) | 60,8% | 75,6% | 71,3% |
+| casos de 2 llamadas (320) | 29,7% | 79,4% | 48,4% |
+| latencia, mediana | 1748 ms | 530 ms | — |
+| prefill · decode | 166 · 59 tok/s | 1504 · 869 tok/s | — |
+| RSS máximo | 20 MB | 165 MB | — |
 
-El motor oficial cerrado, medido con este mismo arnés, queda a 0,3 puntos de su
+El motor oficial cerrado, medido con este mismo arnés, queda a 0,9 puntos de su
 precisión de nombre publicada. Esa coincidencia es lo que indica que el arnés es
-correcto y que la diferencia restante es de este motor, no del modelo ni de los datos.
+correcto y que la diferencia restante es de este motor, no del modelo ni de los
+datos. Las dos columnas medidas quedan por encima de la precisión publicada
+porque los valores de los argumentos se comparan ignorando mayúsculas, algo más
+laxo que el criterio oficial y que se aplica por igual a ambos motores.
 
-**Dónde está la diferencia.** Las respuestas de dos llamadas son un tercio del
-conjunto y la configuración por defecto emite exactamente una llamada por turno,
-así que ahí saca cero. La decodificación multi-llamada está implementada y
-desactivada por defecto: todavía sale perdiendo
-(ver [`bench/README.md`](bench/README.md#multi-call)). En el host es 3,1× más
-lento de extremo a extremo pero 9–12× más lento por token; es C99 escalar frente
-a una compilación ARM64 optimizada con NEON, así que la mayor parte es juego de
-instrucciones, no diseño.
+**Dónde está la diferencia, con precisión.** En los turnos de una sola llamada la
+*selección* de herramienta está casi igualada (94,7% frente a 99,8%). La diferencia
+se concentra en el tercio del conjunto que espera más de una llamada: 29,7% frente
+a 79,4%. Separar esos 320 casos según cuántas llamadas emitió cada motor lo aísla
+del todo: en los turnos donde este motor sí emite dos llamadas, acierta ambos
+nombres el 98% de las veces y la respuesta completa el 61%, en línea con su propia
+tasa de una llamada. Simplemente solo llega a dos llamadas en el 48% de ellos,
+donde el motor oficial llega al 97%. Todo el déficit es una única decisión binaria
+de parar o continuar, tomada aquí con una sola comparación de logits. El desglose,
+la curva de ajuste y los dos errores que hubo que corregir están en
+[`bench/README.md`](bench/README.md#multi-call).
 
-**En el ESP32-S3** los mismos casos tardan una mediana de 342 s cada uno y las
-respuestas de la placa son **idénticas byte a byte** a las del host. Esa paridad
-es lo que permite leer la precisión de 961 casos del host como la de la placa:
-ejecutar el conjunto completo en el dispositivo llevaría unas tres horas. Los
-342 s son el peor caso de este benchmark: cada registro lleva una fecha distinta,
-así que la caché de prefijo KV nunca acierta. Con un system prompt estable, la
-misma placa responde en unos 30 s.
+En el host es 3,3× más lento de extremo a extremo pero 9–15× más lento por token;
+es C99 escalar frente a una compilación ARM64 optimizada con NEON, así que la
+mayor parte es juego de instrucciones, no diseño.
+
+**En el ESP32-S3** los mismos casos tardan una mediana de 294 s cada uno y las
+respuestas de la placa son **idénticas byte a byte** a las del host en 11 de los
+12 casos muestreados. Esa paridad es lo que permite leer la precisión de 961 casos
+del host como la de la placa: ejecutar el conjunto completo en el dispositivo
+llevaría unos tres días. La única discrepancia no es un fallo de portabilidad:
+recompilar el *host* con `-ffast-math` la voltea a la respuesta exacta de la placa,
+porque las dos herramientas candidatas están a 0,57 nats y el argmax voraz queda
+en el filo. Los 294 s son el peor caso de este benchmark: cada registro lleva una
+fecha distinta, así que la caché de prefijo KV nunca acierta. Con un system prompt
+estable, la misma placa responde en unos 30 s.
 
 [`bench/README.md`](bench/README.md) tiene los comandos, los resultados crudos por
 caso y qué conviene no equivocar al volver a ejecutarlos.

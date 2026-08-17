@@ -1700,12 +1700,17 @@ static int piece_all_digits(const Needle *m, uint32_t t) {
 
 #define NEEDLE_TOOLS_BUDGET 180   /* tokens; leaves room for the query */
 #define NEEDLE_RAG_MIN_K    2
-/* One call per turn by default. The multi-call path below works — it answers
- * 7.2% of the two-call cases in google/mobile-actions, which single-call can
- * never do — but it perturbs the first call enough to lose more than it gains
- * (measured on the same build, full eval: 40.7% -> 40.0% overall, and 1-call
- * name accuracy 95.5% -> 84.8%). Raise NEEDLE_MAX_CALLS to enable it. */
-#define NEEDLE_MAX_CALLS    1
+#define NEEDLE_MAX_CALLS    4   /* mimiclaw's llm_response_t caps a turn at 4 */
+
+/* Logit margin the comma must clear before another call is opened.
+ *
+ * The model is decisive when another call is genuinely wanted (`,{"` beats `]`
+ * by ~2.7 nats) and nearly tied when it is not (~0.05 nats), so a threshold
+ * separates the two cleanly. Swept on 300 cases: overall accuracy 39.0% at 0,
+ * 46.7% at 1.0, 49.3% at 2.0, then 42.0% at 3.0 and 40.7% at 4.0 where it has
+ * collapsed back to single-call behaviour. Both buckets improve together —
+ * a spurious second call breaks the one-call cases too. */
+#define NEEDLE_CONT_MARGIN_DEFAULT 2.0f
 
 static int is_word_char(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
@@ -2209,7 +2214,7 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
             /* Continuing costs a whole spurious call when the model is only
              * mildly in favour, and a spurious call fails ordered strict match
              * outright. Require the comma to win by a margin. */
-            float margin = 0.0f;
+            float margin = NEEDLE_CONT_MARGIN_DEFAULT;
             const char *mv = getenv("NEEDLE_CONT_MARGIN");
             if (mv) margin = (float)atof(mv);
             if (lc < lb + margin) break;

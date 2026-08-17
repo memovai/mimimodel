@@ -18,7 +18,7 @@ $ turn on pin 5
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
 | **Speed** | warm tool call **29 s** · cold **241 s** · 1.4 tok/s prefill |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
-| **Accuracy** | 40.7% on google/mobile-actions (961 cases, strict exact match) — the official engine scores 71.3% |
+| **Accuracy** | 50.4% on google/mobile-actions (961 cases, strict exact match) — the official engine scores 76.9% |
 
 > **Honesty first:** this is slower than a cloud API by roughly 5×, it does not understand
 > Chinese, it will happily call a tool when you say hello, and it scores well below the
@@ -267,7 +267,7 @@ Boot runs a demo tool call, then drops into a serial REPL: type a query, press e
 | `needle.c` | the engine — parser, kernels, tokenizer, constrained decoder, CLI |
 | `needle_np.py` | numpy reference implementation, validated against the official JAX decode |
 | `needle-esp32s3/` | ESP-IDF project (partition table, weight flasher, REPL demo) |
-| `bench/` | 24-case tool-calling benchmark, scored against the official engine |
+| `bench/` | evaluation harnesses: google/mobile-actions accuracy, speed, and the ESP32-S3 serial driver ([docs](bench/README.md)) |
 
 ### Development setup
 
@@ -295,30 +295,44 @@ call order and every argument must match.
 
 | | this engine | official engine, same prompts | published |
 |---|---|---|---|
-| accuracy | 40.7% | 71.3% | 63.7% |
-| tool-name accuracy | 63.6% | 98.0% | 98.3% |
-| 1-call cases (640) | 61.1% | 75.6% | 71.3% |
-| 2-call cases (320) | 0% | 62.5% | 48.4% |
-| latency, median | 1820 ms | 587 ms | — |
-| prefill · decode | 154 · 64 tok/s | 1408 · 797 tok/s | — |
-| peak RSS | 20 MB | 163 MB | — |
+| accuracy | 50.4% | 76.9% | 63.7% |
+| tool-name accuracy | 78.9% | 99.2% | 98.3% |
+| 1-call cases (640) | 60.8% | 75.6% | 71.3% |
+| 2-call cases (320) | 29.7% | 79.4% | 48.4% |
+| latency, median | 1748 ms | 530 ms | — |
+| prefill · decode | 166 · 59 tok/s | 1504 · 869 tok/s | — |
+| peak RSS | 20 MB | 165 MB | — |
 
 The official closed-source engine, measured through this same harness, lands
-within 0.3 points of its published tool-name accuracy. That agreement is what
+within 0.9 points of its published tool-name accuracy. That agreement is what
 says the harness is sound and the remaining gap is this engine's, not the
-model's or the data's.
+model's or the data's. Both measured columns sit above the published *accuracy*
+because argument values are compared case-insensitively, which is more lenient
+than the leaderboard and applies to both engines equally.
 
-**Where the gap is.** Two-call answers are a third of the eval and the default
-configuration emits exactly one call per turn, so it scores zero on all of them.
-Multi-call decoding is implemented and off by default — it is still a net loss
-(see [`bench/README.md`](bench/README.md#multi-call)). On the host the engine is
-3.1× slower end-to-end but 9–12× slower per token; it is scalar C99 against a
-NEON-optimised ARM64 build, so most of that is instruction set, not design.
+**Where the gap is, precisely.** Tool *selection* is close to matched on
+single-call turns (94.7% against 99.8%). The gap is concentrated in the third of
+the eval that expects more than one call: 29.7% against 79.4%. Splitting those
+320 cases by how many calls each engine actually emitted isolates it further —
+on the turns where this engine does emit two calls, it gets both names right 98%
+of the time and the whole answer exact 61%, in line with its own single-call
+rate. It just only reaches two calls on 48% of them, where the official engine
+reaches it on 97%. The entire deficit is one binary stop-or-continue decision,
+made here from a single logit comparison.
+[`bench/README.md`](bench/README.md#multi-call) has the breakdown, the tuning
+sweep, and the two bugs that had to be fixed before that number moved off zero.
 
-**On the ESP32-S3**, the same cases take a median of 342 s each and the board's
-answers are byte-for-byte identical to the host's. That parity is what lets the
-961-case host accuracy stand as the device's accuracy — running the full eval on
-the board would take about three hours. The 342 s is this benchmark's worst case:
+On the host the engine is 3.3× slower end-to-end but 9–15× slower per token; it
+is scalar C99 against a NEON-optimised ARM64 build, so most of that is
+instruction set, not design.
+
+**On the ESP32-S3**, the same cases take a median of 294 s each and the board's
+answers are byte-for-byte identical to the host's on 11 of 12 sampled cases. That
+parity is what lets the 961-case host accuracy stand as the device's accuracy —
+running the full eval on the board would take about three days. The one
+disagreement is not a porting bug: recompiling the *host* with `-ffast-math` flips
+it to the board's exact answer, because the two candidate tools are 0.57 nats apart
+and the greedy argmax is on a knife edge. The 294 s is this benchmark's worst case:
 every record carries a different date, so the KV prefix cache never hits. With a
 stable system prompt the same board answers in about 30 s.
 

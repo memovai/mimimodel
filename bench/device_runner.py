@@ -44,6 +44,7 @@ def main():
     ap.add_argument("--offset", type=int, default=0)
     ap.add_argument("--timeout", type=int, default=600, help="seconds per case")
     ap.add_argument("--out", default="/tmp/ma_device.json")
+    ap.add_argument("--binary", default="/tmp/needle_ma")
     args = ap.parse_args()
 
     ev = [r for r in ensure_dataset() if r["metadata"] == "eval"]
@@ -54,11 +55,24 @@ def main():
     queries = [(sysmsg.replace("\n", " ").replace("\t", " ") + "\t"
                 + q.replace("\n", " ").replace("\t", " ")) for sysmsg, q in turns]
 
+    # Freeze the binary the host reference is computed with. The device firmware
+    # is flashed once and the run takes hours; if needle.c is edited and
+    # rebuilt meanwhile, the two sides are different builds and the parity check
+    # reports portability bugs that are really just build skew (it did).
+    frozen = f"/tmp/needle_frozen.{os.getpid()}"
+    import shutil
+    shutil.copy2(args.binary, frozen)
+    fw = os.path.join(ROOT, "needle-esp32s3", "build", "needle_esp32s3.bin")
+    if os.path.exists(fw) and os.path.getmtime(fw) < os.path.getmtime(
+            os.path.join(ROOT, "needle.c")):
+        print("WARNING: needle-esp32s3/build is older than needle.c — reflash "
+              "before trusting the parity column", file=sys.stderr)
+
     # host reference for the same cases, one process so it mirrors the device
     qfile = "/tmp/ma_dev_q.txt"
     with open(qfile, "w") as fh:
         fh.write("\n".join(queries) + "\n")
-    hp = subprocess.run(["/tmp/needle_ma", os.path.join(ROOT, "model", "needle2.cact"),
+    hp = subprocess.run([frozen, os.path.join(ROOT, "model", "needle2.cact"),
                          "@" + qfile, tools_json], capture_output=True, text=True)
     host = []
     for line in hp.stdout.splitlines():

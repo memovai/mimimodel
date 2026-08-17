@@ -1,6 +1,6 @@
 
 === this engine (scalar C99) · 200 calls ===
-latency   : median    1820 ms   p90    2478 ms   total 369 s
-tokens    : prefill median 286, decode median 108 per call
-throughput:     218 tok/s overall (154 prefill + 64 decode)
+latency   : median    1748 ms   p90    2225 ms   total 343 s
+tokens    : prefill median 286, decode median 99 per call
+throughput:     225 tok/s overall (166 prefill + 59 decode)
 -> bench/results/speed_ours.json

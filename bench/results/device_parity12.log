@@ -1,0 +1,70 @@
+host reference computed for 12 cases
+waiting for the board to boot...
+board ready
+
+[1/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-15T17:35:19 D...
+      device: [{"name":"create_contact","arguments":{"last_name":"Lena Petrova","first_name":"Petrova","   (device saw None prompt tokens)
+      want  : [{"name": "create_contact", "arguments": {"email": "lena.petrova.design@webmail.com", "pho
+      360s | name OK | host-parity OK
+
+[2/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T05:43:19 D...
+      device: [{"name":"send_email","arguments":{"subject":"Update on Q4 Report","body":"I've uploaded t   (device saw None prompt tokens)
+      want  : [{"name": "send_email", "arguments": {"body": "I've uploaded the revised figures to the sh
+      294s | name OK | host-parity OK
+
+[3/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-04-03T01:25:42 D...
+      device: [{"name":"create_contact","arguments":{"email":"a.sharma@examplemail.co.in","first_name":"   (device saw None prompt tokens)
+      want  : [{"name": "create_contact", "arguments": {"last_name": "Sharma", "phone_number": "+91 9876
+      341s | name OK | host-parity OK
+
+[4/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-05-08T12:00:26 D...
+      device: [{"name":"create_calendar_event","arguments":{"title":"Team Lunch with Marketing","datetim   (device saw None prompt tokens)
+      want  : [{"name": "create_calendar_event", "arguments": {"datetime": "2025-05-13T13:30:00", "title
+      286s | name OK | host-parity OK
+
+[5/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-16T14:46:41 D...
+      device: [{"name":"send_email","arguments":{"to":"kenji.tanaka@corpmail.jp","subject":"Revised Q3 B   (device saw None prompt tokens)
+      want  : [{"name": "send_email", "arguments": {"body": "Please review the updated budget sheet for 
+      383s | name OK | host-parity OK
+
+[6/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-12-31T19:37:19 D...
+      device: [{"name":"turn_on_flashlight","arguments":{}},{"name":"show_map","arguments":{"query":"Sun   (device saw None prompt tokens)
+      want  : [{"name": "turn_on_flashlight", "arguments": {}}, {"name": "show_map", "arguments": {"quer
+      267s | name OK | host-parity OK
+
+[7/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-08-18T09:44:13 D...
+      device: [{"name":"show_map","arguments":{"query":"Canvas Creations"}}]   (device saw None prompt tokens)
+      want  : [{"name": "show_map", "arguments": {"query": "art supply store 'Canvas Creations' at 934 W
+      218s | name OK | host-parity OK
+
+[8/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-07-21T11:24:32 D...
+      device: [{"name":"create_calendar_event","arguments":{"title":"Meeting with Dr. Chen","datetime":"   (device saw None prompt tokens)
+      want  : [{"name": "create_calendar_event", "arguments": {"title": "Meeting with Dr. Chen", "dateti
+      233s | name OK | host-parity OK
+
+[9/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-06-12T09:13:55 D...
+      device: [{"name":"send_email","arguments":{"subject":"Budget Meeting Invite","body":"Please see th   (device saw None prompt tokens)
+      want  : [{"name": "create_calendar_event", "arguments": {"title": "Quarterly Budget Review", "date
+      398s | name X | host-parity MISMATCH
+
+[10/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-01-25T11:01:53 D...
+      device: [{"name":"turn_on_flashlight","arguments":{}}]   (device saw None prompt tokens)
+      want  : [{"name": "turn_on_flashlight", "arguments": {}}]
+      191s | name OK | host-parity OK
+
+[11/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-05-19T19:20:31 D...
+      device: [{"name":"create_contact","arguments":{"email":"marcus.olivera@brasileiro.com","phone_numb   (device saw None prompt tokens)
+      want  : [{"name": "create_contact", "arguments": {"phone_number": "55-11-98765-4321", "last_name":
+      364s | name OK | host-parity OK
+
+[12/12] Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-27T18:45:54 D...
+      device: [{"name":"show_map","arguments":{"query":"The Wandering Page bookstore"}}]   (device saw None prompt tokens)
+      want  : [{"name": "show_map", "arguments": {"query": "The Wandering Page bookstore in Brooklyn"}}]
+      254s | name OK | host-parity OK
+
+=== device results · 12 cases ===
+tool name correct : 11/12
+name+args exact   : 5/12
+matches host      : 11/12
+seconds per case  : median 294, min 191, max 398
+-> bench/results/device_parity12.json

@@ -1,0 +1,435 @@
+[
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-15T17:35:19 Day of week is Sunday",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "lena.petrova.design@webmail.com",
+     "phone_number": "+359 888 123 456",
+     "first_name": "Lena",
+     "last_name": "Petrova"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 359.8
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T05:43:19 Day of week is Monday",
+  "want": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "subject": "Update on Q4 Report",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Update on Q4 Report",
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Update on Q4 Report",
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 294.4
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-04-03T01:25:42 Day of week is Thursd",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Sharma",
+     "phone_number": "+91 98765 43210",
+     "first_name": "Anya",
+     "email": "anya.sharma@examplemail.co.in"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@examplemail.co.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@examplemail.co.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 341.3
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-05-08T12:00:26 Day of week is Thursd",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "datetime": "2025-05-13T13:30:00",
+     "title": "Team Lunch with Marketing"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Lunch with Marketing",
+     "datetime": "2025-05-13T13:30:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Lunch with Marketing",
+     "datetime": "2025-05-13T13:30:00"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 285.7
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-16T14:46:41 Day of week is Friday",
+  "want": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes.",
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures",
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes."
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures",
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes."
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 382.8
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-12-31T19:37:19 Day of week is Wednes",
+  "want": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Sunnyvale Library"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Sunnyvale Library"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Sunnyvale Library"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 266.7
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-08-18T09:44:13 Day of week is Tuesda",
+  "want": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "art supply store 'Canvas Creations' at 934 Willow Road, Portland, Oregon"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Canvas Creations"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Canvas Creations"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 217.8
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-07-21T11:24:32 Day of week is Monday",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "2025-07-30T14:00:00"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "2026-01-21T14:00:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "2026-01-21T14:00:00"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 233.2
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-06-12T09:13:55 Day of week is Wednes",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Budget Review",
+     "datetime": "2024-06-20T10:30:00"
+    }
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Budget Meeting Invite",
+     "to": "rsharma@financelink.co.in",
+     "body": "Please see the calendar invite for the quarterly review. Bring the Q2 expenditure reports."
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Budget Meeting Invite",
+     "body": "Please see the calendar invite for the quarterly review. Bring the Q2 expenditure reports.",
+     "to": "rsharma@financelink.co.in"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "'",
+     "datetime": ").\n"
+    }
+   }
+  ],
+  "name_ok": false,
+  "exact_ok": false,
+  "agrees_with_host": false,
+  "seconds": 397.6
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-01-25T11:01:53 Day of week is Saturd",
+  "want": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "device": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "host": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 191.2
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-05-19T19:20:31 Day of week is Tuesda",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "55-11-98765-4321",
+     "last_name": "Oliveira",
+     "first_name": "Marcus",
+     "email": "marcus.olivera@brasileiro.com"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "marcus.olivera@brasileiro.com",
+     "phone_number": "55-11-98765-4321",
+     "first_name": "Marcus Oliveira",
+     "last_name": "Marcus Oliveira"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "marcus.olivera@brasileiro.com",
+     "phone_number": "55-11-98765-4321",
+     "first_name": "Marcus Oliveira",
+     "last_name": "Marcus Oliveira"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 364.3
+ },
+ {
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-01-27T18:45:54 Day of week is Tuesda",
+  "want": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Wandering Page bookstore in Brooklyn"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Wandering Page bookstore"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Wandering Page bookstore"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 253.6
+ }
+]
