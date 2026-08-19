@@ -26,21 +26,12 @@ $ turn on pin 5
 
 ---
 
-## 交叉编译到 Xtensa 为什么走不通
+## 为什么会失败？
 
-Cactus 同时开源了[推理引擎](https://github.com/cactus-compute/cactus)和 [Needle 模型](https://github.com/cactus-compute/needle)，
-官网也把 ESP32-S3 列为支持目标。最直觉的方案——交叉编译引擎——读完源码发现是条死路，两个原因：
+官方引擎在 Xtensa 上遇到两个阻碍：Needle 计算核心随预编译二进制发布，开源算子则面向 ARM NEON。
+开放的 `.cact` 模型规格仍足以直接构建一个紧凑的 ESP32-S3 引擎。
 
-1. **开源引擎里并没有 Needle 的计算核心。** 在整个 `cactus` 仓库里搜 `engram`（该架构的核心组件）
-   一个结果都没有。引擎知道 `ModelType::NEEDLE` 这个*名字*、知道怎么拼它的提示词，但层本身在
-   Hugging Face 上分平台预编译的二进制里。
-2. **算子只有 ARM 版。** 15 个 kernel 源文件全部 `#include <arm_neon.h>`，用了约 125 个 NEON
-   intrinsic，且没有标量回退路径。Xtensa GCC 还既不支持 `_Float16` 也不支持 `__fp16`，
-   而 kernel 里用了约 770 次。
-
-但**模型本身是完全开放的**。`needle/needle/model/` 里有架构、量化器、解码循环，以及最关键的
-`export.py`——它的文档字符串就是 `.cact` 权重格式完整的字节级规格。这让「自己写一个专用引擎」
-成为正确路径，而且比通用运行时小得多。
+[查看源码层面的详细分析（英文）](docs/how-it-fails.md)。
 
 ## 原理
 

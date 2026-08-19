@@ -27,25 +27,13 @@ $ turn on pin 5
 
 ---
 
-## Why cross-compiling the engine for Xtensa failed
+## How it fails?
 
-Cactus publishes both an [inference engine](https://github.com/cactus-compute/cactus) and the
-[Needle model](https://github.com/cactus-compute/needle), and their site lists ESP32-S3 as a
-supported target. The obvious plan — cross-compile the engine — turned out to be a dead end,
-for two reasons found by reading the source:
+The published engine reaches two Xtensa blockers: Needle's compute core ships in prebuilt
+binaries, and the open kernels target ARM NEON. The open `.cact` model specification still
+provides enough information to build a compact ESP32-S3 engine directly.
 
-1. **The open engine does not contain the Needle compute core.** Grepping the whole `cactus`
-   repository for `engram` (a core component of the architecture) returns nothing. The engine
-   knows the *name* `ModelType::NEEDLE` and how to format its prompts, but the layers themselves
-   live in the prebuilt per-platform binaries shipped on Hugging Face.
-2. **The kernels are ARM-only.** All 15 kernel source files `#include <arm_neon.h>` and use
-   ~125 NEON intrinsics with no scalar fallback. Xtensa GCC also supports neither `_Float16`
-   nor `__fp16`, which the kernels use ~770 times.
-
-But the *model itself* is fully open. `needle/needle/model/` contains the architecture, the
-quantizer, the decode loop, and — crucially — `export.py`, whose docstring is a complete byte-level
-specification of the `.cact` weight format. That made a bespoke engine the right path, and a
-much smaller one than a general-purpose runtime.
+[Read the source-level breakdown](docs/how-it-fails.md).
 
 ## How it works
 

@@ -29,25 +29,13 @@ $ turn on pin 5
 
 ---
 
-## Por qué falló la compilación cruzada del motor para Xtensa
+## ¿Cómo falla?
 
-Cactus publica tanto un [motor de inferencia](https://github.com/cactus-compute/cactus) como el
-[modelo Needle](https://github.com/cactus-compute/needle), y su web lista el ESP32-S3 como objetivo
-soportado. El plan evidente —compilar el motor de forma cruzada— resultó ser un callejón sin salida,
-por dos razones que aparecen al leer el código:
+El motor publicado encuentra dos obstáculos en Xtensa: el núcleo de cómputo de Needle se distribuye
+en binarios precompilados y los kernels abiertos apuntan a ARM NEON. La especificación abierta de
+`.cact` aún permite construir directamente un motor compacto para ESP32-S3.
 
-1. **El motor abierto no contiene el núcleo de cómputo de Needle.** Buscar `engram` (un componente
-   central de la arquitectura) en todo el repositorio `cactus` no devuelve nada. El motor conoce el
-   *nombre* `ModelType::NEEDLE` y sabe formatear sus prompts, pero las capas en sí viven en los
-   binarios precompilados por plataforma que se distribuyen en Hugging Face.
-2. **Los kernels son solo para ARM.** Los 15 archivos de kernels hacen `#include <arm_neon.h>` y usan
-   unos 125 intrínsecos NEON sin ninguna ruta escalar de respaldo. Además, el GCC de Xtensa no
-   soporta ni `_Float16` ni `__fp16`, que los kernels emplean unas 770 veces.
-
-Pero *el modelo en sí es completamente abierto*. En `needle/needle/model/` están la arquitectura, el
-cuantizador, el bucle de decodificación y —lo decisivo— `export.py`, cuyo docstring es una
-especificación completa a nivel de byte del formato de pesos `.cact`. Eso convirtió «escribir un
-motor a medida» en el camino correcto, y en uno mucho más pequeño que un runtime de propósito general.
+[Consulta el análisis detallado del código fuente (en inglés)](docs/how-it-fails.md).
 
 ## Cómo funciona
 
