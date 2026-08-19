@@ -1,4 +1,4 @@
-# mimimodel — 在 5 美元的 ESP32-S3 上离线运行 45M 参数的工具调用大模型
+# MimiModel: Tool calling LLM on a $5 chip.
 
 为 [Cactus Compute 的 Needle 2](https://github.com/cactus-compute/needle) 从零手写的单文件 C 推理引擎，
 完全跑在 ESP32-S3 单片机上。不需要 Linux，不需要 Python，不需要联网。

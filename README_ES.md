@@ -1,4 +1,4 @@
-# mimimodel — un LLM de 45M parámetros con llamada a herramientas, funcionando sin conexión en un ESP32-S3 de 5 $
+# MimiModel: Tool calling LLM on a $5 chip.
 
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo

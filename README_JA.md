@@ -1,4 +1,4 @@
-# mimimodel — 5 ドルの ESP32-S3 上でオフライン動作する 45M パラメータのツール呼び出し LLM
+# MimiModel: Tool calling LLM on a $5 chip.
 
 [Cactus Compute の Needle 2](https://github.com/cactus-compute/needle) 向けにゼロから書いた
 単一ファイルの C 推論エンジン。ESP32-S3 マイコン上で完結して動きます。Linux も Python も

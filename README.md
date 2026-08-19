@@ -1,4 +1,4 @@
-# mimimodel — a 45M-parameter tool-calling LLM running offline on a $5 ESP32-S3
+# MimiModel: Tool calling LLM on a $5 chip.
 
 A from-scratch, single-file C inference engine for [Cactus Compute's Needle 2](https://github.com/cactus-compute/needle),
 running entirely on an ESP32-S3 microcontroller. No Linux, no Python, no network.
