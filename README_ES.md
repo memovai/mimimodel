@@ -1,6 +1,6 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
-![MimiModel: Tool calling on a $5 chip](assets/banner.png)
+![MimiModel: Tool calling on a $5 chip](assets/banner.jpg)
 
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo
