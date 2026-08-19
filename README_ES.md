@@ -40,7 +40,7 @@ $ turn on pin 5
 
 ---
 
-## ¿Cómo falla?
+## ¿Cómo falla Cactus aquí?
 
 El motor publicado encuentra dos obstáculos en Xtensa: el núcleo de cómputo de Needle se distribuye
 en binarios precompilados y los kernels abiertos apuntan a ARM NEON. La especificación abierta de

@@ -38,7 +38,7 @@ $ turn on pin 5
 
 ---
 
-## How it fails?
+## How Cactus fails here?
 
 The published engine reaches two Xtensa blockers: Needle's compute core ships in prebuilt
 binaries, and the open kernels target ARM NEON. The open `.cact` model specification still
