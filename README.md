@@ -1,5 +1,7 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
+![MimiModel: Tool calling on a $5 chip](assets/banner.png)
+
 A from-scratch, single-file C inference engine for [Cactus Compute's Needle 2](https://github.com/cactus-compute/needle),
 running entirely on an ESP32-S3 microcontroller. No Linux, no Python, no network.
 The 13.7 MB of weights live in flash and are **never** loaded into RAM.

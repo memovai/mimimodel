@@ -1,5 +1,7 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
+![MimiModel: Tool calling on a $5 chip](assets/banner.png)
+
 为 [Cactus Compute 的 Needle 2](https://github.com/cactus-compute/needle) 从零手写的单文件 C 推理引擎，
 完全跑在 ESP32-S3 单片机上。不需要 Linux，不需要 Python，不需要联网。
 13.7 MB 的权重常驻 flash，**从不**加载进内存。

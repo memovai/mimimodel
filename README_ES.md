@@ -1,5 +1,7 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
+![MimiModel: Tool calling on a $5 chip](assets/banner.png)
+
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo
 en un microcontrolador ESP32-S3. Sin Linux, sin Python, sin red. Los 13,7 MB de pesos viven en la

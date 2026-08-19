@@ -1,5 +1,7 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
+![MimiModel: Tool calling on a $5 chip](assets/banner.png)
+
 [Cactus Compute の Needle 2](https://github.com/cactus-compute/needle) 向けにゼロから書いた
 単一ファイルの C 推論エンジン。ESP32-S3 マイコン上で完結して動きます。Linux も Python も
 ネットワークも不要。13.7 MB の重みは flash に置いたまま、**一度も** RAM に載せません。
