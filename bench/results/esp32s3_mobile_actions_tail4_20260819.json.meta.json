@@ -1,0 +1,19 @@
+{
+  "tool_order": "dataset",
+  "retrieval": "native",
+  "metric": "strict",
+  "sampling": {
+    "method": "explicit-indices",
+    "indices": [
+      664,
+      744,
+      817,
+      951
+    ]
+  },
+  "firmware_build": "[needle] build: fast_math=0 profile=0 sinkhorn_iters=20",
+  "dataset_sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+  "model_sha256": "b43aabfcaf1a6db6acf488076eab71d823c08697c7af4521fc1d174b60ede5ba",
+  "firmware_sha256": "a1b3ce9d6b3e20b52540b5c3900b7b77ef64253cff17f287e2f238fe6baa89de",
+  "host_binary_sha256": "1fd083cbaf07ed6f5095d1fe4947d7aca4374f13e748c23ef3b267343d0284bd"
+}

@@ -1,0 +1,95 @@
+{
+  "date": "2026-08-19",
+  "hardware": {
+    "chip": "ESP32-S3 rev 0.2",
+    "cpu_mhz": 240,
+    "flash_mb": 16,
+    "psram_mb": 8,
+    "psram_mode": "octal 80 MHz"
+  },
+  "protocol": {
+    "dataset": "google/mobile-actions eval",
+    "tool_order": "dataset",
+    "retrieval": "native",
+    "metric": "ordered strict exact",
+    "developer_whitespace": "preserved"
+  },
+  "hashes": {
+    "dataset_sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+    "model_sha256": "b43aabfcaf1a6db6acf488076eab71d823c08697c7af4521fc1d174b60ede5ba",
+    "host_binary_sha256": "e7aa2375dbdb5ae212ab6329fc30ec50a5e8d736d9dc48c0a05d7d9198c60a3f",
+    "measured_fast_math_firmware_sha256": "69ade8fb79f1b47ebf45e9fee86193ab4d0583e1620366278a9c6a3936aaa2d7",
+    "final_fast_math_profile_firmware_sha256": "5a3ba3669b186bd8765554ca309d8ff2b7e727afb640e50e90c10651318e0468",
+    "final_standard_host_binary_sha256": "1fd083cbaf07ed6f5095d1fe4947d7aca4374f13e748c23ef3b267343d0284bd",
+    "standard_fair_firmware_sha256": "a1b3ce9d6b3e20b52540b5c3900b7b77ef64253cff17f287e2f238fe6baa89de"
+  },
+  "short_fixed_schema": {
+    "baseline": {
+      "cold_ms": 42895,
+      "warm_ms": 20067,
+      "cold_prefill_tps": 1.65,
+      "warm_prefill_tps": 1.60,
+      "decode_tps": 1.41
+    },
+    "fast_math": {
+      "cold_ms": 41541,
+      "warm_ms": 19444,
+      "cold_prefill_tps": 1.70,
+      "warm_prefill_tps": 1.65,
+      "decode_tps": 1.46
+    }
+  },
+  "mobile_actions": [
+    {
+      "index": 0,
+      "baseline_seconds": 364,
+      "fast_math_seconds": 352.4,
+      "name_ok": true,
+      "exact_ok": false,
+      "agrees_with_host": true
+    },
+    {
+      "index": 1,
+      "baseline_seconds": 292,
+      "fast_math_seconds": 282.8,
+      "name_ok": true,
+      "exact_ok": false,
+      "agrees_with_host": true
+    },
+    {
+      "index": 9,
+      "baseline_seconds": null,
+      "fast_math_seconds": 189.2,
+      "name_ok": true,
+      "exact_ok": true,
+      "agrees_with_host": true
+    }
+  ],
+  "fair_stratified_sample": {
+    "artifact": "esp32s3_mobile_actions_stratified12_20260819.json",
+    "seed": 20260819,
+    "allocation": {
+      "1_call": 8,
+      "2_call": 4,
+      "3_call": 0
+    },
+    "exact": "5/12 (41.7%; Wilson 95% CI 19.3-68.0%)",
+    "name": "9/12 (75.0%; Wilson 95% CI 46.8-91.1%)",
+    "raw_host_parity": "10/12",
+    "score_host_parity": "12/12",
+    "seconds": "median 315.5, min 203.1, max 357.7",
+    "throughput": "median prefill 1.39 tok/s, decode 1.11 tok/s",
+    "stability": "row 664 exceeded 650 s after eight continuous rows; after reset it completed in 355.9 s"
+  },
+  "rejected_experiments": {
+    "pie_int16": "512x512 kernel 15.531 ms vs float 5.271 ms; request 273.456 s and decode changed 16 to 128 tokens",
+    "eight_row_float_kernel": "512x512 kernel 7.082 ms vs four-row 5.004 ms; cold request 53.685 s vs 42.889 s",
+    "sinkhorn_8": "0/10 host outputs matched the 20-iteration baseline and total host time increased",
+    "psram_greedy_continue": "cached 974 KB vs 940 KB; no measurable short-request change"
+  },
+  "notes": [
+    "The sample is a parity and timing audit, not an accuracy estimate.",
+    "Fast math is an optional performance mode because non-IEEE reassociation can change near-tie greedy decisions.",
+    "Even the standard build had two raw-output differences from arm64, but all 12 cases agreed on strict/name pass-fail outcomes."
+  ]
+}

@@ -1,0 +1,394 @@
+[
+ {
+  "dataset_index": 51,
+  "n_expected": 2,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T11:20:37\u001eDay of week is Monday",
+  "want": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Grand View Conference Center"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Grand View Conference Center"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Grand View Conference Center"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 275.6,
+  "device_ms": 274629,
+  "prefill_tok": 271,
+  "prefill_tps": 1.41,
+  "decode_tok": 89,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 130,
+  "n_expected": 2,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-07-21T07:32:21\u001eDay of week is Tuesda",
+  "want": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Clay Pot Studio 1205 Granville Street, Vancouver"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Pottery Class",
+     "datetime": "2026-07-24T18:00:00"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ")."
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ")."
+    }
+   }
+  ],
+  "name_ok": false,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 266.6,
+  "device_ms": 266194,
+  "prefill_tok": 312,
+  "prefill_tps": 1.38,
+  "decode_tok": 41,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 173,
+  "n_expected": 2,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-02-23T08:19:59\u001eDay of week is Monday",
+  "want": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "datetime": "2026-03-06T15:00:00",
+     "title": "Vet Appointment"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Vet Appointment",
+     "datetime": "2026-03-06T15:00:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Vet Appointment",
+     "datetime": "2026-03-06T15:00:00"
+    }
+   }
+  ],
+  "name_ok": false,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 327.0,
+  "device_ms": 326592,
+  "prefill_tok": 277,
+  "prefill_tps": 1.41,
+  "decode_tok": 141,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 223,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-07T15:26:14\u001eDay of week is Saturd",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "datetime": "2024-09-10T10:30:00",
+     "title": "Project Kickoff Meeting"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Kickoff Meeting",
+     "datetime": "2026-09-10T10:30:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Kickoff Meeting",
+     "datetime": "2026-09-10T10:30:00"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 328.4,
+  "device_ms": 328007,
+  "prefill_tok": 322,
+  "prefill_tps": 1.38,
+  "decode_tok": 101,
+  "decode_tps": 1.12
+ },
+ {
+  "dataset_index": 265,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-04-19T07:43:19\u001eDay of week is Sunday",
+  "want": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The National Museum of Korea"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The National Museum of Korea"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The National Museum of Korea"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 237.9,
+  "device_ms": 237443,
+  "prefill_tok": 252,
+  "prefill_tps": 1.43,
+  "decode_tok": 65,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 489,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-09-29T07:45:34\u001eDay of week is Tuesda",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "(416) 555-0199",
+     "first_name": "Kenji",
+     "email": "kenji.tanaka@globalcorp.com",
+     "last_name": "Tanaka"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Kenji Tanaka",
+     "phone_number": "416\\",
+     "email": "kenji.tanaka@globalcorp.com",
+     "first_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Kenji Tanaka",
+     "phone_number": "416\\",
+     "email": "kenji.tanaka@globalcorp.com",
+     "first_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 357.7,
+  "device_ms": 357078,
+  "prefill_tok": 305,
+  "prefill_tps": 1.39,
+  "decode_tok": 148,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 585,
+  "n_expected": 2,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-10-21T04:21:58\u001eDay of week is Monday",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Rodriguez",
+     "email": "javier.r@example.com",
+     "first_name": "Javier"
+    }
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Artisian Bakery in Portland, Oregon"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ").\n"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ").\n"
+    }
+   }
+  ],
+  "name_ok": false,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "seconds": 330.6,
+  "device_ms": 329842,
+  "prefill_tok": 305,
+  "prefill_tps": 1.39,
+  "decode_tok": 118,
+  "decode_tps": 1.12
+ },
+ {
+  "dataset_index": 626,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-08-13T19:13:54\u001eDay of week is Thursd",
+  "want": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "device": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "host": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 203.1,
+  "device_ms": 202553,
+  "prefill_tok": 263,
+  "prefill_tps": 1.42,
+  "decode_tok": 16,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 664,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-03-12T17:10:17\u001eDay of week is Wednes",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Sora",
+     "last_name": "Kim",
+     "phone_number": "+82 10 5555 1234",
+     "email": "sora.kim.design@corpmail.com"
+    }
+   }
+  ],
+  "device": [],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Kim Sora",
+     "phone_number": "+82 10 5555 1234",
+     "email": "sora.kim.design@corpmail.com",
+     "last_name": "first_name"
+    }
+   }
+  ],
+  "name_ok": false,
+  "exact_ok": false,
+  "agrees_with_host": false,
+  "seconds": 650.7
+ }
+]

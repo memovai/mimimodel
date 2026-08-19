@@ -1,0 +1,174 @@
+[
+ {
+  "dataset_index": 664,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-03-12T17:10:17\u001eDay of week is Wednes",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Sora",
+     "last_name": "Kim",
+     "phone_number": "+82 10 5555 1234",
+     "email": "sora.kim.design@corpmail.com"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Kim Sora",
+     "phone_number": "+82 10 5555 1234",
+     "email": "sora.kim.design@corpmail.com",
+     "last_name": "Kim Sora"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Kim Sora",
+     "phone_number": "+82 10 5555 1234",
+     "email": "sora.kim.design@corpmail.com",
+     "last_name": "first_name"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": false,
+  "seconds": 355.9,
+  "device_ms": 355607,
+  "prefill_tok": 310,
+  "prefill_tps": 1.38,
+  "decode_tok": 142,
+  "decode_tps": 1.11
+ },
+ {
+  "dataset_index": 744,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-05-08T06:36:27\u001eDay of week is Wednes",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Annual checkup with Dr. Chen",
+     "datetime": "2024-05-13T10:30:00"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Annual checkup with Dr. Chen",
+     "datetime": "2024-05-13T10:30:00"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Annual checkup with Dr. Chen",
+     "datetime": "2024-05-13T10:30:00"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 304.0,
+  "device_ms": 303914,
+  "prefill_tok": 295,
+  "prefill_tps": 1.39,
+  "decode_tok": 99,
+  "decode_tps": 1.12
+ },
+ {
+  "dataset_index": 817,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-02-13T17:51:33\u001eDay of week is Tuesda",
+  "want": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Pike Place Market"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Pike Place Market"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Pike Place Market"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "seconds": 225.7,
+  "device_ms": 225666,
+  "prefill_tok": 249,
+  "prefill_tps": 1.43,
+  "decode_tok": 55,
+  "decode_tps": 1.12
+ },
+ {
+  "dataset_index": 951,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-07-25T06:08:41\u001eDay of week is Friday",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "kenji.tanaka@emailservice.jp",
+     "phone_number": "+81 90-1234-5678",
+     "last_name": "Tanaka",
+     "first_name": "Kenji"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "kenji.tanaka@emailservice.jp",
+     "first_name": "Kenji Tanaka",
+     "email": "+81 90-1234-5678"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Kenji Tanaka",
+     "email": "kenji.tanaka@emailservice.jp",
+     "phone_number": "+81 90-1234-5678",
+     "first_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": false,
+  "seconds": 339.2,
+  "device_ms": 339048,
+  "prefill_tok": 305,
+  "prefill_tps": 1.39,
+  "decode_tok": 128,
+  "decode_tps": 1.11
+ }
+]

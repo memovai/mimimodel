@@ -1,0 +1,10 @@
+{
+  "engine": "ours",
+  "protocol_version": 2,
+  "metric": "strict",
+  "tool_order": "dataset",
+  "retrieval": "native",
+  "dataset_sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+  "engine_sha256": "1fd083cbaf07ed6f5095d1fe4947d7aca4374f13e748c23ef3b267343d0284bd",
+  "model_sha256": "b43aabfcaf1a6db6acf488076eab71d823c08697c7af4521fc1d174b60ede5ba"
+}

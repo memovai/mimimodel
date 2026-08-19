@@ -19,7 +19,7 @@ $ turn on pin 5
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
 | **Velocidad** | llamada en caliente **29 s** · en frío **241 s** · prefill 1,4 tok/s |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
-| **Precisión** | 50,4% en google/mobile-actions (961 casos, coincidencia estricta) — el motor oficial saca 76,9% |
+| **Precisión** | 49,3% en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
 
 > **Honestidad por delante:** esto es unas 5 veces más lento que una API en la nube, no entiende
 > chino, si le saludas te llamará una herramienta igualmente, y queda bastante por debajo del
@@ -29,7 +29,7 @@ $ turn on pin 5
 
 ---
 
-## Por qué no bastaba con «compilar el motor para Xtensa»
+## Por qué falló la compilación cruzada del motor para Xtensa
 
 Cactus publica tanto un [motor de inferencia](https://github.com/cactus-compute/cactus) como el
 [modelo Needle](https://github.com/cactus-compute/needle), y su web lista el ESP32-S3 como objetivo
@@ -138,9 +138,9 @@ Un modelo de 45M en carrera libre produce algo *casi* JSON. En vez de eso, el mo
 decodificación contra el esquema de herramientas, replicando lo que hace el compilador de gramáticas
 del motor cerrado:
 
-- el texto estructural (`[{"name":"`, `","arguments":{`) se **fuerza**, pero enmascarando los logits
-  a los tokens que son prefijo de la cadena requerida —nunca insertando IDs de token directamente—,
-  de forma que el contexto del modelo se mantiene canónico;
+- el texto estructural (`[{"name":"`, `","arguments":{`) se **fuerza**. El decodificador enmascara
+  los logits a los tokens que son prefijo de la cadena requerida, evita insertar IDs de token
+  directamente y mantiene canónico el contexto del modelo;
 - el **nombre de la herramienta** se elige puntuando la log-probabilidad media completa de cada
   candidato (con teacher-forcing y un rebobinado de contador muy barato), después de que un
   preordenamiento gratuito por el primer token deje solo los 3 mejores candidatos;
@@ -202,7 +202,7 @@ Rendimiento bruto del motor, medido sobre hardware real:
 | Reparto en dos núcleos (matvec por filas, atención por cabezas KV) | ~1,8× |
 | Omitir la cabeza de logits de 8192×512 durante el prefill | +10% prefill |
 | Decodificación de pesos por LUT de byte + kernel de 4 filas (4 filas comparten cada lectura de activación) | +18% |
-| Scratch caliente en SRAM interna, no en PSRAM | +5% |
+| Scratch caliente trasladado a SRAM interna | +5% |
 | Caché de pesos en PSRAM (oportunista) | +8% |
 | **Total** | **prefill 1,72 tok/s (2,7×), decode 1,38 (2,3×)** |
 | Caché de prefijo KV (cuesta ~20% de velocidad bruta por agrandar el anillo) | **8,2× extremo a extremo** |
@@ -211,23 +211,24 @@ Rendimiento bruto del motor, medido sobre hardware real:
 
 - **SIMD PIE de 128 bits del ESP32-S3.** Implementado en ensamblador (`ee.vmulas.s16.accx`, 8 MAC
   por instrucción) con una ruta de activaciones cuantizadas a int16. Numéricamente correcto
-  (error relativo 5,5e-5 en la autoprueba) y **0,32× la velocidad**: 3 veces *más lento*. El cuello
-  de botella es desempaquetar los pesos de 2 bits en carriles int16, no las multiplicaciones-acumulaciones,
-  y PIE no tiene instrucción de desempaquetado de 2 bits. El código se conserva tras `-DNEEDLE_PIE`,
-  desactivado por defecto.
+  (error relativo 5,5e-5 en la autoprueba) y **0,32× la velocidad**: 3 veces *más lento*. Desempaquetar
+  los pesos de 2 bits en carriles int16 concentra el coste; PIE carece de una instrucción de
+  desempaquetado de 2 bits y las multiplicaciones-acumulaciones representan una parte menor. El
+  código se conserva tras `-DNEEDLE_PIE`, desactivado por defecto.
 - **Aritmética int16 en el host.** 2,3× más lenta que en float sobre ARM/x86, porque el compilador
-  vectoriza automáticamente los bucles en float. SIMD no es una victoria incondicional.
+  vectoriza automáticamente los bucles en float. El beneficio de SIMD depende de la disposición
+  de los datos y de las instrucciones disponibles.
 - **Sinkhorn en espacio lineal.** Matemáticamente equivalente a la versión en espacio logarítmico,
   pero sufre underflow y da NaN. Quédate con la logarítmica.
 
 ## Limitaciones
 
-- **~29 s por llamada.** Una API en la nube responde lo mismo en 3–8 s. El valor aquí es el
-  funcionamiento sin conexión, el coste cero de API y que los datos nunca salgan del dispositivo;
-  no la latencia.
-- **El chino no funciona.** 0/5 en órdenes de dispositivo en chino. El motor oficial falla igual, así
-  que es el límite del modelo, no del port. Al menos su puntuación de confianza cae a 0,02–0,22 en
-  estos casos, así que son detectables.
+- **~29 s por llamada.** Una API en la nube responde lo mismo en 3–8 s. El valor está en el
+  funcionamiento sin conexión, el coste cero de API y mantener los datos en el dispositivo; la
+  latencia sigue siendo muy superior a la de una API en la nube.
+- **El modelo no admite chino.** Las órdenes de dispositivo en chino obtienen 0/5 y el motor oficial
+  presenta los mismos fallos. La limitación pertenece al propio modelo. La puntuación de confianza
+  cae a 0,02–0,22 en estos casos, lo que permite detectarlos.
 - **No sabe declinar.** Si le pides un chiste, el modelo emite una llamada a herramienta igualmente.
   Cualquier enrutado en producción necesita una puerta de confianza más un prefiltro de texto.
 - **Los argumentos booleanos/semánticos no son fiables.** `gpio_write(pin, state)` acierta el `state`
@@ -304,61 +305,62 @@ es la comprobación que detectó los dos errores descritos en [Corrección](#cor
 
 Evaluado sobre [google/mobile-actions](https://huggingface.co/datasets/google/mobile-actions)
 (CC-BY-4.0) — el conjunto de 961 casos de llamada a funciones en dispositivo
-publicado junto a FunctionGemma — con su propia métrica, *ordered strict exact
-match*: los nombres de función, el orden de las llamadas y cada argumento deben
-coincidir.
+publicado junto a FunctionGemma — puntuado aquí con *ordered strict exact match*:
+los nombres de función, el orden de las llamadas y cada argumento deben coincidir.
+La nueva ejecución conserva el orden de herramientas de cada registro, los turnos
+developer/user separados y los espacios originales; ambos motores usan su recuperación nativa.
 
-| | este motor | motor oficial, mismos prompts | publicado |
-|---|---|---|---|
-| precisión | 50,4% | 76,9% | 63,7% |
-| precisión de nombre | 78,9% | 99,2% | 98,3% |
-| casos de 1 llamada (640) | 60,8% | 75,6% | 71,3% |
-| casos de 2 llamadas (320) | 29,7% | 79,4% | 48,4% |
-| latencia, mediana | 1748 ms | 530 ms | — |
-| prefill · decode | 166 · 59 tok/s | 1504 · 869 tok/s | — |
-| RSS máximo | 20 MB | 165 MB | — |
+| | este motor | motor oficial, mismos registros/esquemas |
+|---|---|---|
+| precisión | 49,3% | 69,2% |
+| precisión de nombre | 79,1% | 98,1% |
+| casos de 1 llamada (640) | 60,3% | 73,6% |
+| casos de 2 llamadas (320) | 27,5% | 60,3% |
 
-El motor oficial cerrado, medido con este mismo arnés, queda a 0,9 puntos de su
-precisión de nombre publicada. Esa coincidencia es lo que indica que el arnés es
-correcto y que la diferencia restante es de este motor, no del modelo ni de los
-datos. Las dos columnas medidas quedan por encima de la precisión publicada
-porque los valores de los argumentos se comparan ignorando mayúsculas, algo más
-laxo que el criterio oficial y que se aplica por igual a ambos motores.
+El artefacto histórico de este motor puntúa 48,8% estricto y 50,4% solo tras
+normalizar mayúsculas y espacios. El 76,9% oficial sumaba indicadores obsoletos:
+63 filas contradicen su propia salida, cuya puntuación estricta es 70,7%. Los
+nuevos artefactos puntúan 49,3%/69,2% y no tienen indicadores inconsistentes.
 
-**Dónde está la diferencia, con precisión.** En los turnos de una sola llamada la
-*selección* de herramienta está casi igualada (94,7% frente a 99,8%). La diferencia
-se concentra en el tercio del conjunto que espera más de una llamada: 29,7% frente
-a 79,4%. Separar esos 320 casos según cuántas llamadas emitió cada motor lo aísla
-del todo: en los turnos donde este motor sí emite dos llamadas, acierta ambos
-nombres el 98% de las veces y la respuesta completa el 61%, en línea con su propia
-tasa de una llamada. Simplemente solo llega a dos llamadas en el 48% de ellos,
-donde el motor oficial llega al 97%. Todo el déficit es una única decisión binaria
-de parar o continuar, tomada aquí con una sola comparación de logits. El desglose,
+**Dónde está la diferencia.** Son 13,3 puntos en filas de una llamada y 32,8 en
+filas de dos llamadas. La selección de nombre en filas de una llamada está más
+cerca (95,8% frente a 99,2%); el principal déficit es detenerse antes de la segunda
+llamada, seguido de la extracción de argumentos. El desglose,
 la curva de ajuste y los dos errores que hubo que corregir están en
 [`bench/README.md`](bench/README.md#multi-call).
 
-En el host es 3,3× más lento de extremo a extremo pero 9–15× más lento por token;
-es C99 escalar frente a una compilación ARM64 optimizada con NEON, así que la
-mayor parte es juego de instrucciones, no diseño.
+Cactus publica 63,7% exacto y 98,3% de nombres. El paquete público actual
+2.0.6/engine 2.0.2 obtiene 69,2%/98,1% en este arnés. Como la web no publica la
+conversión de prompts/esquemas, las herramientas recuperadas, las filas crudas ni
+el hash binario, esa diferencia de 5,5 puntos no es atribuible.
 
-**En el ESP32-S3** los mismos casos tardan una mediana de 294 s cada uno y las
-respuestas de la placa son **idénticas byte a byte** a las del host en 11 de los
-12 casos muestreados. Esa paridad es lo que permite leer la precisión de 961 casos
-del host como la de la placa: ejecutar el conjunto completo en el dispositivo
-llevaría unos tres días. La única discrepancia no es un fallo de portabilidad:
-recompilar el *host* con `-ffast-math` la voltea a la respuesta exacta de la placa,
-porque las dos herramientas candidatas están a 0,57 nats y el argmax voraz queda
-en el filo. Los 294 s son el peor caso de este benchmark: cada registro lleva una
-fecha distinta, así que la caché de prefijo KV nunca acierta. Con un system prompt
-estable, la misma placa responde en unos 30 s.
+Con los temporizadores de fase reales, una auditoría de 100 casos midió 244/195
+tok/s de prefill/decode frente a 1664/996; la latencia total fue 1711 ms frente a
+667 ms incluyendo la inicialización oficial.
+
+**Auditoría real ESP32-S3 (2026-08-19):** en una placa rev 0.2 a 240 MHz con 8 MB
+de PSRAM octal, dos filas mobile-actions con el protocolo corregido tardaron
+364/292 s de base y 352,4/282,8 s con `-ffast-math` opcional (aprox. 3,2% menos),
+siempre idénticas byte a byte al host estándar. Una tercera fila correcta tardó
+189,2 s y fue exacta y también idéntica al host. Una carga fija de una herramienta
+midió 42,895/20,067 s en frío/caliente y 41,541/19,444 s con fast math. Es una
+auditoría de tiempo y paridad, no una estimación de precisión; fast math sigue
+siendo opcional porque puede cambiar decisiones voraces casi empatadas. Datos en
+[`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json).
+
+La compilación justa también ejecutó una muestra proporcional de semilla fija
+(8 filas de una llamada + 4 de dos): 5/12 exactas, 9/12 nombres, mediana 315,5 s
+y 1,39/1,11 tok/s. El intervalo Wilson exacto es 19,3-68,0%, por lo que no estima
+la población. La salida cruda coincidió con arm64 en 10/12 y el aprobado/fallo en
+12/12. Una solicitud superó 650 s tras ocho filas continuas y terminó en 355,9 s
+después de reiniciar; se conserva como hallazgo de estabilidad.
 
 [`bench/README.md`](bench/README.md) tiene los comandos, los resultados crudos por
 caso y qué conviene no equivocar al volver a ejecutarlos.
 
 ## Corrección
 
-El motor no se escribió esperando que funcionara. Se construyó como una cadena de equivalencias
-verificadas:
+El motor sigue una cadena de equivalencias verificadas:
 
 1. `needle_np.py` (numpy) se comparó **posición a posición y logit a logit** con el `_forward_cached`
    oficial en JAX del paquete `needle`. Diferencia máxima: 3e-4.
@@ -375,7 +377,8 @@ flowchart LR
 
 Dos errores aparecieron solo gracias a esto: los tensores mHC `a_pre`/`a_post`/`a_res` son *escalares*
 por capa (el broadcasting de numpy lo ocultaba; en C era una lectura fuera de rango), y los `taps` del
-engram son vectores `(4, 512)` por canal, no 4 escalares.
+engram siguen una disposición vectorial `(4, 512)` por canal que la implementación original interpretaba
+como 4 escalares.
 
 ## Créditos
 

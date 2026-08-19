@@ -1,0 +1,84 @@
+{
+  "date": "2026-08-19",
+  "dataset": {
+    "name": "google/mobile-actions",
+    "split": "eval",
+    "rows": 961,
+    "sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+    "source": "https://huggingface.co/datasets/google/mobile-actions"
+  },
+  "protocol": {
+    "version": 2,
+    "tool_order": "dataset",
+    "retrieval": "native per engine",
+    "turns": "developer and user kept separate",
+    "developer_whitespace": "preserved",
+    "metric": "ordered strict exact match"
+  },
+  "full_results": {
+    "mimimodel": {
+      "artifact": "ours_961_protocol_v2.json",
+      "exact": "474/961 (49.3%)",
+      "name": "760/961 (79.1%)",
+      "one_call_exact": "386/640 (60.3%)",
+      "two_call_exact": "88/320 (27.5%)",
+      "engine_sha256": "1fd083cbaf07ed6f5095d1fe4947d7aca4374f13e748c23ef3b267343d0284bd",
+      "model_sha256": "b43aabfcaf1a6db6acf488076eab71d823c08697c7af4521fc1d174b60ede5ba"
+    },
+    "official_current": {
+      "artifact": "oracle_961_protocol_v2.json",
+      "exact": "665/961 (69.2%)",
+      "name": "943/961 (98.1%)",
+      "one_call_exact": "471/640 (73.6%)",
+      "two_call_exact": "193/320 (60.3%)",
+      "package": "cactus-needle 2.0.6",
+      "engine": "2.0.2",
+      "binary_sha256": "f8ff35e0ceea5812f3f90bddbb40ca3a8d03af07c84555e116bf0096fa994afd"
+    },
+    "cactus_published": {
+      "exact_percent": 63.7,
+      "name_percent": 98.3,
+      "one_call_exact_percent": 71.3,
+      "two_call_exact_percent": 48.4,
+      "source": "https://cactuscompute.com/needle",
+      "reproducibility": "No raw rows, prompt/schema conversion, retrieval traces, or binary hash are published; do not merge this column with the directly comparable local runs."
+    }
+  },
+  "historical_provenance": {
+    "mimimodel_raw": {
+      "strict": "469/961 (48.8%)",
+      "normalized": "484/961 (50.4%)"
+    },
+    "official_raw": {
+      "strict": "679/961 (70.7%)",
+      "normalized": "685/961 (71.3%)",
+      "saved_flag_sum": "76.9% exact / 99.2% name",
+      "saved_flag_mismatches": 63
+    },
+    "protocol_v2_effect": {
+      "mimimodel_changed_outputs": 339,
+      "mimimodel_exact_wins_losses": "40/35 (net +5)",
+      "official_changed_outputs": 196,
+      "official_exact_wins_losses": "55/69 (net -14)"
+    }
+  },
+  "device": {
+    "artifact": "esp32s3_mobile_actions_stratified12_20260819.json",
+    "hardware": "ESP32-S3 rev 0.2, 240 MHz, 8 MB octal PSRAM at 80 MHz",
+    "build": "-O3, fast_math=0, profile=0, sinkhorn_iters=20",
+    "sample": "proportional stratified random sample, seed 20260819, 8 one-call + 4 two-call",
+    "exact": "5/12 (41.7%; Wilson 95% CI 19.3-68.0%)",
+    "name": "9/12 (75.0%; Wilson 95% CI 46.8-91.1%)",
+    "raw_host_parity": "10/12",
+    "score_host_parity": "12/12",
+    "latency_seconds": "median 315.5, min 203.1, max 357.7",
+    "throughput": "median prefill 1.39 tok/s, decode 1.11 tok/s",
+    "stability": "One continuous-run request exceeded 650 s after eight rows; after reset the same row completed in 355.9 s. The timed-out attempt is excluded."
+  },
+  "conclusion": [
+    "Use 49.3% versus 69.2% for the same-script host comparison.",
+    "Do not call 5/12 the board's population accuracy; its interval is too wide.",
+    "Do not transfer host raw outputs to ESP32 byte-for-byte; 2/12 differed across arm64 and Xtensa, although all sampled pass/fail outcomes agreed.",
+    "Do not compare ESP32 throughput to Cactus phone/Pi figures as if hardware and engine kernels were controlled."
+  ]
+}

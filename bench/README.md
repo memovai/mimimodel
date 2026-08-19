@@ -31,6 +31,11 @@ cc -O3 -o /tmp/needle_ma needle.c -lm
 The mobile-actions dataset (25 MB) downloads itself on first run into
 `bench/mobile_actions.jsonl`.
 
+Oracle versions matter. New result sidecars record the Python package, native
+engine, dataset, model, and binary hashes. The current audit used package 2.0.6
+loading engine 2.0.2. The historical artifact recorded none of this, so its exact
+official build cannot be proven after the fact.
+
 ## Accuracy
 
 ```bash
@@ -44,63 +49,64 @@ The mobile-actions dataset (25 MB) downloads itself on first run into
 .venv/bin/python bench/mobile_actions.py --limit 300
 ```
 
-Output:
+The 2026-08-19 protocol-v2 rerun gives:
 
 ```
 === google/mobile-actions eval · this engine · 961 cases ===
-accuracy (ordered strict exact, all 961): 484/961 (50.4%)   name acc 758/961 (78.9%)
-  1-call (640): exact 389 (60.8%)   names 606 (94.7%)
-  2-call (320): exact  95 (29.7%)   names 152 (47.5%)
+accuracy (ordered strict exact, all 961): 474/961 (49.3%)   name acc 760/961 (79.1%)
+  1-call (640): exact 386 (60.3%)   names 613 (95.8%)
+  2-call (320): exact  88 (27.5%)   names 147 (45.9%)
   3-call (  1): exact   0 ( 0.0%)   names   0 ( 0.0%)
-latency: median 1946 ms, p90 2427 ms
+latency: median 1814 ms, p90 2262 ms
 ```
 
 ### Where it stands
 
-All three columns are the same model and the same 961 prompts; only the engine
-and the scoring normalisation differ.
+| | this engine | official engine 2.0.2, identical inputs |
+|---|---|---|
+| strict accuracy | 49.3% | 69.2% |
+| name accuracy | 79.1% | 98.1% |
+| 1-call strict | 60.3% | 73.6% |
+| 2-call strict | 27.5% | 60.3% |
 
-| | this engine | official engine, same prompts | published leaderboard |
-|---|---|---|---|
-| accuracy | 50.4% | 76.9% | 63.7% |
-| name acc | 78.9% | 99.2% | 98.3% |
-| 1-call | 60.8% | 75.6% | 71.3% |
-| 2-call | 29.7% | 79.4% | 48.4% |
-| median latency | 1946 ms | 603 ms | — |
-
-Those latencies are the accuracy run's own timings, taken while both engines were
-scored; [Speed](#speed) measures the same thing properly on a dedicated 200-call
-run and gets 1748 ms / 530 ms.
-
-The official engine measured through this harness lands within 0.9 points of its
-published *name* accuracy, which is the evidence that the harness itself is sound.
-Both measured columns sit above the published *accuracy* because of the
-lowercase/strip normalisation described under [The metric](#the-metric); that
-leniency applies to both engines equally.
+The historical custom output scores 469/961 (48.8%) strict or 484/961 (50.4%)
+under `strip().lower()`. The former 76.9% official number was not a valid
+re-score: it summed flags in `oracle_961.json`, where 63 rows disagree with their
+own output. That raw output scores 679/961 (70.7%) strict. Protocol-v2 changed 339
+custom outputs (40 wins, 35 losses) and 196 official outputs (55 wins, 69 losses),
+which is why a single headline cannot be moved between protocols. Run
+`python bench/mobile_actions.py --rescore <file>` to audit any artifact; it reads
+the saved metric from the sidecar before checking flags.
 
 The remaining gap is in this engine, not the model or the data. It splits cleanly:
 
-- **1-call (640 cases): 60.8% against 75.6%.** Names are nearly matched (94.7% vs
-  99.8%); the loss is in argument values.
-- **2-call (320 cases): 29.7% against 79.4%.** This is where most of the total gap
+- **1-call (640 cases): 60.3% against 73.6%.** Names are close (95.8% vs
+  99.2%); the loss is in argument values.
+- **2-call (320 cases): 27.5% against 60.3%.** This is where most of the total gap
   lives. Deciding *whether to open a second call* is the weak part — see
   [Multi-call](#multi-call).
+
+Cactus publishes 63.7% exact / 98.3% names for Needle 2 on the same named split
+and strict metric. The public package scores 69.2%/98.1% here. The site does not
+publish its prompt/schema conversion, selected-tool traces, raw rows, or binary
+hash, so the 5.5-point exact difference cannot be attributed. Treat the website
+number as an external reference, not a third directly comparable column.
 
 ### Multi-call
 
 321 of the 961 cases expect more than one tool call, so a single-call engine has a
 hard ceiling of 66.6%. The multi-call path is **on by default**
-(`NEEDLE_MAX_CALLS=4`). Same build, same prompts, one knob:
+(`NEEDLE_MAX_CALLS=4`). The following ablation uses the legacy workload and one knob:
 
 | | `MAX_CALLS=1` | `MAX_CALLS=4` (default) |
 |---|---|---|
-| overall accuracy | 40.7% | **50.4%** |
+| strict accuracy | 39.3% | **48.8%** |
 | name accuracy | 63.6% | **78.9%** |
-| 1-call exact (640) | 61.1% | 60.8% |
+| 1-call strict (640) | 59.1% | 58.8% |
 | 1-call names (640) | 95.5% | 94.7% |
-| 2-call exact (320) | 0% | **29.7%** |
+| 2-call strict (320) | 0% | **29.1%** |
 
-+9.7 points overall for 0.3 points of single-call accuracy. That trade only became
++9.5 points overall for 0.3 points of single-call accuracy. That trade only became
 this favourable after the two bugs below were fixed; before them the same switch
 was a net loss, which is why it shipped disabled at first.
 
@@ -121,9 +127,9 @@ The curve is sharp on both sides. Below 2.0 the model opens calls it should not 
 1-call name accuracy collapses; above 2.0 it almost never opens a second call and
 the 2-call bucket goes to zero. There is no setting that is good at both.
 
-#### The remaining 2-call gap is call *count*, not call *content*
+#### Historical 2-call diagnosis: call *count*, not call *content*
 
-Splitting the 320 two-call cases by how many calls each engine actually emitted:
+Splitting the legacy run's 320 two-call cases by how many calls each engine emitted:
 
 | calls emitted | this engine | official engine |
 |---|---|---|
@@ -134,9 +140,9 @@ Splitting the 320 two-call cases by how many calls each engine actually emitted:
 | 4 | 3 | 0 |
 
 Restricted to the turns where it emitted exactly two calls, this engine gets both
-tool names right **98%** of the time and the whole answer exact **61%** — against
-the official engine's 100% and 81%, and in line with this engine's own 1-call exact
-rate of 60.8%. Content quality is not the problem on these turns.
+tool names right **98%** of the time and the whole answer strict **60%** — against
+the official engine's 100% and 64%, and close to this engine's own 1-call rate.
+Call count is the larger problem, but argument decoding remains a measurable gap.
 
 The problem is that it only reaches two calls on 155 of 320 (48%) where the
 official engine reaches it on 311 (97%). 132 turns stop one call short and 33
@@ -165,15 +171,33 @@ fix said larger margins hurt the 2-call bucket. After the fix, 2.0 is the clear 
 
 ### The metric
 
-`accuracy` is **ordered strict exact match** — the same definition the published
-leaderboard uses: function names, call order and every argument must match. A turn
+`accuracy` is **ordered strict exact match**: function names, call order and every argument must match. A turn
 that expects two calls and gets one is a miss. `name acc` is the same comparison
 ignoring argument values.
 
-One deliberate deviation: argument values are compared after `strip().lower()`.
-That is slightly more lenient than the published metric, and it applies equally to
-both engines, so the head-to-head is fair while the absolute numbers sit a few
-points above the leaderboard's.
+Strict is now the default. `--metric normalized` reproduces the old
+`str(value).strip().lower()` behavior for historical comparisons.
+
+### Protocol audit
+
+The seven schemas are identical across eval records, but their order is randomized:
+961 rows contain 881 ordered variants. The old harness always used row zero's
+ordering and flattened developer newlines. On the first 100 cases, preserving the
+dataset order changed 25 self-engine outputs and 22 official-engine outputs. Fixed
+order moved strict accuracy 54% to 56% here and 70% to 72% officially; wins and
+losses both occurred, so this is measurement bias rather than an optimization.
+
+`--tool-order dataset` is the accuracy default. `canonical` sorts by name for a
+controlled speed workload, and `fixed-first` exists only to reproduce old runs.
+The result sidecar records the metric and protocol plus dataset, model, binary,
+official package, and engine hashes.
+
+Native mode still compares two different retrieval policies. For decoder-focused
+comparison, `--retrieval common-bm25-2` preselects the same two schemas before
+calling either engine, so neither native retriever engages. Its full-answer recall
+ceiling is 895/961 (93.1%): 637/640 single-call and 258/321 multi-call cases. On the
+first 100 rows it scored 56% strict / 87% names here, versus 73% / 96% officially.
+This isolates decoder behavior but is not a replacement for native end-to-end eval.
 
 ### Why the harness looks the way it does
 
@@ -208,37 +232,117 @@ a second benchmark process reported latencies roughly 2× too high.
 .venv/bin/python bench/speed.py --limit 200 --oracle
 ```
 
-Measured on an M-series Mac, 200 calls each, serial:
+The old table reported 166/59 tok/s by dividing prefill and decode token counts
+separately by the same whole-request wall time. Those are not phase throughputs.
+The batch protocol now exports the phase timers already maintained by `needle.c`.
+
+Protocol audit on an M4 Mac, first 100 dataset-order cases, serial:
 
 | | this engine | official engine | ratio |
 |---|---|---|---|
-| latency, median | 1748 ms | 530 ms | 3.3× slower |
-| latency, p90 | 2225 ms | 734 ms | 3.0× slower |
-| prefill | ~166 tok/s | 1504 tok/s | 9.1× slower |
-| decode | ~59 tok/s | 869 tok/s | 15× slower |
-| peak RSS | 20 MB | 165 MB | |
+| completion latency, median | 1711 ms | 464 ms | 3.7× |
+| request latency incl. init | 1711 ms | 667 ms | 2.6× |
+| prefill | 244 tok/s | 1664 tok/s | 6.8× |
+| decode | 195 tok/s | 996 tok/s | 5.1× |
+| peak RSS | 20 MB | 163 MB | |
 
-The per-token gap (9–15×) is much wider than the end-to-end gap (3.3×) because the
-two engines do different amounts of non-model work per call: the official engine
-runs an embedding forward pass for its tool retrieval, this one runs BM25.
+Official `Needle(...)` initialization was previously excluded from per-call
+latency. It costs a 202 ms median with randomized tool order in this sample, versus
+31 ms when order is fixed and its tool-index cache can be reused. The C engine's
+parse and BM25 retrieval remain inside its completion measurement.
 
-**Not comparable:** this engine is scalar C99; the official build is NEON-optimised
-ARM64. Most of the per-token gap is that, not a design difference.
+With common BM25 top-2 on the same 100 cases, median completion was 1509 ms versus
+98 ms, or 186 ms for the official engine including its 79 ms initialization. Phase
+throughput was 252/196 tok/s here and 1979/1296 officially. This is the cleaner
+kernel/decoder comparison; native mode is the relevant product comparison.
+
+The instruction-level comparison still is not symmetric: this engine is portable
+scalar C99 and the official build is ARM64/NEON optimized.
+
+### Optimization priority
+
+A three-call host profile attributes 56% of forward time to Q/K/V/gate CQ
+matvecs and another 19% to out projection plus Hadamard work. mHC was 9%,
+attention itself 6%, logits 5%, and engram 3%. The exact split will move on the
+ESP32 because flash and PSRAM bandwidth differ, but it makes the first target
+clear: optimize packed-weight reads, CQ decode/MAC reuse, and hot-matrix caching
+before spending time on attention.
+
+Compiler flags were not a shortcut on the tested M4 host. `-O3`,
+`-O3 -mcpu=native`, and `-O3 -mcpu=native -flto` were effectively tied;
+`-Ofast -mcpu=native -flto` was about 43% slower on the same warm sample. Keep
+`-O3` as the baseline and require an output-parity check for every kernel change.
 
 ## On the ESP32-S3
 
 ```bash
-cd needle-esp32s3 && idf.py build && idf.py -p /dev/tty.usbXXX flash
-cd .. && .venv/bin/python bench/device_runner.py --port /dev/tty.usbXXX --limit 25
+cd needle-esp32s3
+# parity build (default): IEEE-style math, no profiler
+idf.py -DNEEDLE_FAST_MATH=OFF -DNEEDLE_PROFILE=OFF build
+# performance audit build used below
+idf.py -DNEEDLE_FAST_MATH=ON -DNEEDLE_PROFILE=ON build
+idf.py -p /dev/tty.usbXXX flash
+cd .. && .venv/bin/python bench/device_runner.py --port /dev/tty.usbXXX \
+  --sample 12 --seed 20260819 --timeout 1200
 ```
 
 `device_runner.py` sends each case over the serial REPL and compares the board's
 answer against the host engine's on the same case. Both run the same `needle.c`
-against the same weights, so agreement is what licenses reading the host's 961-case
-accuracy as the device's accuracy. Running all 961 on the board would take about
-three days.
+against the same weights, but Xtensa and arm64 can still take different greedy
+branches. Running all 961 on the board would take about three days, so device
+samples must report confidence intervals and both raw-output and score parity.
 
-Measured (ESP32-S3, 240 MHz, 8 MB PSRAM, 12 cases, firmware and host binary built
+### 2026-08-19 protocol audit
+
+Real board: ESP32-S3 rev 0.2 at 240 MHz, 16 MB flash, 8 MB octal PSRAM at
+80 MHz. With dataset tool order, native retrieval, preserved developer
+whitespace, and strict scoring:
+
+| workload | `-O3` | `-O3 -ffast-math` | change |
+|---|---:|---:|---:|
+| fixed one-tool schema, cold | 42.895 s | 41.541 s | -3.2% |
+| same schema, prefix-cache hit | 20.067 s | 19.444 s | -3.1% |
+| mobile-actions row 0 | 364 s | 352.4 s | -3.2% |
+| mobile-actions row 1 | 292 s | 282.8 s | -3.2% |
+
+The short workload measured 1.65 prefill / 1.41 decode tok/s at baseline and
+1.70 / 1.46 tok/s with fast math. Three fast-math mobile-actions rows all
+matched the standard host output byte-for-byte; row 9 was also a strict-exact
+dataset success and took 189.2 s. Three rows are a parity check, not an accuracy
+estimate, so fast math remains an explicit opt-in.
+
+Board profiling puts Q/K/V/gate at 48-52%, out projection plus Hadamard at
+17-18%, mHC at 16-17%, and attention at only 6-9%. The existing dual-core split
+is effective: the same 512x512 CQ2 matvec measured 5.004 ms single-core and
+2.559 ms dual-core (1.96x). Rejected experiments are recorded with the raw audit
+in `results/device_protocol_audit_20260819.json`: PIE int16 was 3-6x slower and
+changed decode length, an eight-row float kernel was 25% slower on-device, and
+eight Sinkhorn iterations changed all first ten host outputs.
+
+The fair build (`fast_math=0`, `profile=0`) was then run on a proportional,
+stratified random sample: seed 20260819, eight 1-call rows and four 2-call rows.
+
+| sampled device result | value |
+|---|---:|
+| strict exact | 5/12 (41.7%; Wilson 95% CI 19.3-68.0%) |
+| name accuracy | 9/12 (75.0%; Wilson 95% CI 46.8-91.1%) |
+| byte-for-byte host parity | 10/12 |
+| strict/name pass-fail parity | 12/12 |
+| latency | median 315.5 s (203.1-357.7) |
+| throughput | median 1.39 prefill / 1.11 decode tok/s |
+
+This is real device accuracy on those 12 rows, but the interval is too wide to
+claim a population accuracy. Two contact-extraction rows took different wrong
+token branches on Xtensa and arm64 while retaining the same name/exact outcome.
+After eight continuous rows, a ninth request also exceeded the original 650 s
+timeout; resetting the board and rerunning the same row completed in 355.9 s.
+The timeout is excluded from the denominator and retained in
+`esp32s3_mobile_actions_interrupted_timeout_20260819.json`. The runner now aborts
+on timeout instead of sending another query into an unaligned serial stream and
+supports `--indices` for deterministic resume.
+
+The older legacy-protocol run measured (ESP32-S3, 240 MHz, 8 MB PSRAM, 12 cases,
+firmware and host binary built
 from the same source):
 
 | | value |
@@ -247,9 +351,8 @@ from the same source):
 | vs the same code on the host | ~150× slower |
 | host parity | 11/12 byte-for-byte identical |
 
-The device is scored by parity, not by its own accuracy number: 12 cases is far too
-small a sample to read an accuracy percentage off. Parity is the claim that
-transfers.
+The old device result below remains useful provenance, but neither old nor new
+sample licenses copying the host's 961-row percentage onto the board.
 
 ### The one case that disagreed
 
@@ -297,18 +400,22 @@ answers in about 30 s (measured separately: 241 s cold, 29 s warm).
 
 | File | What |
 |---|---|
-| `ours_961.json` | this engine, default config (`MAX_CALLS=4`, `CONT_MARGIN=2.0`), full eval |
+| `ours_961.json` | legacy fixed-order run, default config (`MAX_CALLS=4`, `CONT_MARGIN=2.0`) |
+| `ours_961_protocol_v2.json` | current dataset-order strict run, 474/961 |
 | `ours_961_singlecall.json` | same build forced to `NEEDLE_MAX_CALLS=1`, the single-vs-multi comparison |
 | `ours_961_margin0_multicall.json` | multi-call at `CONT_MARGIN=0` — the full-eval version of the sweep's top row |
-| `oracle_961.json` | the official engine, same prompts, full eval |
+| `oracle_961.json` | legacy official output; saved pass flags are stale, re-score raw fields |
+| `oracle_961_protocol_v2.json` | package 2.0.6 / engine 2.0.2 on identical protocol-v2 inputs, 665/961 |
+| `mobile_actions_protocol_v2_audit_20260819.json` | hashes, current/published/historical comparison, and device summary |
+| `esp32s3_mobile_actions_stratified12_20260819.json` | fair-build real-board sample; 12 valid rows plus reproducibility sidecar |
+| `esp32s3_mobile_actions_interrupted_timeout_20260819.json` | interrupted continuous run retaining the excluded timeout |
 | `device_parity12.json` | ESP32-S3, firmware and host built from the same source — the parity number quoted above |
 | `device_5.json`, `device_25.json` | earlier ESP32-S3 samples. `device_25` was run against a stale firmware build; its 22/25 parity is a measurement artefact, kept only because the trap is worth seeing |
 | `speed_ours.json`, `speed_oracle.json` | per-call latency and throughput |
 
-Each row holds the query, the expected calls, what the engine produced, the pass
-flags and the wall time, so a run can be re-scored offline without re-running it.
-That is worth knowing: when a metric definition changes, re-score the saved rows
-rather than spending another 30 minutes of inference.
+Each row holds the query, expected calls, produced calls, pass flags and wall time.
+New runs also write `<out>.meta.json` with reproducibility hashes. Treat pass flags
+as derived data and use `--rescore`; the old oracle file demonstrates why.
 
 ## Tuning knobs
 
