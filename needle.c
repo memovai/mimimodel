@@ -49,6 +49,9 @@ static inline void *aligned_alloc16(size_t sz) {
 #define NEEDLE_KV_SLACK 160   /* rows beyond the window: one call's decode */
 #define NEEDLE_QUERY_ROOM 512 /* query tokens the prefix cache stays valid for */
 #define NEEDLE_DECODE_ROOM 200
+#ifndef NEEDLE_SINKHORN_ITERS
+#define NEEDLE_SINKHORN_ITERS 20
+#endif
 #define MAX_LAYERS   32
 #define MAX_SITES    4
 #define MAX_TABLES   8
@@ -504,7 +507,7 @@ static void cq_matvec_i16(const Needle *m, const CQMat *W, const float *xh,
     }
 }
 
-/* 2-bit quad-row kernel: four rows share each activation load */
+/* 2-bit quad-row kernel: four rows share each activation load. */
 static void cq_matvec_2b(const Needle *m, const CQMat *W, const float *xh,
                          float *y) {
     uint32_t G = W->group, n_groups = W->in_pad / G;
@@ -701,7 +704,7 @@ static void cq_matvec_mt(const Needle *m, const CQMat *W, const float *xh, float
 #endif
 
 /* Copy a CQ matrix (packed indices + norms are contiguous in the blob) into
- * PSRAM, which the CPU reads ~2x faster than QIO flash. Returns bytes used. */
+ * PSRAM to reduce flash-cache churn. Returns bytes used. */
 #ifdef ESP_PLATFORM
 #include "esp_heap_caps.h"
 #include "esp_partition.h"
@@ -749,7 +752,9 @@ size_t needle_cache_psram(Needle *m, size_t budget) {
     }
     for (int i = 0; i < n; i++) {
         got = cq_cache_psram(order[i], budget - used);
-        if (!got) break;
+        /* A large projection may not fit while a later K/V or mHC matrix does.
+         * Keep filling the remaining budget instead of abandoning it. */
+        if (!got) continue;
         used += got;
     }
     return used;
@@ -1275,7 +1280,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         }
         for (uint32_t l = 0; l < n * n; l++)
             tmpl[l] = m->a_res[i] * tmpl[l] + m->b_res[i * n * n + l];
-        PROF_T(0, sinkhorn(tmpl, (int)n, 20));
+        PROF_T(0, sinkhorn(tmpl, (int)n, NEEDLE_SINKHORN_ITERS));
 
         /* x = hres @ x + hpost[:,None]*y */
         static float xn[MAX_LANES * 512];
@@ -2268,8 +2273,8 @@ int main(int argc, char **argv) {
             m.n_layers, m.d_model, m.vocab, m.kv_window);
 
     /* Batch mode: query argument of the form @path reads one query per line and
-     * emits one JSON result per line. Runs in a single process so the <tools>
-     * prefix cache stays warm across cases, matching how a device behaves. */
+     * emits one JSON result per line. Input is system<TAB>query with an optional
+     * third tools-JSON field. 0x1e encodes a newline inside either text field. */
     if (query[0] == '@') {
         FILE *qf = strcmp(query + 1, "-") == 0 ? stdin : fopen(query + 1, "r");
         if (!qf) { perror("open query file"); return 1; }
@@ -2280,15 +2285,25 @@ int main(int argc, char **argv) {
             size_t ln = strlen(line);
             while (ln && (line[ln-1] == '\n' || line[ln-1] == '\r')) line[--ln] = 0;
             if (ln == 0) continue;
-            /* a line may be "system\tquery"; a bare line has no system turn */
+            /* A bare line has no system turn. Per-row tools preserve benchmark
+             * tool ordering instead of silently reusing the first case's order. */
             char *sys_part = NULL, *q_part = line;
+            const char *row_tools = tools;
             char *tabp = strchr(line, '\t');
-            if (tabp) { *tabp = 0; sys_part = line; q_part = tabp + 1; }
+            if (tabp) {
+                *tabp = 0; sys_part = line; q_part = tabp + 1;
+                char *tab2 = strchr(q_part, '\t');
+                if (tab2) { *tab2 = 0; row_tools = tab2 + 1; }
+            }
+            for (char *p = sys_part; p && *p; p++) if ((uint8_t)*p == 0x1e) *p = '\n';
+            for (char *p = q_part; *p; p++) if ((uint8_t)*p == 0x1e) *p = '\n';
             double t0 = now_ms();
-            int cl = needle_toolcall_sys(&m, sys_part, q_part, tools, callbuf, sizeof callbuf);
+            int cl = needle_toolcall_sys(&m, sys_part, q_part, row_tools, callbuf, sizeof callbuf);
             double dt = now_ms() - t0;
-            printf("%s\t%.0f\t%d\t%d\n", cl >= 0 ? callbuf : "[]", dt,
-                   g_needle_stats.prefill_tok, g_needle_stats.decode_tok);
+            printf("%s\t%.0f\t%d\t%d\t%lld\t%lld\n", cl >= 0 ? callbuf : "[]", dt,
+                   g_needle_stats.prefill_tok, g_needle_stats.decode_tok,
+                   (long long)g_needle_stats.prefill_us,
+                   (long long)g_needle_stats.decode_us);
             fflush(stdout);
             n++;
         }

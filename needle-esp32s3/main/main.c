@@ -29,15 +29,22 @@ static void print_heap(const char *tag) {
 
 static void run_query(const char *query, int max_new) {
     (void)max_new;
-    /* mirror the host batch protocol: an optional system turn before a tab */
+    /* Mirror the host batch protocol: optional system and per-row tools fields. */
     static char qbuf[4096];
     snprintf(qbuf, sizeof qbuf, "%s", query);
     char *sys_part = NULL, *q_part = qbuf;
+    const char *tools = DEMO_TOOLS;
     char *tabp = strchr(qbuf, '\t');
-    if (tabp) { *tabp = 0; sys_part = qbuf; q_part = tabp + 1; }
+    if (tabp) {
+        *tabp = 0; sys_part = qbuf; q_part = tabp + 1;
+        char *tab2 = strchr(q_part, '\t');
+        if (tab2) { *tab2 = 0; tools = tab2 + 1; }
+    }
+    for (char *p = sys_part; p && *p; p++) if ((uint8_t)*p == 0x1e) *p = '\n';
+    for (char *p = q_part; *p; p++) if ((uint8_t)*p == 0x1e) *p = '\n';
     static char callbuf[2048];
     int64_t t0 = esp_timer_get_time();
-    int cl = needle_toolcall_sys(&g_model, sys_part, q_part, DEMO_TOOLS,
+    int cl = needle_toolcall_sys(&g_model, sys_part, q_part, tools,
                                  callbuf, sizeof callbuf);
     int64_t t1 = esp_timer_get_time();
     if (cl >= 0)
@@ -56,6 +63,18 @@ static void run_query(const char *query, int max_new) {
 
 void app_main(void) {
     printf("\n=== Needle 2 on ESP32-S3 (mimimodel) ===\n");
+#ifdef __FAST_MATH__
+    const int fast_math = 1;
+#else
+    const int fast_math = 0;
+#endif
+#ifdef NEEDLE_PROF
+    const int profile = 1;
+#else
+    const int profile = 0;
+#endif
+    printf("[needle] build: fast_math=%d profile=%d sinkhorn_iters=%d\n",
+           fast_math, profile, NEEDLE_SINKHORN_ITERS);
     print_heap("boot");
 
     const esp_partition_t *part = esp_partition_find_first(
@@ -86,8 +105,7 @@ void app_main(void) {
            (unsigned long)g_model.kv_window);
     print_heap("after load");
 
-    /* weights in PSRAM read ~3x faster than flash; cache as many as fit,
-     * keeping 3MB for KV cache and runtime state */
+    /* Cache as many weights as fit without displacing KV/runtime state. */
     {
         g_needle_part = part;
         g_needle_mmap_base = (const uint8_t *)blob;
@@ -134,9 +152,18 @@ void app_main(void) {
         int64_t tb = esp_timer_get_time();
         for (int r = 0; r < 20; r++) cq_matvec_i16(&g_model, W, g_model.xh, y_i);
         int64_t tc = esp_timer_get_time();
+#ifdef NEEDLE_PROF
+        for (int r = 0; r < 20; r++) cq_matvec_mt(&g_model, W, g_model.xh, y_f);
+        int64_t td = esp_timer_get_time();
+#endif
         printf("[pie] matvec 512x512x2b: float %lld us, int16 %lld us (%.2fx)\n",
                (long long)((tb - ta) / 20), (long long)((tc - tb) / 20),
                (double)(tb - ta) / (double)(tc - tb));
+#ifdef NEEDLE_PROF
+        printf("[matvec] single-core %lld us, dual-core %lld us (%.2fx)\n",
+               (long long)((tb - ta) / 20), (long long)((td - tc) / 20),
+               (double)(tb - ta) / (double)(td - tc));
+#endif
     }
 
     (void)0; // run_query("What's the weather in Paris right now?", 32);   /* cold: full prefill */
@@ -155,7 +182,7 @@ void app_main(void) {
         if (c == '\n' || c == '\r') {
             if (ln == 0) continue;
             line[ln] = 0;
-            run_query(line, 48);   /* accepts "system\tquery" or a bare query */
+            run_query(line, 48);   /* accepts system<TAB>query<TAB>tools */
             ln = 0;
             printf("\n> ");
             fflush(stdout);
