@@ -1,12 +1,15 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
-![MimiModel: Tool calling on a $5 chip](assets/banner.jpg)
+![MimiModel: Agentic LLM on a $5 chip](assets/banner.jpg)
 
 <p>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://discord.gg/r8ZxSvB8Yr"><img src="https://img.shields.io/badge/Discord-mimiclaw-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
   <a href="https://x.com/ssslvky"><img src="https://img.shields.io/badge/X-@ssslvky-black?logo=x" alt="X"></a>
 </p>
+
+MimiModel is an engine that runs a 45M-parameter LLM for tool calling, device control, and
+structured extraction on a $5 ESP32-S3.
 
 A from-scratch, single-file C inference engine for [Cactus Compute's Needle 2](https://github.com/cactus-compute/needle),
 running entirely on an ESP32-S3 microcontroller. No Linux, no Python, no network.
