@@ -8,6 +8,9 @@
   <a href="https://x.com/ssslvky"><img src="https://img.shields.io/badge/X-@ssslvky-black?logo=x" alt="X"></a>
 </p>
 
+MimiModel es un motor que ejecuta un LLM de 45M de parámetros para llamadas a herramientas,
+control de dispositivos y extracción estructurada en un ESP32-S3 de 5 $.
+
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo
 en un microcontrolador ESP32-S3. Sin Linux, sin Python, sin red. Los 13,7 MB de pesos viven en la
