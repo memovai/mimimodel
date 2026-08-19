@@ -1,6 +1,6 @@
 # MimiModel: Tool calling LLM on a $5 chip.
 
-![MimiModel: Agentic LLM on a $5 chip](assets/banner.jpg)
+![MimiModel: Agentic LLM on a $5 chip](assets/banner-agentic.jpg)
 
 <p>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
