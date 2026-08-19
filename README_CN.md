@@ -2,6 +2,12 @@
 
 ![MimiModel: Tool calling on a $5 chip](assets/banner.jpg)
 
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://discord.gg/r8ZxSvB8Yr"><img src="https://img.shields.io/badge/Discord-mimiclaw-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://x.com/ssslvky"><img src="https://img.shields.io/badge/X-@ssslvky-black?logo=x" alt="X"></a>
+</p>
+
 为 [Cactus Compute 的 Needle 2](https://github.com/cactus-compute/needle) 从零手写的单文件 C 推理引擎，
 完全跑在 ESP32-S3 单片机上。不需要 Linux，不需要 Python，不需要联网。
 13.7 MB 的权重常驻 flash，**从不**加载进内存。

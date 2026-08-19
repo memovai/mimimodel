@@ -2,6 +2,12 @@
 
 ![MimiModel: Tool calling on a $5 chip](assets/banner.jpg)
 
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://discord.gg/r8ZxSvB8Yr"><img src="https://img.shields.io/badge/Discord-mimiclaw-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://x.com/ssslvky"><img src="https://img.shields.io/badge/X-@ssslvky-black?logo=x" alt="X"></a>
+</p>
+
 Un motor de inferencia en C, escrito desde cero en un solo archivo, para
 [Needle 2 de Cactus Compute](https://github.com/cactus-compute/needle), ejecutándose por completo
 en un microcontrolador ESP32-S3. Sin Linux, sin Python, sin red. Los 13,7 MB de pesos viven en la

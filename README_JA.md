@@ -2,6 +2,12 @@
 
 ![MimiModel: Tool calling on a $5 chip](assets/banner.jpg)
 
+<p>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://discord.gg/r8ZxSvB8Yr"><img src="https://img.shields.io/badge/Discord-mimiclaw-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://x.com/ssslvky"><img src="https://img.shields.io/badge/X-@ssslvky-black?logo=x" alt="X"></a>
+</p>
+
 [Cactus Compute の Needle 2](https://github.com/cactus-compute/needle) 向けにゼロから書いた
 単一ファイルの C 推論エンジン。ESP32-S3 マイコン上で完結して動きます。Linux も Python も
 ネットワークも不要。13.7 MB の重みは flash に置いたまま、**一度も** RAM に載せません。
