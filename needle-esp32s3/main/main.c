@@ -1,8 +1,8 @@
 /* Needle 2 (45M, CQ2) on ESP32-S3 — weights memory-mapped from flash.
  *
- * Boot: maps the `needle` partition, loads the model, runs a demo tool-call,
- * then serves a REPL on the USB-serial console: each line = a user query
- * against the built-in demo tool set.
+ * Boot: maps the `needle` partition, loads the model, then serves a REPL on
+ * the USB-serial console. Each line can carry a user query and an optional
+ * runtime tool schema.
  */
 #define NEEDLE_NO_MAIN
 #include "needle_core.c"
@@ -51,6 +51,8 @@ static void run_query(const char *query, int max_new) {
         printf("[needle] call: %s\n", callbuf);
     else
         printf("[needle] constrained decode failed\n");
+    printf("[needle] prefix cache: %s\n",
+           g_needle_stats.prefix_reused ? "hit" : "miss");
     printf("[needle] total %lld ms | prefill %d tok %.2f tok/s | decode %d tok %.2f tok/s\n",
            (t1 - t0) / 1000,
            g_needle_stats.prefill_tok,

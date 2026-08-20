@@ -46,6 +46,77 @@ provides enough information to build a compact ESP32-S3 engine directly.
 
 [Read the source-level breakdown](docs/how-it-fails.md).
 
+## Quickstart
+
+### 1. Install the host CLI
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+```
+
+Run `mimimodel` from a macOS or Linux host terminal. The CLI keeps one serial connection open so
+the ESP32-S3 can reuse its KV prefix cache between commands.
+
+### 2. Build and flash once
+
+Requires ESP-IDF v5.5+, a board with 16 MB flash and 8 MB PSRAM, and
+`model/needle2.cact` downloaded from [Hugging Face](https://huggingface.co/Cactus-Compute/needle2).
+Replace `/dev/ttyUSB0` with the board's port; macOS ports usually begin with `/dev/cu.usbmodem`.
+
+```bash
+cd needle-esp32s3
+idf.py set-target esp32s3
+idf.py build
+idf.py -p /dev/ttyUSB0 flash
+./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB into `needle` @ 0x210000
+cd ..
+```
+
+Do not leave `idf.py monitor` running: the CLI needs the serial port.
+
+### 3. Add tools
+
+```bash
+mimimodel tools import examples/tools/demo.json --profile demo --activate
+mimimodel tools list
+```
+
+Tool schemas are configured at runtime. The firmware has seven fallback mobile-action schemas in
+[`DEMO_TOOLS`](needle-esp32s3/main/main.c#L19-L22), and the CLI sends the active profile with every
+request. Edit a JSON file and run `mimimodel tools add FILE`, `tools remove NAME`, or
+`tools import FILE` to change tools without rebuilding the firmware or replacing the weights.
+Use `mimimodel tools validate FILE` before importing a new schema.
+The bundled three-tool profile stays below the engine's 180-token retrieval budget. Larger profiles
+remain valid, but query-dependent tool pruning can change the effective prefix and prevent a cache
+hit.
+
+### 4. Run
+
+```bash
+# Simple: 103.9 seconds cold, 22.8 seconds with the same tool prefix cached
+mimimodel run "Turn on the flashlight."
+# [{"name":"turn_on_flashlight","arguments":{}}]
+
+# Two tools: 251.6 seconds cold, 170.5 seconds cached
+mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
+# [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
+```
+
+The first `run` starts a background serial daemon and resets the board once. Later calls with the
+same tool profile keep the connection and cached prefix. `mimimodel status` shows the port, firmware
+build, and prefix hash; `mimimodel daemon stop` releases the port. The model expects English
+input. The command returns tool-call JSON but does not execute the selected tools.
+
+These timings were measured on the ESP32-S3 described above with the bundled three-tool profile.
+The two-tool output selected both tools and exactly extracted the timestamp, email address, event
+title, and subject.
+
+> ⚠️ Flash the app **before or together with** the weights. Any firmware whose partition table
+> puts a SPIFFS region over the weight area will auto-format it on first boot and silently corrupt
+> the model (this cost us an afternoon: flash read back `0xFFFF`, which becomes `NaN`).
+
 ## How it works
 
 ### 1. The `.cact` format
@@ -227,52 +298,23 @@ Raw engine throughput, measured on hardware:
 - **The confidence head is not implemented yet.** Its weights are present in the `.cact` file; the
   engine currently skips the probe heads.
 
-## Build and run
-
-### On a host (macOS / Linux)
-
-```bash
-mkdir -p model && cd model
-curl -LO https://huggingface.co/Cactus-Compute/needle2/resolve/main/needle2.cact
-cd ..
-cc -O3 -o needle needle.c -lm
-./needle model/needle2.cact "Set a timer for 10 minutes" \
-  '[{"name":"set_timer","description":"Set a countdown timer","parameters":{"type":"object","properties":{"minutes":{"type":"integer","description":"Minutes"}},"required":["minutes"]}}]'
-# [{"name":"set_timer","arguments":{"minutes":10}}]
-```
-
-Set `NEEDLE_FREE=1` for unconstrained decoding, `NEEDLE_REPEAT=n` to exercise the prefix cache.
-
-### On the ESP32-S3
-
-Requires ESP-IDF v5.5+, a board with 16 MB flash and 8 MB PSRAM.
-
-```bash
-cd needle-esp32s3
-idf.py set-target esp32s3
-idf.py build
-./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB into the raw `needle` partition @ 0x210000
-idf.py -p /dev/ttyUSB0 flash monitor
-```
-
-Boot runs a demo tool call, then drops into a serial REPL: type a query, press enter.
-
-> ⚠️ Flash the app **before or together with** the weights. Any firmware whose partition table
-> puts a SPIFFS region over the weight area will auto-format it on first boot and silently corrupt
-> the model (this cost us an afternoon: flash read back `0xFFFF`, which becomes `NaN`).
+## Development
 
 ### Files
 
 | Path | What |
 |---|---|
 | `needle.c` | the engine — parser, kernels, tokenizer, constrained decoder, CLI |
+| `mimimodel_cli.py` | host CLI, tool profiles, and persistent serial daemon |
+| `examples/tools/demo.json` | editable runtime tool-schema example |
 | `needle_np.py` | numpy reference implementation, validated against the official JAX decode |
 | `needle-esp32s3/` | ESP-IDF project (partition table, weight flasher, REPL demo) |
 | `bench/` | evaluation harnesses: google/mobile-actions accuracy, speed, and the ESP32-S3 serial driver ([docs](bench/README.md)) |
 
 ### Development setup
 
-The engine itself has no dependencies. The reference implementation and the benchmark do:
+The C engine itself has no dependencies. `pip install -e .` installs the host CLI and pyserial.
+The reference implementation and benchmark need the additional packages below:
 
 ```bash
 # the numpy reference and the JAX cross-check read the upstream package's source

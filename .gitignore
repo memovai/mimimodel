@@ -9,6 +9,7 @@
 .venv/
 __pycache__/
 *.pyc
+*.egg-info/
 
 # ESP-IDF build output and generated config
 needle-esp32s3/build/

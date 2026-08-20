@@ -48,6 +48,79 @@ en binarios precompilados y los kernels abiertos apuntan a ARM NEON. La especifi
 
 [Consulta el análisis detallado del código fuente (en inglés)](docs/how-it-fails.md).
 
+## Inicio rápido
+
+### 1. Instalar la CLI del host
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+```
+
+`mimimodel` se ejecuta en un terminal host de macOS o Linux. La CLI mantiene abierta una conexión
+serie para reutilizar la caché de prefijo KV entre comandos.
+
+### 2. Compilar y grabar una vez
+
+Requiere ESP-IDF v5.5+, una placa con 16 MB de flash y 8 MB de PSRAM, y los pesos descargados desde
+[Hugging Face](https://huggingface.co/Cactus-Compute/needle2) en `model/needle2.cact`. Sustituye
+`/dev/ttyUSB0` por el puerto de la placa; en macOS suele comenzar por `/dev/cu.usbmodem`.
+
+```bash
+cd needle-esp32s3
+idf.py set-target esp32s3
+idf.py build
+idf.py -p /dev/ttyUSB0 flash
+./scripts/flash_weights.sh /dev/ttyUSB0        # 13,7 MB en `needle` en 0x210000
+cd ..
+```
+
+No dejes `idf.py monitor` abierto: la CLI necesita el puerto serie.
+
+### 3. Añadir herramientas
+
+```bash
+mimimodel tools import examples/tools/demo.json --profile demo --activate
+mimimodel tools list
+```
+
+Los esquemas de herramientas se configuran en tiempo de ejecución. El firmware incluye siete
+esquemas móviles de respaldo en [`DEMO_TOOLS`](needle-esp32s3/main/main.c#L19-L22), y la CLI envía
+el perfil activo en cada petición. Edita un archivo JSON y usa `mimimodel tools add FILE`,
+`tools remove NAME` o `tools import FILE` para cambiar herramientas sin recompilar ni volver a
+grabar los pesos. `mimimodel tools validate FILE` comprueba un esquema antes de importarlo.
+El perfil incluido de tres herramientas queda por debajo del presupuesto de recuperación de 180
+tokens. Los perfiles mayores son válidos, pero la poda dependiente de la petición puede cambiar el
+prefijo efectivo e impedir un acierto de caché.
+
+### 4. Ejecutar
+
+```bash
+# Simple: 103,9 segundos en frío; 22,8 segundos con el mismo prefijo en caché
+mimimodel run "Turn on the flashlight."
+# [{"name":"turn_on_flashlight","arguments":{}}]
+
+# Dos herramientas: 251,6 segundos en frío; 170,5 segundos con caché
+mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
+# [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
+```
+
+El primer `run` inicia un daemon serie en segundo plano y reinicia la placa una sola vez. Las
+llamadas posteriores con el mismo perfil conservan la conexión y el prefijo. `mimimodel status`
+muestra el puerto, la compilación del firmware y el hash del prefijo; `mimimodel daemon stop`
+libera el puerto. La entrada debe estar en inglés. El comando devuelve JSON, pero no ejecuta las
+herramientas.
+
+Los tiempos se midieron en el ESP32-S3 descrito arriba con el perfil incluido de tres herramientas.
+La salida doble seleccionó ambas herramientas y extrajo exactamente la fecha y hora, el correo, el
+título y el asunto.
+
+> ⚠️ Graba la app **antes o junto con** los pesos. Cualquier firmware cuya tabla de particiones
+> coloque una región SPIFFS sobre la zona de pesos la formateará automáticamente en el primer
+> arranque y corromperá el modelo en silencio (esto nos costó una tarde: la flash devolvía `0xFFFF`,
+> que interpretado como coma flotante es `NaN`).
+
 ## Cómo funciona
 
 ### 1. El formato `.cact`
@@ -237,55 +310,23 @@ Rendimiento bruto del motor, medido sobre hardware real:
 - **La cabeza de confianza aún no está implementada.** Sus pesos están presentes en el archivo
   `.cact`; el motor omite de momento las probe heads.
 
-## Compilar y ejecutar
-
-### En un host (macOS / Linux)
-
-```bash
-mkdir -p model && cd model
-curl -LO https://huggingface.co/Cactus-Compute/needle2/resolve/main/needle2.cact
-cd ..
-cc -O3 -o needle needle.c -lm
-./needle model/needle2.cact "Set a timer for 10 minutes" \
-  '[{"name":"set_timer","description":"Set a countdown timer","parameters":{"type":"object","properties":{"minutes":{"type":"integer","description":"Minutes"}},"required":["minutes"]}}]'
-# [{"name":"set_timer","arguments":{"minutes":10}}]
-```
-
-Usa `NEEDLE_FREE=1` para decodificación sin restricciones y `NEEDLE_REPEAT=n` para ejercitar la
-caché de prefijo.
-
-### En el ESP32-S3
-
-Requiere ESP-IDF v5.5+ y una placa con 16 MB de flash y 8 MB de PSRAM.
-
-```bash
-cd needle-esp32s3
-idf.py set-target esp32s3
-idf.py build
-./scripts/flash_weights.sh /dev/ttyUSB0        # 13,7 MB en la partición cruda `needle` en 0x210000
-idf.py -p /dev/ttyUSB0 flash monitor
-```
-
-Al arrancar ejecuta una llamada a herramienta de demostración y luego entra en un REPL por serie:
-escribe una consulta y pulsa Enter.
-
-> ⚠️ Graba la app **antes o junto con** los pesos. Cualquier firmware cuya tabla de particiones
-> coloque una región SPIFFS sobre la zona de pesos la formateará automáticamente en el primer
-> arranque y corromperá el modelo en silencio (esto nos costó una tarde: la flash devolvía `0xFFFF`,
-> que interpretado como coma flotante es `NaN`).
+## Desarrollo
 
 ### Archivos
 
 | Ruta | Qué es |
 |---|---|
 | `needle.c` | el motor: parser, kernels, tokenizador, decodificador restringido, CLI |
+| `mimimodel_cli.py` | CLI del host, perfiles de herramientas y daemon serie persistente |
+| `examples/tools/demo.json` | ejemplo editable de esquemas de herramientas en tiempo de ejecución |
 | `needle_np.py` | implementación de referencia en numpy, validada contra la decodificación JAX oficial |
 | `needle-esp32s3/` | proyecto ESP-IDF (tabla de particiones, grabador de pesos, demo REPL) |
 | `bench/` | arneses de evaluación: precisión en google/mobile-actions, velocidad y el driver serie del ESP32-S3 ([docs](bench/README.md)) |
 
 ### Entorno de desarrollo
 
-El motor en sí no tiene dependencias. La implementación de referencia y el benchmark sí:
+El motor C no tiene dependencias. `pip install -e .` instala la CLI del host y pyserial. La
+implementación de referencia y el benchmark necesitan además:
 
 ```bash
 # la referencia en numpy y el contraste con JAX leen el código del paquete original

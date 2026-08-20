@@ -44,6 +44,74 @@ $ turn on pin 5
 
 [查看源码层面的详细分析（英文）](docs/how-it-fails.md)。
 
+## 快速开始
+
+### 1. 安装主机 CLI
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+```
+
+`mimimodel` 是运行在 macOS 或 Linux 主机终端上的 CLI。它保持一个常驻串口连接，使 ESP32-S3 能在
+多次命令间复用 KV 前缀缓存。
+
+### 2. 构建并烧录一次
+
+需要 ESP-IDF v5.5+、16 MB flash + 8 MB PSRAM 的开发板，以及从
+[Hugging Face](https://huggingface.co/Cactus-Compute/needle2) 下载到 `model/needle2.cact` 的权重。
+请把 `/dev/ttyUSB0` 替换成开发板的端口；macOS 上通常以 `/dev/cu.usbmodem` 开头。
+
+```bash
+cd needle-esp32s3
+idf.py set-target esp32s3
+idf.py build
+idf.py -p /dev/ttyUSB0 flash
+./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB 烧进 0x210000 处的 `needle` 分区
+cd ..
+```
+
+不要让 `idf.py monitor` 保持运行，因为 CLI 需要占用该串口。
+
+### 3. 添加工具
+
+```bash
+mimimodel tools import examples/tools/demo.json --profile demo --activate
+mimimodel tools list
+```
+
+工具 schema 在运行时配置。固件的
+[`DEMO_TOOLS`](needle-esp32s3/main/main.c#L19-L22) 提供 7 个移动操作后备 schema，CLI 会在每次请求
+中发送当前 profile。修改 JSON 文件后，可用 `mimimodel tools add FILE`、`tools remove NAME` 或
+`tools import FILE` 更换工具，无需重编译固件或重新烧权重。导入前可运行
+`mimimodel tools validate FILE` 检查 schema。
+仓库附带的 3 工具 profile 低于引擎的 180-token 检索预算。更大的 profile 仍可使用，但按 query 进行的
+工具裁剪可能改变实际前缀，因此不能保证命中缓存。
+
+### 4. 运行
+
+```bash
+# 简单请求：冷调用 103.9 秒；相同工具前缀命中缓存后 22.8 秒
+mimimodel run "Turn on the flashlight."
+# [{"name":"turn_on_flashlight","arguments":{}}]
+
+# 双工具请求：冷调用 251.6 秒；命中缓存后 170.5 秒
+mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
+# [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
+```
+
+第一次 `run` 会启动后台串口进程，并只重启一次开发板。之后使用相同工具 profile 的调用会保留连接和
+前缀缓存。`mimimodel status` 显示端口、固件 build 和前缀 hash；`mimimodel daemon stop` 释放串口。
+模型输入需要使用英文。命令返回工具调用 JSON，但不会实际执行工具。
+
+以上耗时来自前述 ESP32-S3 和仓库附带的 3 工具 profile。双工具输出选对了两个工具，并准确提取了
+时间、邮箱地址、事件标题和邮件主题。
+
+> ⚠️ 先烧（或同时烧）app，再烧权重。任何分区表把 SPIFFS 区盖在权重区上的固件，都会在首次开机时
+> 自动格式化并悄无声息地损坏模型（这个坑让我们搭进去一个下午：flash 读回来是 `0xFFFF`，
+> 解释成浮点就是 `NaN`）。
+
 ## 原理
 
 ### 1. `.cact` 格式
@@ -212,52 +280,22 @@ flowchart TB
   写操作准确率从 1/5 提升到 5/6。
 - **置信度头还没实现。** 它的权重就在 `.cact` 文件里，引擎目前跳过了 probe heads。
 
-## 构建与运行
-
-### 在主机上（macOS / Linux）
-
-```bash
-mkdir -p model && cd model
-curl -LO https://huggingface.co/Cactus-Compute/needle2/resolve/main/needle2.cact
-cd ..
-cc -O3 -o needle needle.c -lm
-./needle model/needle2.cact "Set a timer for 10 minutes" \
-  '[{"name":"set_timer","description":"Set a countdown timer","parameters":{"type":"object","properties":{"minutes":{"type":"integer","description":"Minutes"}},"required":["minutes"]}}]'
-# [{"name":"set_timer","arguments":{"minutes":10}}]
-```
-
-设 `NEEDLE_FREE=1` 走非约束解码，设 `NEEDLE_REPEAT=n` 可以验证前缀缓存。
-
-### 在 ESP32-S3 上
-
-需要 ESP-IDF v5.5+，以及 16 MB flash + 8 MB PSRAM 的板子。
-
-```bash
-cd needle-esp32s3
-idf.py set-target esp32s3
-idf.py build
-./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB 烧进 0x210000 处的 `needle` 裸分区
-idf.py -p /dev/ttyUSB0 flash monitor
-```
-
-开机会跑一次演示工具调用，然后进入串口 REPL：输入问题，回车。
-
-> ⚠️ 先烧（或同时烧）app，再烧权重。任何分区表把 SPIFFS 区盖在权重区上的固件，都会在首次开机时
-> 自动格式化并悄无声息地损坏模型（这个坑让我们搭进去一个下午：flash 读回来是 `0xFFFF`，
-> 解释成浮点就是 `NaN`）。
+## 开发
 
 ### 文件
 
 | 路径 | 内容 |
 |---|---|
 | `needle.c` | 引擎本体——解析器、算子、分词器、约束解码器、命令行 |
+| `mimimodel_cli.py` | 主机 CLI、工具 profile 和常驻串口进程 |
+| `examples/tools/demo.json` | 可编辑的运行时工具 schema 示例 |
 | `needle_np.py` | numpy 参考实现，已与官方 JAX 解码对拍验证 |
 | `needle-esp32s3/` | ESP-IDF 工程（分区表、权重烧录脚本、REPL 演示） |
 | `bench/` | 评测脚本：google/mobile-actions 准确率、速度、ESP32-S3 串口驱动（[说明](bench/README.md)）|
 
 ### 开发环境
 
-引擎本身零依赖。参考实现和评测脚本需要装东西：
+C 引擎本身零依赖。`pip install -e .` 会安装主机 CLI 和 pyserial。参考实现与评测还需要：
 
 ```bash
 # numpy 参考实现和 JAX 对拍要读上游包的源码

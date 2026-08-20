@@ -46,6 +46,78 @@ ESP32-S3 向けの小さな専用エンジンを直接構築できます。
 
 [ソースコードに基づく詳細（英語）](docs/how-it-fails.md)。
 
+## クイックスタート
+
+### 1. ホスト CLI をインストール
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+```
+
+`mimimodel` は macOS または Linux ホストのターミナルで実行します。CLI がシリアル接続を維持し、
+コマンド間で KV プレフィックスを再利用します。
+
+### 2. 一度だけビルドして書き込む
+
+ESP-IDF v5.5 以降、16 MB flash・8 MB PSRAM のボード、および
+[Hugging Face](https://huggingface.co/Cactus-Compute/needle2) から `model/needle2.cact` に
+ダウンロードした重みが必要です。`/dev/ttyUSB0` は実際のポートに置き換えてください。macOS では
+通常 `/dev/cu.usbmodem` から始まります。
+
+```bash
+cd needle-esp32s3
+idf.py set-target esp32s3
+idf.py build
+idf.py -p /dev/ttyUSB0 flash
+./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB を 0x210000 の `needle` へ
+cd ..
+```
+
+CLI がシリアルポートを使うため、`idf.py monitor` は起動したままにしないでください。
+
+### 3. ツールを追加
+
+```bash
+mimimodel tools import examples/tools/demo.json --profile demo --activate
+mimimodel tools list
+```
+
+ツール schema は実行時に設定します。ファームウェアは
+[`DEMO_TOOLS`](needle-esp32s3/main/main.c#L19-L22) に 7 個のモバイル操作用フォールバック schema
+を持ち、CLI はリクエストごとにアクティブな profile を送信します。JSON ファイルを編集して
+`mimimodel tools add FILE`、`tools remove NAME`、`tools import FILE` を実行すれば、再ビルドや重みの
+再書き込みなしで変更できます。`mimimodel tools validate FILE` で事前に検証できます。
+同梱の 3 ツール profile は、エンジンの 180-token 検索予算内に収まります。より大きな profile も
+利用できますが、query ごとのツール枝刈りで実際のプレフィックスが変わり、cache hit しない場合が
+あります。
+
+### 4. 実行
+
+```bash
+# 単純: コールド 103.9 秒、同じツールプレフィックスのキャッシュ後は 22.8 秒
+mimimodel run "Turn on the flashlight."
+# [{"name":"turn_on_flashlight","arguments":{}}]
+
+# 2 ツール: コールド 251.6 秒、キャッシュ後は 170.5 秒
+mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
+# [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
+```
+
+最初の `run` はバックグラウンドのシリアル daemon を起動し、ボードを一度だけリセットします。
+同じ profile を使う後続呼び出しは接続とプレフィックスを保持します。`mimimodel status` はポート、
+firmware build、プレフィックス hash を表示し、`mimimodel daemon stop` はポートを解放します。入力には英語を
+使います。コマンドはツール呼び出し JSON を返しますが、ツール自体は実行しません。
+
+この所要時間は、上記 ESP32-S3 と同梱の 3 ツール profile で実測しました。2 ツール出力は両方の
+ツールを選び、日時、メールアドレス、予定タイトル、件名を正確に抽出しました。
+
+> ⚠️ 重みより**先に、あるいは同時に** app を書き込んでください。パーティションテーブルが SPIFFS
+> 領域を重み領域に重ねているファームウェアは、初回起動時にそこを自動フォーマットし、モデルを
+> 静かに破壊します（これで半日溶かしました。flash から `0xFFFF` が読め、それは浮動小数点として
+> `NaN` になります）。
+
 ## 仕組み
 
 ### 1. `.cact` フォーマット
@@ -223,53 +295,23 @@ flowchart TB
 - **信頼度ヘッドは未実装。** 重みは `.cact` に入っていますが、エンジンは現状 probe head を
   スキップしています。
 
-## ビルドと実行
-
-### ホスト上（macOS / Linux）
-
-```bash
-mkdir -p model && cd model
-curl -LO https://huggingface.co/Cactus-Compute/needle2/resolve/main/needle2.cact
-cd ..
-cc -O3 -o needle needle.c -lm
-./needle model/needle2.cact "Set a timer for 10 minutes" \
-  '[{"name":"set_timer","description":"Set a countdown timer","parameters":{"type":"object","properties":{"minutes":{"type":"integer","description":"Minutes"}},"required":["minutes"]}}]'
-# [{"name":"set_timer","arguments":{"minutes":10}}]
-```
-
-`NEEDLE_FREE=1` で制約なしデコード、`NEEDLE_REPEAT=n` でプレフィックスキャッシュの確認ができます。
-
-### ESP32-S3 上
-
-ESP-IDF v5.5 以降と、16 MB flash・8 MB PSRAM のボードが必要です。
-
-```bash
-cd needle-esp32s3
-idf.py set-target esp32s3
-idf.py build
-./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB を 0x210000 の生 `needle` パーティションへ
-idf.py -p /dev/ttyUSB0 flash monitor
-```
-
-起動時にデモのツール呼び出しを 1 回実行し、その後シリアル REPL に入ります。クエリを入力して Enter。
-
-> ⚠️ 重みより**先に、あるいは同時に** app を書き込んでください。パーティションテーブルが SPIFFS
-> 領域を重み領域に重ねているファームウェアは、初回起動時にそこを自動フォーマットし、モデルを
-> 静かに破壊します（これで半日溶かしました。flash から `0xFFFF` が読め、それは浮動小数点として
-> `NaN` になります）。
+## 開発
 
 ### ファイル構成
 
 | パス | 内容 |
 |---|---|
 | `needle.c` | エンジン本体——パーサ、カーネル、トークナイザ、制約デコーダ、CLI |
+| `mimimodel_cli.py` | ホスト CLI、ツール profile、常駐シリアル daemon |
+| `examples/tools/demo.json` | 編集可能な実行時ツール schema の例 |
 | `needle_np.py` | numpy 参照実装。公式 JAX デコードと突き合わせ検証済み |
 | `needle-esp32s3/` | ESP-IDF プロジェクト（パーティションテーブル、重み書き込みスクリプト、REPL デモ） |
 | `bench/` | 評価ハーネス：google/mobile-actions の正解率、速度、ESP32-S3 のシリアルドライバ（[説明](bench/README.md)）|
 
 ### 開発環境のセットアップ
 
-エンジン自体に依存はありません。参照実装とベンチマークには必要です。
+C エンジン自体に依存はありません。`pip install -e .` でホスト CLI と pyserial が入ります。
+参照実装とベンチマークには、さらに次のパッケージが必要です。
 
 ```bash
 # numpy 参照実装と JAX 突き合わせは上流パッケージのソースを読みます

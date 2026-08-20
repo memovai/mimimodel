@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mimimodel-cli"
+version = "0.1.0"
+description = "Host CLI for MimiModel on ESP32-S3"
+requires-python = ">=3.9"
+dependencies = ["pyserial>=3.5"]
+
+[project.scripts]
+mimimodel = "mimimodel_cli:main"
+
+[tool.setuptools]
+py-modules = ["mimimodel_cli"]

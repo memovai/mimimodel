@@ -1,0 +1,35 @@
+[
+  {
+    "name": "create_calendar_event",
+    "description": "Create a calendar event",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "datetime": {"type": "string"}
+      },
+      "required": ["title", "datetime"]
+    }
+  },
+  {
+    "name": "send_email",
+    "description": "Send an email",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subject": {"type": "string"},
+        "body": {"type": "string"},
+        "to": {"type": "string"}
+      },
+      "required": ["to", "subject"]
+    }
+  },
+  {
+    "name": "turn_on_flashlight",
+    "description": "Turn on the flashlight",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]

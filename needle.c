@@ -1450,6 +1450,7 @@ static int64_t needle_now_us(void) {
 
 typedef struct {
     int prefill_tok, decode_tok;
+    int prefix_reused;
     int64_t prefill_us, decode_us;
 } NeedleStats;
 NeedleStats g_needle_stats;
@@ -1964,6 +1965,7 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
         dc.logits = needle_step_ex(m, rids[k], dc.pos++, k == n_rids - 1);
     int64_t t_dec = needle_now_us();
     g_needle_stats.prefill_tok = reused ? n_rids : n_ids;
+    g_needle_stats.prefix_reused = reused;
     g_needle_stats.prefill_us = t_dec - t_pre;
 
     size_t olen = 0;
