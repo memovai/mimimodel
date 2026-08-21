@@ -13,6 +13,7 @@ __pycache__/
 
 # ESP-IDF build output and generated config
 needle-esp32s3/build/
+needle-esp32s3/build-*/
 needle-esp32s3/sdkconfig
 needle-esp32s3/sdkconfig.old
 needle-esp32s3/managed_components/

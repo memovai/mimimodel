@@ -13,8 +13,54 @@
 #include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#ifdef NEEDLE_PROF
+#include "xtensa/xt_perf_consts.h"
+#include "xtensa_perfmon_access.h"
+#endif
 
 static Needle g_model;
+
+#ifdef NEEDLE_PROF
+typedef struct {
+    const char *name;
+    uint16_t select;
+    uint16_t mask;
+} PmuEvent;
+
+typedef void (*MatvecFn)(const Needle *, const CQMat *, const float *, float *);
+
+static void profile_matvec_pmu(const char *kernel, MatvecFn fn,
+                               const Needle *m, const CQMat *W,
+                               const float *xh, float *y) {
+    static const PmuEvent events[] = {
+        {"instructions", XTPERF_CNT_INSN, XTPERF_MASK_INSN_ALL},
+        {"d-stall", XTPERF_CNT_D_STALL, XTPERF_MASK_D_STALL_ALL},
+        {"d-cache-stall", XTPERF_CNT_D_STALL, XTPERF_MASK_D_STALL_CACHE_MISS},
+        {"i-stall", XTPERF_CNT_I_STALL, XTPERF_MASK_I_STALL_ALL},
+        {"bubbles", XTPERF_CNT_BUBBLES, XTPERF_MASK_BUBBLES_ALL},
+        {"reg-dep-bubbles", XTPERF_CNT_BUBBLES,
+                            XTPERF_MASK_BUBBLES_R_HOLD_REG_DEP},
+        {"d-load-miss-u1", XTPERF_CNT_D_LOAD_U1,
+                           XTPERF_MASK_D_LOAD_CACHE_MISSES},
+    };
+    /* The PMU is core-local. Keep this single-core so every event describes
+     * the same complete kernel rather than one half of a dual-core job. */
+    fn(m, W, xh, y);
+    for (size_t i = 0; i < sizeof events / sizeof events[0]; i++) {
+        xtensa_perfmon_stop();
+        xtensa_perfmon_init(0, XTPERF_CNT_CYCLES, XTPERF_MASK_CYCLES, 0, 0);
+        xtensa_perfmon_init(1, events[i].select, events[i].mask, 0, 0);
+        xtensa_perfmon_start();
+        fn(m, W, xh, y);
+        xtensa_perfmon_stop();
+        uint32_t cycles = xtensa_perfmon_value(0);
+        uint32_t value = xtensa_perfmon_value(1);
+        printf("[pmu:%s] %-16s %10lu | cycles %10lu | %6.2f%% cycles\n",
+               kernel, events[i].name, (unsigned long)value, (unsigned long)cycles,
+               cycles ? 100.0 * value / cycles : 0.0);
+    }
+}
+#endif
 
 /* google/mobile-actions eval tool set (CC-BY-4.0) — 7 tools, 417 tokens,
  * pruned per query by the engine's BM25 retrieval to fit the window */
@@ -130,11 +176,19 @@ void app_main(void) {
     {
         needle_reset(&g_model, 8);
         CQMat *W = &g_model.layers[0].q_proj;
-        static float xin[512], y_f[512], y_i[512];
+        static float xin[512], y_f[512], y_i[512], y_tie[512];
         for (int i = 0; i < 512; i++) xin[i] = sinf(i * 0.37f) * 0.8f;
         cq_prepare_x(&g_model, W, xin, g_model.xh);
         cq_matvec_2b(&g_model, W, g_model.xh, y_f);
         cq_matvec_i16(&g_model, W, g_model.xh, y_i);
+        cq_matvec_2b_tie728(&g_model, W, g_model.xh, y_tie);
+        printf("[tie728] align lut=%u xh=%u rows=%u/%u\n",
+               (unsigned)((uintptr_t)g_model.lut2 & 15),
+               (unsigned)((uintptr_t)g_model.xh & 15),
+               (unsigned)((uintptr_t)W->packed & 15),
+               (unsigned)(((uintptr_t)W->packed + W->in_pad / 4) & 15));
+        printf("[tie728] y[0..3] = %.4f %.4f %.4f %.4f\n",
+               y_tie[0], y_tie[1], y_tie[2], y_tie[3]);
         float maxabs = 0, maxerr = 0;
         for (int i = 0; i < 512; i++) {
             if (fabsf(y_f[i]) > maxabs) maxabs = fabsf(y_f[i]);
@@ -148,12 +202,22 @@ void app_main(void) {
         printf("[pie] max |y| %.4f, max abs err %.5f, rel %.2e -> %s\n",
                maxabs, maxerr, maxerr / (maxabs > 0 ? maxabs : 1),
                maxerr < maxabs * 1e-3f ? "PASS" : "FAIL");
+        float tie_err = 0.0f;
+        for (uint32_t i = 0; i < W->out; i++) {
+            float e = fabsf(y_f[i] - y_tie[i]);
+            if (e > tie_err) tie_err = e;
+        }
+        printf("[tie728] CQ2 aligned-load max abs err %.3e -> %s\n",
+               tie_err, tie_err < 1e-4f ? "PASS" : "FAIL");
 
         int64_t ta = esp_timer_get_time();
         for (int r = 0; r < 20; r++) cq_matvec_2b(&g_model, W, g_model.xh, y_f);
         int64_t tb = esp_timer_get_time();
         for (int r = 0; r < 20; r++) cq_matvec_i16(&g_model, W, g_model.xh, y_i);
         int64_t tc = esp_timer_get_time();
+        for (int r = 0; r < 20; r++)
+            cq_matvec_2b_tie728(&g_model, W, g_model.xh, y_tie);
+        int64_t tt = esp_timer_get_time();
 #ifdef NEEDLE_PROF
         for (int r = 0; r < 20; r++) cq_matvec_mt(&g_model, W, g_model.xh, y_f);
         int64_t td = esp_timer_get_time();
@@ -161,12 +225,20 @@ void app_main(void) {
         printf("[pie] matvec 512x512x2b: float %lld us, int16 %lld us (%.2fx)\n",
                (long long)((tb - ta) / 20), (long long)((tc - tb) / 20),
                (double)(tb - ta) / (double)(tc - tb));
+        printf("[tie728] matvec aligned-load %lld us vs C %lld us (%.2fx)\n",
+               (long long)((tt - tc) / 20), (long long)((tb - ta) / 20),
+               (double)(tb - ta) / (double)(tt - tc));
 #ifdef NEEDLE_PROF
         printf("[matvec] single-core %lld us, dual-core %lld us (%.2fx)\n",
-               (long long)((tb - ta) / 20), (long long)((td - tc) / 20),
-               (double)(tb - ta) / (double)(td - tc));
+               (long long)((tb - ta) / 20), (long long)((td - tt) / 20),
+               (double)(tb - ta) / (double)(td - tt));
+        profile_matvec_pmu("C", cq_matvec_2b,
+                           &g_model, W, g_model.xh, y_f);
+        profile_matvec_pmu("tie728", cq_matvec_2b_tie728,
+                           &g_model, W, g_model.xh, y_tie);
 #endif
     }
+    print_heap("after kernels");
 
     (void)0; // run_query("What's the weather in Paris right now?", 32);   /* cold: full prefill */
     (void)0; // run_query("Set a timer for 10 minutes", 32);                /* warm: prefix reused */

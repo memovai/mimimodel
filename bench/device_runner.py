@@ -90,6 +90,10 @@ def main():
     ap.add_argument("--timeout", type=int, default=600, help="seconds per case")
     ap.add_argument("--out", default="/tmp/ma_device.json")
     ap.add_argument("--binary", default="/tmp/needle_ma")
+    ap.add_argument("--firmware",
+                    default=os.path.join(ROOT, "needle-esp32s3", "build",
+                                         "needle_esp32s3.bin"),
+                    help="firmware image currently flashed on the board")
     ap.add_argument("--tool-order", choices=("dataset", "canonical", "fixed-first"),
                     default="dataset")
     ap.add_argument("--retrieval", choices=("native", "common-bm25-2"), default="native")
@@ -123,7 +127,7 @@ def main():
     frozen = f"/tmp/needle_frozen.{os.getpid()}"
     import shutil
     shutil.copy2(args.binary, frozen)
-    fw = os.path.join(ROOT, "needle-esp32s3", "build", "needle_esp32s3.bin")
+    fw = os.path.abspath(args.firmware)
     if os.path.exists(fw) and os.path.getmtime(fw) < os.path.getmtime(
             os.path.join(ROOT, "needle.c")):
         print("WARNING: needle-esp32s3/build is older than needle.c — reflash "

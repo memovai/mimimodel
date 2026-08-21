@@ -134,7 +134,8 @@ typedef struct {
 
     const uint8_t *blob;   /* whole .cact in memory / mapped flash */
     float codebook[28];    /* cb2[4] | cb3[8] | cb4[16] */
-    float lut2[256][4];    /* byte -> 4 decoded 2-bit codebook values */
+    __attribute__((aligned(16))) float lut2[256][4];
+                                      /* byte -> 4 decoded 2-bit values */
     float lut4[256][2];    /* byte -> 2 decoded 4-bit codebook values */
     /* int16 mirrors of the same LUTs, for the SIMD/integer matvec path.
      * Weight value == lut*_i16[b][j] * cb*_scale  (exact: only 4/16 levels) */
@@ -560,6 +561,44 @@ static void cq_matvec_2b(const Needle *m, const CQMat *W, const float *xh,
     }
 }
 
+#if defined(ESP_PLATFORM) && defined(__XTENSA__)
+extern void needle_cq2_dot2_tie728(float out[2], const uint8_t *row0,
+                                    const uint8_t *row1, const float *x,
+                                    const float *lut, int nbytes);
+
+static void cq_matvec_2b_tie728(const Needle *m, const CQMat *W,
+                                const float *xh, float *y) {
+    uint32_t G = W->group, n_groups = W->in_pad / G;
+    uint32_t row_bytes = W->in_pad / 4;
+    const float *lut = (const float *)m->lut2;
+    uint32_t r = 0;
+    for (; r + 2 <= W->out; r += 2) {
+        const uint8_t *r0 = W->packed + (uint64_t)r * row_bytes;
+        const uint8_t *r1 = r0 + row_bytes;
+        const uint16_t *n0 = W->norms + (uint64_t)r * n_groups;
+        const uint16_t *n1 = n0 + n_groups;
+        float a0 = 0.0f, a1 = 0.0f;
+        for (uint32_t g = 0; g < n_groups; g++) {
+            float s[2];
+            uint32_t boff = g * G / 4;
+            needle_cq2_dot2_tie728(s, r0 + boff, r1 + boff,
+                                    xh + g * G, lut, G / 4);
+            a0 += fp16_to_f32(n0[g]) * s[0];
+            a1 += fp16_to_f32(n1[g]) * s[1];
+        }
+        y[r] = a0;
+        y[r + 1] = a1;
+    }
+    if (r < W->out) {
+        CQMat tail = *W;
+        tail.packed += (uint64_t)r * row_bytes;
+        tail.norms += (uint64_t)r * n_groups;
+        tail.out = 1;
+        cq_matvec_2b(m, &tail, xh, y + r);
+    }
+}
+#endif
+
 static void cq_matvec(const Needle *m, const CQMat *W, const float *xh,
                       float *y) {
     /* The integer path only wins where a SIMD MAC exists: on scalar cores the
@@ -568,7 +607,14 @@ static void cq_matvec(const Needle *m, const CQMat *W, const float *xh,
 #ifdef NEEDLE_HAVE_PIE
     if (W->bits == 2 || W->bits == 4) { cq_matvec_i16(m, W, xh, y); return; }
 #endif
-    if (W->bits == 2) { cq_matvec_2b(m, W, xh, y); return; }
+    if (W->bits == 2) {
+#if defined(ESP_PLATFORM) && defined(__XTENSA__)
+        cq_matvec_2b_tie728(m, W, xh, y);
+#else
+        cq_matvec_2b(m, W, xh, y);
+#endif
+        return;
+    }
     uint32_t G = W->group, n_groups = W->in_pad / G;
     const float *cb = (W->bits == 2) ? m->codebook
                     : (W->bits == 3) ? m->codebook + 4
@@ -906,8 +952,8 @@ void needle_reset(Needle *m, uint32_t max_len) {
         m->k = (float *)fast_malloc((size_t)KV * hd * 4);
         m->v = (float *)fast_malloc((size_t)KV * hd * 4);
         m->att_out = (float *)fast_malloc(A * 4);
-        m->xh = (float *)fast_malloc((size_t)n * C * 4);   /* >= biggest in_pad */
-        m->xh2 = (float *)fast_malloc((size_t)n * C * 4);  /* phi-prepared nx */
+        m->xh = (float *)aligned_alloc16((size_t)n * C * 4);  /* >= biggest in_pad */
+        m->xh2 = (float *)aligned_alloc16((size_t)n * C * 4); /* phi-prepared nx */
         for (int s = 0; s < 2; s++) {
             /* ee.vld.128 needs 16-byte alignment; group offsets are multiples
              * of 256 bytes so aligning the base is enough */
@@ -1011,21 +1057,63 @@ static int64_t PROF_NOW(void) {
     return (int64_t)ts.tv_sec * 1000000 + ts.tv_nsec / 1000;
 }
 #endif
-int64_t g_prof[8];
-static const char *g_prof_names[8] = {"mhc", "qkv+gate", "attn", "out+hada", "engram", "logits", "misc", ""};
-#define PROF_T(slot, expr) do { int64_t _t0 = PROF_NOW(); expr; g_prof[slot] += PROF_NOW() - _t0; } while (0)
+enum {
+    PROF_EMBED,
+    PROF_ENGRAM,
+    PROF_MHC_PRE,
+    PROF_QKV_PREP,
+    PROF_Q,
+    PROF_K,
+    PROF_V,
+    PROF_QKV_POST,
+    PROF_ATTN,
+    PROF_GATE,
+    PROF_OUT,
+    PROF_POST_ATTN,
+    PROF_HADA,
+    PROF_MHC_POST,
+    PROF_LOGITS,
+    PROF_COUNT
+};
+static int64_t g_prof[2][PROF_COUNT];
+static int64_t g_prof_wall[2];
+static int g_prof_mode;
+static const char *g_prof_names[PROF_COUNT] = {
+    "embedding", "engram", "mhc-pre", "qkv-prep", "q-proj", "k-proj",
+    "v-proj", "qkv-post", "attention", "gate-proj",
+    "out-proj", "post-attn", "hada-mlp", "mhc-post", "logits"
+};
+#define PROF_SPLIT(slot) do { \
+    int64_t _prof_now = PROF_NOW(); \
+    g_prof[g_prof_mode][slot] += _prof_now - _prof_mark; \
+    _prof_mark = _prof_now; \
+} while (0)
+#define PROF_SET_MODE(mode) do { g_prof_mode = (mode); } while (0)
+#define PROF_ADD_WALL(mode, us) do { g_prof_wall[mode] += (us); } while (0)
 void needle_prof_dump(void) {
-    int64_t total = 0;
-    for (int i = 0; i < 7; i++) total += g_prof[i];
-    for (int i = 0; i < 7; i++) {
-        if (g_prof[i])
-            printf("[prof] %-9s %8lld us (%2d%%)\n", g_prof_names[i],
-                   (long long)g_prof[i], (int)(g_prof[i] * 100 / (total ? total : 1)));
-        g_prof[i] = 0;
+    static const char *mode_names[2] = {"prefill", "decode"};
+    for (int mode = 0; mode < 2; mode++) {
+        int64_t model = 0;
+        for (int i = 0; i < PROF_COUNT; i++) model += g_prof[mode][i];
+        int64_t wall = g_prof_wall[mode] ? g_prof_wall[mode] : model;
+        printf("[prof:%s] model %lld us | wall %lld us | outside %lld us\n",
+               mode_names[mode], (long long)model, (long long)wall,
+               (long long)(wall > model ? wall - model : 0));
+        for (int i = 0; i < PROF_COUNT; i++) {
+            if (g_prof[mode][i])
+                printf("[prof:%s] %-10s %8lld us (%2d%% wall)\n",
+                       mode_names[mode], g_prof_names[i],
+                       (long long)g_prof[mode][i],
+                       (int)(g_prof[mode][i] * 100 / (wall ? wall : 1)));
+            g_prof[mode][i] = 0;
+        }
+        g_prof_wall[mode] = 0;
     }
 }
 #else
-#define PROF_T(slot, expr) expr
+#define PROF_SPLIT(slot) do {} while (0)
+#define PROF_SET_MODE(mode) do { (void)(mode); } while (0)
+#define PROF_ADD_WALL(mode, us) do { (void)(mode); (void)(us); } while (0)
 void needle_prof_dump(void) {}
 #endif
 
@@ -1087,6 +1175,9 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
     uint32_t C = m->d_model, n = m->lanes, L = m->n_layers;
     uint32_t H = m->n_heads, KV = m->n_kv, hd = m->head_dim;
     uint32_t A = H * hd, half = hd / 2;
+#ifdef NEEDLE_PROF
+    int64_t _prof_mark = PROF_NOW();
+#endif
 
     m->hist[m->hist_len++] = token;
 
@@ -1095,8 +1186,10 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
     float sc = sqrtf((float)C);
     for (uint32_t c = 0; c < C; c++) m->x[c] *= sc;
     for (uint32_t l = 1; l < n; l++) memcpy(m->x + l * C, m->x, C * 4);
+    PROF_SPLIT(PROF_EMBED);
 
-    if (m->n_sites) PROF_T(4, engram_step(m));
+    if (m->n_sites) engram_step(m);
+    PROF_SPLIT(PROF_ENGRAM);
     tr("emb", -1, m->x, (int)(n*C));
     tr("ekv", -1, m->ev, (int)(m->n_sites*C));
 
@@ -1112,13 +1205,13 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         float hpre[MAX_LANES], tmpl[MAX_LANES * MAX_LANES];
         {
             /* phi_pre rows for layer i: rows [i*n, (i+1)*n) of (L*n, n*C) */
-            PROF_T(0, cq_prepare_x(m, &m->phi_pre, m->nx, m->xh2));
+            cq_prepare_x(m, &m->phi_pre, m->nx, m->xh2);
             CQMat sub = m->phi_pre;
             uint32_t row_bytes = sub.in_pad * sub.bits / 8;
             sub.packed += (uint64_t)i * n * row_bytes;
             sub.norms += (uint64_t)i * n * (sub.in_pad / sub.group);
             sub.out = n;
-            PROF_T(0, cq_matvec(m, &sub, m->xh2, hpre));
+            cq_matvec(m, &sub, m->xh2, hpre);
         }
         uint32_t own = i % n;
         for (uint32_t l = 0; l < n; l++) {
@@ -1150,15 +1243,21 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
                 break;
             }
         }
+        PROF_SPLIT(PROF_MHC_PRE);
 
         /* ---- attention ---- */
         zcrms(bx, lp->norm_in, m->h, (int)C);
         tr("h", (int)i, m->h, (int)C);
-        PROF_T(1, cq_prepare_x(m, &lp->q_proj, m->h, m->xh));
+        cq_prepare_x(m, &lp->q_proj, m->h, m->xh);
+        PROF_SPLIT(PROF_QKV_PREP);
         tr("xh", (int)i, m->xh, (int)lp->q_proj.in_pad);
-        PROF_T(1, cq_matvec_mt(m, &lp->q_proj, m->xh, m->q));
-        PROF_T(1, cq_matvec_mt(m, &lp->k_proj, m->xh, m->k));
-        PROF_T(1, cq_matvec_mt(m, &lp->v_proj, m->xh, m->v));
+        static float gate[2048];
+        cq_matvec_mt(m, &lp->q_proj, m->xh, m->q);
+        PROF_SPLIT(PROF_Q);
+        cq_matvec_mt(m, &lp->k_proj, m->xh, m->k);
+        PROF_SPLIT(PROF_K);
+        cq_matvec_mt(m, &lp->v_proj, m->xh, m->v);
+        PROF_SPLIT(PROF_V);
         tr("bx", (int)i, bx, (int)C);
         tr("qkv", (int)i, m->q, (int)A);
 
@@ -1206,10 +1305,8 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
             for (uint32_t d = 0; d < hd; d++)
                 m->v_cache[base + d] = (int8_t)lrintf(m->v[kk * hd + d] / m->v_scale[sbase]);
         }
+        PROF_SPLIT(PROF_QKV_POST);
 
-#ifdef NEEDLE_PROF
-        int64_t _attn_t0 = PROF_NOW();
-#endif
         uint32_t lo = 0;
         if (m->kv_window && pos + 1 > m->kv_window) lo = pos + 1 - m->kv_window;
         uint32_t reps = H / KV;
@@ -1223,22 +1320,22 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
             attn_job_fn(&aj0);
         }
         (void)reps;
+        PROF_SPLIT(PROF_ATTN);
 
-#ifdef NEEDLE_PROF
-        g_prof[2] += PROF_NOW() - _attn_t0;
-#endif
         /* gate + out_proj (gate_proj input is h, reuse prepared xh) */
-        static float gate[2048];
-        PROF_T(1, cq_matvec_mt(m, &lp->gate_proj, m->xh, gate));
+        cq_matvec_mt(m, &lp->gate_proj, m->xh, gate);
         for (uint32_t d = 0; d < A; d++) m->att_out[d] *= sigmoidf_(gate[d]);
+        PROF_SPLIT(PROF_GATE);
         tr("attout", (int)i, m->att_out, (int)A);
         static float attn[512];
-        PROF_T(3, cq_apply(m, &lp->out_proj, m->att_out, attn, m->xh));
+        cq_apply(m, &lp->out_proj, m->att_out, attn, m->xh);
+        PROF_SPLIT(PROF_OUT);
         static float attn_n[512];
         zcrms(attn, lp->post_norm, attn_n, (int)C);
         float gsc = sigmoidf_(lp->attn_gate);
         static float y[512];
         for (uint32_t c = 0; c < C; c++) y[c] = bx[c] + gsc * attn_n[c];
+        PROF_SPLIT(PROF_POST_ATTN);
 
         /* ---- hadamard mlp ---- */
         static float hh2[512];
@@ -1250,6 +1347,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         for (uint32_t c = 0; c < N; c++) m->z[c] = siluf_(m->z[c] * invn * lp->d2[c]);
         fwht(m->z, (int)N);
         for (uint32_t c = 0; c < C; c++) y[c] += m->z[c] * invn * lp->d3[c];
+        PROF_SPLIT(PROF_HADA);
 
         /* y -= u */
         for (uint32_t c = 0; c < C; c++) y[c] -= m->u[c];
@@ -1263,7 +1361,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
             sub.packed += (uint64_t)i * n * row_bytes;
             sub.norms += (uint64_t)i * n * (sub.in_pad / sub.group);
             sub.out = n;
-            PROF_T(0, cq_matvec(m, &sub, m->xh2, hpost));
+            cq_matvec(m, &sub, m->xh2, hpost);
         }
         for (uint32_t l = 0; l < n; l++) {
             float off = (l == own) ? 0.0f : -4.0f;
@@ -1276,11 +1374,11 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
             sub.packed += (uint64_t)i * n * n * row_bytes;
             sub.norms += (uint64_t)i * n * n * (sub.in_pad / sub.group);
             sub.out = n * n;
-            PROF_T(0, cq_matvec(m, &sub, m->xh2, tmpl));
+            cq_matvec(m, &sub, m->xh2, tmpl);
         }
         for (uint32_t l = 0; l < n * n; l++)
             tmpl[l] = m->a_res[i] * tmpl[l] + m->b_res[i * n * n + l];
-        PROF_T(0, sinkhorn(tmpl, (int)n, NEEDLE_SINKHORN_ITERS));
+        sinkhorn(tmpl, (int)n, NEEDLE_SINKHORN_ITERS);
 
         /* x = hres @ x + hpost[:,None]*y */
         static float xn[MAX_LANES * 512];
@@ -1294,6 +1392,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         tr("hres", (int)i, tmpl, (int)(n*n));
         memcpy(m->x, xn, (size_t)n * C * 4);
         tr("xnew", (int)i, m->x, (int)(n*C));
+        PROF_SPLIT(PROF_MHC_POST);
     }
 
     if (!want_logits) return NULL;
@@ -1307,7 +1406,8 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
     }
     static float xf[512];
     zcrms(xm, m->final_norm, xf, (int)C);
-    PROF_T(5, cq_apply(m, &m->embedding, xf, m->logits, m->xh));
+    cq_apply(m, &m->embedding, xf, m->logits, m->xh);
+    PROF_SPLIT(PROF_LOGITS);
     return m->logits;
 }
 
@@ -1933,6 +2033,7 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
 
     DecCtx dc = { NULL, 0 };
     int64_t t_pre = needle_now_us();
+    PROF_SET_MODE(0);
     int reused = (m->px_valid && m->px_hash == th && m->px_n == (uint32_t)n_pids
                   && m->max_len >= (uint32_t)(n_ids + NEEDLE_DECODE_ROOM));
     if (getenv("NEEDLE_NO_PREFIX_CACHE")) reused = 0;
@@ -1964,6 +2065,8 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
     for (int k = 0; k < n_rids; k++)
         dc.logits = needle_step_ex(m, rids[k], dc.pos++, k == n_rids - 1);
     int64_t t_dec = needle_now_us();
+    PROF_ADD_WALL(0, t_dec - t_pre);
+    PROF_SET_MODE(1);
     g_needle_stats.prefill_tok = reused ? n_rids : n_ids;
     g_needle_stats.prefix_reused = reused;
     g_needle_stats.prefill_us = t_dec - t_pre;
@@ -2232,6 +2335,7 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
     out[olen] = 0;
     g_needle_stats.decode_tok = (int)(dc.pos - (uint32_t)n_ids);
     g_needle_stats.decode_us = needle_now_us() - t_dec;
+    PROF_ADD_WALL(1, g_needle_stats.decode_us);
     return (int)olen;
 }
 
