@@ -27,7 +27,7 @@ $ turn on pin 5
 | **Model** | Needle 2 — 45M params, CQ 2-bit, 13.7 MB single file |
 | **Hardware** | ESP32-S3, 240 MHz Xtensa LX7, 16 MB flash, 8 MB PSRAM (~$5) |
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
-| **ESP32 speed** | fixed one-tool: **2.07 tok/s prefill · 1.69 tok/s decode** · 15.266 s warm · 33.382 s cold |
+| **ESP32 speed** | fixed one-tool: **2.11 tok/s prefill · 1.73 tok/s decode** · 14.914 s warm · 32.770 s cold |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
 | **Accuracy** | **69.6%** on google/mobile-actions (961 cases, strict) — official engine 2.0.2: 69.2% on identical inputs |
 
@@ -116,8 +116,8 @@ input. The command returns tool-call JSON but does not execute the selected tool
 
 The multi-tool output selects both tools and extracts the timestamp, email address, event title,
 and subject. Latency depends on the selected schema, query length, and generated calls. For a
-reproducible reference, the default fastest build (`fast_math=1`) with one fixed tool took **33.382 s**
-cold and **15.266 s** after a prefix-cache hit on the board above (2026-08-22). Both runs returned
+reproducible reference, the default fastest build (`fast_math=1`) with one fixed tool took **32.770 s**
+cold and **14.914 s** after a prefix-cache hit on the board above (2026-08-22). Both runs returned
 the same JSON shown in the simple example. See [Benchmark](#benchmark) for the exact conditions.
 
 > ⚠️ Flash the app **before or together with** the weights. Any firmware whose partition table
@@ -265,7 +265,8 @@ Raw engine throughput, measured on hardware:
 | PSRAM weight cache (opportunistic) | +8% |
 | TIE728 aligned float loads + 2-row/8-accumulator CQ2 kernel | 512×512 matvec: 5.272 → 3.781 ms single-core; 2.700 → 1.960 ms dual-core |
 | Cross-operator scheduling (mHC/Sinkhorn and gate work run during independent core-0 work) | 5.9% lower cold latency; 5.6% lower warm latency |
-| **Default fastest one-tool run** | **2.07 tok/s prefill, 1.69 decode; 33.382 s cold, 15.266 s warm** |
+| Request-sized PSRAM weight tier, ordered by profiled projection cost | 2.3% lower warm latency; releases itself before KV resizing |
+| **Default fastest one-tool run** | **2.11 tok/s prefill, 1.73 decode; 32.770 s cold, 14.914 s warm** |
 | KV prefix cache (costs ~20% raw speed for a bigger ring) | **end-to-end 8.2×** |
 
 ### What did not work
@@ -289,8 +290,8 @@ Raw engine throughput, measured on hardware:
 
 ## Limitations
 
-- **Latency is schema-dependent.** The controlled one-tool workload takes 15.266 s warm and
-  33.382 s cold; larger schemas and multi-call outputs can take minutes. A cloud API remains much
+- **Latency is schema-dependent.** The controlled one-tool workload takes 14.914 s warm and
+  32.770 s cold; larger schemas and multi-call outputs can take minutes. A cloud API remains much
   faster. The value here comes from offline operation, zero API cost, and keeping data on-device.
 - **Chinese is unsupported by the model.** Chinese device commands score 0/5, with identical
   failures in the official engine. This places the limitation in the model itself. Confidence
@@ -381,8 +382,8 @@ divided phase token counts by whole-request time.
 are recorded separately.
 
 **Current real ESP32-S3 speed (2026-08-22):** the default fastest build
-(`fast_math=1`, `profile=0`) ran a fixed one-tool prompt in 33.382 s cold
-and 15.266 s warm. Cold prefill/decode reached 2.07/1.69 tok/s; all five runs
+(`fast_math=1`, `profile=0`) ran a fixed one-tool prompt in 32.770 s cold
+and 14.914 s warm. Cold prefill/decode reached 2.11/1.73 tok/s; all repeated runs
 emitted identical flashlight calls. Its TIE728 boot self-test passed with maximum
 absolute error 8.583e-06. A 252-token mobile-actions row completed strict exact in
 158.111 s, 6.5% faster than the previous firmware, and matched the host byte for byte.

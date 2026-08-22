@@ -76,6 +76,12 @@ static inline void *aligned_alloc16(size_t sz) {
 #ifndef NEEDLE_GATE_LEAD_ROWS_DEFAULT
 #define NEEDLE_GATE_LEAD_ROWS_DEFAULT 32
 #endif
+#ifndef NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT
+#define NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT 0
+#endif
+#ifndef NEEDLE_DYNAMIC_CACHE_RESERVE_KB_DEFAULT
+#define NEEDLE_DYNAMIC_CACHE_RESERVE_KB_DEFAULT 256
+#endif
 #ifndef NEEDLE_SINKHORN_ITERS
 #define NEEDLE_SINKHORN_ITERS 20
 #endif
@@ -824,7 +830,27 @@ static void mhc_proj_job_fn(void *p) {
 const esp_partition_t *g_needle_part = NULL;
 const uint8_t *g_needle_mmap_base = NULL;
 
-static size_t cq_cache_psram(CQMat *W, size_t budget) {
+typedef struct {
+    CQMat *matrix;
+    const uint8_t *packed;
+    const uint16_t *norms;
+    uint8_t *copy;
+} DynamicCQCache;
+
+#define MAX_DYNAMIC_CQ_CACHE (8 + MAX_LAYERS * 5)
+static DynamicCQCache *g_dynamic_cq_cache;
+static int g_dynamic_cq_count;
+
+static int cq_points_into_model(const CQMat *W) {
+    if (!g_needle_mmap_base || !g_needle_part) return 1;
+    uintptr_t p = (uintptr_t)W->packed;
+    uintptr_t lo = (uintptr_t)g_needle_mmap_base;
+    return p >= lo && p < lo + g_needle_part->size;
+}
+
+static size_t cq_cache_psram(CQMat *W, size_t budget, int dynamic) {
+    /* A prior cache tier already owns this matrix. */
+    if (!cq_points_into_model(W)) return 0;
     uint32_t row_bytes = (W->bits == TERNARY_RECORD_BITS) ? W->in_pad / 4
                                                           : W->in_pad * W->bits / 8;
     size_t total = (size_t)W->out * row_bytes
@@ -841,12 +867,24 @@ static size_t cq_cache_psram(CQMat *W, size_t budget) {
     } else {
         memcpy(buf, W->packed, total);
     }
+    if (dynamic) {
+        if (!g_dynamic_cq_cache
+            || g_dynamic_cq_count >= MAX_DYNAMIC_CQ_CACHE) {
+            heap_caps_free(buf);
+            return 0;
+        }
+        DynamicCQCache *entry = &g_dynamic_cq_cache[g_dynamic_cq_count++];
+        entry->matrix = W;
+        entry->packed = W->packed;
+        entry->norms = W->norms;
+        entry->copy = buf;
+    }
     W->packed = buf;
     W->norms = (const uint16_t *)(buf + (size_t)W->out * row_bytes);
     return total;
 }
 
-size_t needle_cache_psram(Needle *m, size_t budget) {
+static size_t needle_cache_psram_tier(Needle *m, size_t budget, int dynamic) {
     size_t used = 0, got;
     CQMat *order[8 + MAX_LAYERS * 5];
     int n = 0;
@@ -855,19 +893,63 @@ size_t needle_cache_psram(Needle *m, size_t budget) {
         order[n++] = &m->engrams[s].key_proj;
         order[n++] = &m->engrams[s].value_proj;
     }
-    for (uint32_t i = 0; i < m->n_layers; i++) {
-        Layer *L = &m->layers[i];
-        order[n++] = &L->q_proj; order[n++] = &L->k_proj; order[n++] = &L->v_proj;
-        order[n++] = &L->gate_proj; order[n++] = &L->out_proj;
+    if (dynamic) {
+        /* Profile-guided ordering: q/gate/out dominate projection time.  The
+         * fixed boot tier keeps the original layer-local order; only the
+         * request-sized opportunistic tier prefers the hotter matrices. */
+        for (uint32_t i = 0; i < m->n_layers; i++) {
+            Layer *L = &m->layers[i];
+            order[n++] = &L->q_proj;
+            order[n++] = &L->gate_proj;
+            order[n++] = &L->out_proj;
+        }
+        for (uint32_t i = 0; i < m->n_layers; i++) {
+            Layer *L = &m->layers[i];
+            order[n++] = &L->k_proj;
+            order[n++] = &L->v_proj;
+        }
+    } else {
+        for (uint32_t i = 0; i < m->n_layers; i++) {
+            Layer *L = &m->layers[i];
+            order[n++] = &L->q_proj;
+            order[n++] = &L->k_proj;
+            order[n++] = &L->v_proj;
+            order[n++] = &L->gate_proj;
+            order[n++] = &L->out_proj;
+        }
     }
     for (int i = 0; i < n; i++) {
-        got = cq_cache_psram(order[i], budget - used);
+        got = cq_cache_psram(order[i], budget - used, dynamic);
         /* A large projection may not fit while a later K/V or mHC matrix does.
          * Keep filling the remaining budget instead of abandoning it. */
         if (!got) continue;
         used += got;
     }
     return used;
+}
+
+size_t needle_cache_psram(Needle *m, size_t budget) {
+    return needle_cache_psram_tier(m, budget, 0);
+}
+
+static void needle_release_dynamic_cache(void) {
+    while (g_dynamic_cq_count > 0) {
+        DynamicCQCache *entry = &g_dynamic_cq_cache[--g_dynamic_cq_count];
+        entry->matrix->packed = entry->packed;
+        entry->matrix->norms = entry->norms;
+        heap_caps_free(entry->copy);
+    }
+}
+
+static size_t needle_cache_psram_dynamic(Needle *m, size_t reserve) {
+    if (!g_dynamic_cq_cache) {
+        g_dynamic_cq_cache = (DynamicCQCache *)heap_caps_calloc(
+            MAX_DYNAMIC_CQ_CACHE, sizeof(*g_dynamic_cq_cache), MALLOC_CAP_SPIRAM);
+        if (!g_dynamic_cq_cache) return 0;
+    }
+    size_t free = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
+    if (free <= reserve) return 0;
+    return needle_cache_psram_tier(m, free - reserve, 1);
 }
 #endif
 
@@ -973,6 +1055,9 @@ static void sinkhorn(float *lg, int n, int iters) {
 /* ----------------------------------------------------------------- state */
 
 void needle_reset(Needle *m, uint32_t max_len) {
+#if defined(ESP_PLATFORM) && NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT
+    needle_release_dynamic_cache();
+#endif
     m->max_len = max_len;
     uint32_t C = m->d_model, hd = m->head_dim, L = m->n_layers, KV = m->n_kv;
     uint32_t n = m->lanes;
@@ -2513,6 +2598,16 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
         }
         needle_reset(m, (uint32_t)(n_pids + NEEDLE_QUERY_ROOM + NEEDLE_DECODE_ROOM));
         if (m->max_len == 0) return -1;
+#if defined(ESP_PLATFORM) && NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT
+        {
+            int64_t cache_start = needle_now_us();
+            size_t cached = needle_cache_psram_dynamic(
+                m, (size_t)NEEDLE_DYNAMIC_CACHE_RESERVE_KB_DEFAULT * 1024);
+            fprintf(stderr, "[needle] dynamic weights cached: %u KB in %lld ms\n",
+                    (unsigned)(cached / 1024),
+                    (long long)((needle_now_us() - cache_start) / 1000));
+        }
+#endif
         ering_bytes = (size_t)m->n_sites * m->ering_depth * m->d_model * 4;
         evalid_bytes = (size_t)m->n_sites * m->ering_depth;
         for (int p = 0; p < n_pids; p++) needle_step_ex(m, pids[p], (uint32_t)p, 0);

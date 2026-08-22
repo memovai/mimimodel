@@ -9,6 +9,7 @@ option(NEEDLE_PROFILE "Collect per-phase inference timings" OFF)
 option(NEEDLE_BYTE_GRAMMAR "Use continuous schema-constrained byte decoding" ON)
 option(NEEDLE_MHC_OVERLAP "Overlap mHC post/res projections with attention preparation" ON)
 option(NEEDLE_GATE_OVERLAP "Overlap the start of gate projection with QKV postprocessing" ON)
+option(NEEDLE_DYNAMIC_WEIGHT_CACHE "Use PSRAM left after actual KV allocation for weights" ON)
 set(NEEDLE_PREFIX_SINK_TOKENS 160 CACHE STRING
     "Protected prompt-prefix tokens kept alongside the 256-token recent window")
 set(NEEDLE_REASON_MAX_TOKENS 256 CACHE STRING
@@ -19,6 +20,8 @@ set(NEEDLE_MHC_Q_LEAD_ROWS 128 CACHE STRING
     "Q projection rows core 0 computes while the mHC overlap job finishes")
 set(NEEDLE_GATE_LEAD_ROWS 32 CACHE STRING
     "Gate projection rows core 1 computes during QKV postprocessing")
+set(NEEDLE_DYNAMIC_CACHE_RESERVE_KB 256 CACHE STRING
+    "PSRAM kept free after the dynamic weight-cache tier")
 
 target_compile_options(${COMPONENT_LIB} PRIVATE -O3 -mlongcalls)
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
@@ -27,6 +30,7 @@ target_compile_definitions(${COMPONENT_LIB} PRIVATE
     NEEDLE_MT_MIN_ROWS_DEFAULT=${NEEDLE_MT_MIN_ROWS}
     NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT=${NEEDLE_MHC_Q_LEAD_ROWS}
     NEEDLE_GATE_LEAD_ROWS_DEFAULT=${NEEDLE_GATE_LEAD_ROWS}
+    NEEDLE_DYNAMIC_CACHE_RESERVE_KB_DEFAULT=${NEEDLE_DYNAMIC_CACHE_RESERVE_KB}
 )
 if(NEEDLE_FAST_MATH)
     target_compile_options(${COMPONENT_LIB} PRIVATE -ffast-math)
@@ -40,6 +44,11 @@ if(NEEDLE_MHC_OVERLAP)
     target_compile_definitions(${COMPONENT_LIB} PRIVATE NEEDLE_MHC_OVERLAP_DEFAULT=1)
 else()
     target_compile_definitions(${COMPONENT_LIB} PRIVATE NEEDLE_MHC_OVERLAP_DEFAULT=0)
+endif()
+if(NEEDLE_DYNAMIC_WEIGHT_CACHE)
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT=1)
+else()
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE NEEDLE_DYNAMIC_WEIGHT_CACHE_DEFAULT=0)
 endif()
 if(NEEDLE_BYTE_GRAMMAR)
     target_compile_definitions(${COMPONENT_LIB} PRIVATE NEEDLE_BYTE_GRAMMAR_DEFAULT=1)
