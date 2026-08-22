@@ -1,0 +1,3572 @@
+[
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "ms": 2142.0,
+  "prefill_tok": 314,
+  "decode_tok": 145,
+  "prefill_us": 1350161,
+  "decode_us": 765080,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.ortega@ecotradeintl.com",
+     "subject": "Update on Q4 Report",
+     "body": "To javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "ms": 1732.0,
+  "prefill_tok": 308,
+  "decode_tok": 72,
+  "prefill_us": 1326762,
+  "decode_us": 383774,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@examplemail.co.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "ms": 2032.0,
+  "prefill_tok": 311,
+  "decode_tok": 127,
+  "prefill_us": 1333298,
+  "decode_us": 671493,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Lunch with Marketing",
+     "datetime": "2025-05-13T13:30:00"
+    }
+   }
+  ],
+  "ms": 1770.0,
+  "prefill_tok": 283,
+  "decode_tok": 103,
+  "prefill_us": 1198708,
+  "decode_us": 545222,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "kenji.tanaka@corpmail.jp",
+     "subject": "Revised Q3 Budget Figures",
+     "body": "Please review the updated budget sheet for Q3. I had to adjust the travel expenses based on the new vendor quotes."
+    }
+   }
+  ],
+  "ms": 2281.0,
+  "prefill_tok": 327,
+  "decode_tok": 160,
+  "prefill_us": 1413608,
+  "decode_us": 846562,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Sunnyvale Library"
+    }
+   }
+  ],
+  "ms": 1599.0,
+  "prefill_tok": 258,
+  "decode_tok": 94,
+  "prefill_us": 1082698,
+  "decode_us": 496194,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Canvas Creations"
+    }
+   }
+  ],
+  "ms": 1311.0,
+  "prefill_tok": 274,
+  "decode_tok": 25,
+  "prefill_us": 1151779,
+  "decode_us": 137749,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "2026-01-21T14:00:00"
+    }
+   }
+  ],
+  "ms": 1550.0,
+  "prefill_tok": 301,
+  "decode_tok": 47,
+  "prefill_us": 1281109,
+  "decode_us": 248089,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "'",
+     "datetime": ").\n"
+    }
+   }
+  ],
+  "ms": 2201.0,
+  "prefill_tok": 333,
+  "decode_tok": 140,
+  "prefill_us": 1433866,
+  "decode_us": 740951,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1159.0,
+  "prefill_tok": 252,
+  "decode_tok": 16,
+  "prefill_us": 1054638,
+  "decode_us": 84063,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "marcus.olivera@brasileiro.com",
+     "phone_number": "55-11-98765-4321",
+     "first_name": "Marcus Oliveira",
+     "last_name": "Marcus Oliveira"
+    }
+   }
+  ],
+  "ms": 2162.0,
+  "prefill_tok": 312,
+  "decode_tok": 151,
+  "prefill_us": 1339163,
+  "decode_us": 795942,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Wandering Page bookstore"
+    }
+   }
+  ],
+  "ms": 1530.0,
+  "prefill_tok": 270,
+  "decode_tok": 68,
+  "prefill_us": 1141768,
+  "decode_us": 365761,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "public library on Elm Street"
+    }
+   }
+  ],
+  "ms": 1761.0,
+  "prefill_tok": 274,
+  "decode_tok": 109,
+  "prefill_us": 1155467,
+  "decode_us": 584980,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Follow-up on Q1 Report",
+     "body": "I reviewed the Q1 report draft. Looks good, just check page 12 for the revised sales figures.",
+     "to": "Aisha.Khan@fabrikam.com"
+    }
+   }
+  ],
+  "ms": 1763.0,
+  "prefill_tok": 305,
+  "decode_tok": 81,
+  "prefill_us": 1303302,
+  "decode_us": 438933,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "elara.pereira@email.com",
+     "subject": "Title",
+     "body": ";"
+    }
+   }
+  ],
+  "ms": 2184.0,
+  "prefill_tok": 331,
+  "decode_tok": 138,
+  "prefill_us": 1427753,
+  "decode_us": 729853,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1560.0,
+  "prefill_tok": 291,
+  "decode_tok": 56,
+  "prefill_us": 1238268,
+  "decode_us": 301984,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Morning Run",
+     "datetime": "2026-02-04T06:30:00"
+    }
+   }
+  ],
+  "ms": 1840.0,
+  "prefill_tok": 269,
+  "decode_tok": 130,
+  "prefill_us": 1127419,
+  "decode_us": 689605,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "987-654-3210",
+     "email": "Aisha Khan",
+     "last_name": "Khan",
+     "first_name": "Aisha"
+    }
+   }
+  ],
+  "ms": 2284.0,
+  "prefill_tok": 334,
+  "decode_tok": 153,
+  "prefill_us": 1447700,
+  "decode_us": 807560,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": ").\n",
+     "to": "elara.chen@example.com"
+    }
+   }
+  ],
+  "ms": 2120.0,
+  "prefill_tok": 311,
+  "decode_tok": 143,
+  "prefill_us": 1336457,
+  "decode_us": 754522,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1232.0,
+  "prefill_tok": 268,
+  "decode_tok": 16,
+  "prefill_us": 1126534,
+  "decode_us": 83460,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "next Monday at 10:30 AM"
+    }
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "City Medical Building"
+    }
+   }
+  ],
+  "ms": 1932.0,
+  "prefill_tok": 302,
+  "decode_tok": 117,
+  "prefill_us": 1290469,
+  "decode_us": 619589,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Grand View Cafe, 78 King St, Toronto"
+    }
+   }
+  ],
+  "ms": 1952.0,
+  "prefill_tok": 314,
+  "decode_tok": 110,
+  "prefill_us": 1346782,
+  "decode_us": 583980,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Q4 Financial Review",
+     "datetime": "2024-12-05T14:00:00"
+    }
+   }
+  ],
+  "ms": 1808.0,
+  "prefill_tok": 291,
+  "decode_tok": 101,
+  "prefill_us": 1244468,
+  "decode_us": 537377,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Follow-up on Q3 Budget Review",
+     "body": "Elena, just confirming we are meeting tomorrow at 10 AM to discuss the revised budget proposal. Please bring the new cost analysis spreadsheet. Thanks.",
+     "to": "Elena.petrova@starlightmed.org"
+    }
+   }
+  ],
+  "ms": 1937.0,
+  "prefill_tok": 324,
+  "decode_tok": 95,
+  "prefill_us": 1409061,
+  "decode_us": 506021,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1124.0,
+  "prefill_tok": 247,
+  "decode_tok": 16,
+  "prefill_us": 1019151,
+  "decode_us": 85492,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "+1 (555) 301-4567",
+     "last_name": "Aisha Khan",
+     "first_name": "Aisha"
+    }
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "789 Elmwood Ave, Toronto"
+    }
+   }
+  ],
+  "ms": 2099.0,
+  "prefill_tok": 302,
+  "decode_tok": 147,
+  "prefill_us": 1288571,
+  "decode_us": 783803,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "javier.delgado@example.es",
+     "first_name": "Javier Delgado",
+     "last_name": "+34 678 555 123"
+    }
+   }
+  ],
+  "ms": 2072.0,
+  "prefill_tok": 307,
+  "decode_tok": 137,
+  "prefill_us": 1315556,
+  "decode_us": 728089,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Ristorante Pizzeria Bellagio Via Tiziano 19, Milano"
+    }
+   }
+  ],
+  "ms": 1643.0,
+  "prefill_tok": 270,
+  "decode_tok": 93,
+  "prefill_us": 1129640,
+  "decode_us": 493953,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "nearest branch of 'The Corner Bakery' cafe at 3850 N Sheridan Rd"
+    }
+   }
+  ],
+  "ms": 1429.0,
+  "prefill_tok": 272,
+  "decode_tok": 46,
+  "prefill_us": 1169012,
+  "decode_us": 240506,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Annual Dentist Appointment",
+     "datetime": "2025-12-25T10:30:00"
+    }
+   }
+  ],
+  "ms": 1656.0,
+  "prefill_tok": 266,
+  "decode_tok": 93,
+  "prefill_us": 1127435,
+  "decode_us": 502029,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "elara.jones@fictionalmail.com",
+     "subject": "Dog Sitting Arrangement",
+     "body": "I can watch Buster on Tuesday, but not Wednesday."
+    }
+   }
+  ],
+  "ms": 2066.0,
+  "prefill_tok": 281,
+  "decode_tok": 161,
+  "prefill_us": 1195038,
+  "decode_us": 850369,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dinner with Javier and Sofia at La Brasserie",
+     "datetime": "2024-07-23T19:00:00"
+    }
+   }
+  ],
+  "ms": 2067.0,
+  "prefill_tok": 318,
+  "decode_tok": 127,
+  "prefill_us": 1367381,
+  "decode_us": 671580,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "App Launch Planning",
+     "datetime": "2026-04-12T10:30:00"
+    }
+   }
+  ],
+  "ms": 1841.0,
+  "prefill_tok": 300,
+  "decode_tok": 99,
+  "prefill_us": 1286215,
+  "decode_us": 526747,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Check-up",
+     "datetime": "2025-11-13T18:15:00"
+    }
+   }
+  ],
+  "ms": 1957.0,
+  "prefill_tok": 313,
+  "decode_tok": 106,
+  "prefill_us": 1346156,
+  "decode_us": 583252,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Client Presentation Prep",
+     "datetime": "2026-12-16T09:00:00"
+    }
+   }
+  ],
+  "ms": 1905.0,
+  "prefill_tok": 308,
+  "decode_tok": 100,
+  "prefill_us": 1322682,
+  "decode_us": 554041,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Financial Review",
+     "datetime": "2026-01-26T11:00:00"
+    }
+   }
+  ],
+  "ms": 1533.0,
+  "prefill_tok": 299,
+  "decode_tok": 45,
+  "prefill_us": 1279002,
+  "decode_us": 234742,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "sanjay.patel@zylocorp.in",
+     "subject": "Confirming project proposal delivery",
+     "body": "Hi Sanjay, just letting you know that the final project proposal for the Bangalore initiative has been successfully uploaded to the shared drive. Please review it by Tuesday."
+    }
+   }
+  ],
+  "ms": 2027.0,
+  "prefill_tok": 343,
+  "decode_tok": 98,
+  "prefill_us": 1487032,
+  "decode_us": 515819,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Review Q2 Marketing Strategy",
+     "datetime": "2025-03-28T16:30:00"
+    }
+   }
+  ],
+  "ms": 1770.0,
+  "prefill_tok": 260,
+  "decode_tok": 121,
+  "prefill_us": 1097017,
+  "decode_us": 651105,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "45 Rue de Rivoli, Paris, France"
+    }
+   }
+  ],
+  "ms": 1469.0,
+  "prefill_tok": 256,
+  "decode_tok": 70,
+  "prefill_us": 1077146,
+  "decode_us": 372087,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1152.0,
+  "prefill_tok": 249,
+  "decode_tok": 16,
+  "prefill_us": 1047513,
+  "decode_us": 83620,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Kenji Tanaka",
+     "email": "kenji.tanaka@globalmail.com",
+     "phone_number": "+81 90-1234-5678",
+     "first_name": "Kenji"
+    }
+   }
+  ],
+  "ms": 1856.0,
+  "prefill_tok": 327,
+  "decode_tok": 74,
+  "prefill_us": 1431164,
+  "decode_us": 395555,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1257.0,
+  "prefill_tok": 243,
+  "decode_tok": 39,
+  "prefill_us": 1025711,
+  "decode_us": 211833,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "marco.rossi@verizon.net",
+     "subject": "Follow up on the Buenos Aires project",
+     "body": "Hi Marco, I just sent over the draft presentation for the client kickoff meeting next week. Let me know your thoughts before Tuesday."
+    }
+   }
+  ],
+  "ms": 2302.0,
+  "prefill_tok": 324,
+  "decode_tok": 165,
+  "prefill_us": 1404243,
+  "decode_us": 876456,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1221.0,
+  "prefill_tok": 229,
+  "decode_tok": 45,
+  "prefill_us": 954584,
+  "decode_us": 239161,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Rijksmuseum in Amsterdam"
+    }
+   }
+  ],
+  "ms": 1170.0,
+  "prefill_tok": 195,
+  "decode_tok": 69,
+  "prefill_us": 788120,
+  "decode_us": 360183,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "+34 912 345 678",
+     "email": "create_contact",
+     "last_name": "create_contact",
+     "first_name": "create_contact"
+    }
+   }
+  ],
+  "ms": 2125.0,
+  "prefill_tok": 280,
+  "decode_tok": 172,
+  "prefill_us": 1191604,
+  "decode_us": 910339,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "create_calendar_event",
+     "datetime": "title"
+    }
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 2066.0,
+  "prefill_tok": 268,
+  "decode_tok": 167,
+  "prefill_us": 1157470,
+  "decode_us": 888351,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1829.0,
+  "prefill_tok": 287,
+  "decode_tok": 105,
+  "prefill_us": 1247560,
+  "decode_us": 560647,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1014.0,
+  "prefill_tok": 220,
+  "decode_tok": 16,
+  "prefill_us": 905977,
+  "decode_us": 86064,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1160.0,
+  "prefill_tok": 253,
+  "decode_tok": 16,
+  "prefill_us": 1056798,
+  "decode_us": 83779,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "aisha.k@corp.com",
+     "phone_number": "+44 7700 900351",
+     "first_name": "Aisha",
+     "last_name": "create_contact"
+    }
+   }
+  ],
+  "ms": 2202.0,
+  "prefill_tok": 299,
+  "decode_tok": 167,
+  "prefill_us": 1276401,
+  "decode_us": 895244,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Grand View Conference Center"
+    }
+   }
+  ],
+  "ms": 1657.0,
+  "prefill_tok": 271,
+  "decode_tok": 89,
+  "prefill_us": 1164334,
+  "decode_us": 472805,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Aroma Cafe 15 Rue Saint-Antoine, Paris, France"
+    }
+   }
+  ],
+  "ms": 1378.0,
+  "prefill_tok": 268,
+  "decode_tok": 38,
+  "prefill_us": 1156875,
+  "decode_us": 201656,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Check-in Meeting",
+     "datetime": "2025-04-01T10:00:00"
+    }
+   }
+  ],
+  "ms": 1613.0,
+  "prefill_tok": 307,
+  "decode_tok": 44,
+  "prefill_us": 1344678,
+  "decode_us": 237606,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Curry's art supply store on Queen Street West in Toronto"
+    }
+   }
+  ],
+  "ms": 1378.0,
+  "prefill_tok": 204,
+  "decode_tok": 99,
+  "prefill_us": 831626,
+  "decode_us": 524523,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1228.0,
+  "prefill_tok": 264,
+  "decode_tok": 16,
+  "prefill_us": 1121015,
+  "decode_us": 84915,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Follow up with Dr. Chen",
+     "datetime": "2026-04-22T10:30:00"
+    }
+   }
+  ],
+  "ms": 1966.0,
+  "prefill_tok": 308,
+  "decode_tok": 114,
+  "prefill_us": 1329865,
+  "decode_us": 606978,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1425.0,
+  "prefill_tok": 273,
+  "decode_tok": 45,
+  "prefill_us": 1160750,
+  "decode_us": 240874,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "elena.petrova@securemail.com",
+     "subject": "Quick update on the holiday schedule",
+     "body": "Hi Elena, just confirming I'll be taking off December 26th and 29th. Thanks!"
+    }
+   }
+  ],
+  "ms": 2108.0,
+  "prefill_tok": 291,
+  "decode_tok": 155,
+  "prefill_us": 1244280,
+  "decode_us": 842561,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Sofia Petrova",
+     "phone_number": "+359 88 567 8901",
+     "first_name": "Petrova",
+     "email": "null"
+    }
+   }
+  ],
+  "ms": 2063.0,
+  "prefill_tok": 301,
+  "decode_tok": 135,
+  "prefill_us": 1301989,
+  "decode_us": 737045,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "91 98765 43210",
+     "email": "null",
+     "first_name": "null",
+     "last_name": "null"
+    }
+   }
+  ],
+  "ms": 1654.0,
+  "prefill_tok": 304,
+  "decode_tok": 57,
+  "prefill_us": 1315876,
+  "decode_us": 309644,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Tool is show_meeting_location"
+    }
+   }
+  ],
+  "ms": 2072.0,
+  "prefill_tok": 326,
+  "decode_tok": 118,
+  "prefill_us": 1419023,
+  "decode_us": 629427,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "important client meeting regarding the new contract",
+     "datetime": "2025-06-17T10:00:00"
+    }
+   }
+  ],
+  "ms": 1811.0,
+  "prefill_tok": 278,
+  "decode_tok": 111,
+  "prefill_us": 1189082,
+  "decode_us": 595144,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1319.0,
+  "prefill_tok": 282,
+  "decode_tok": 16,
+  "prefill_us": 1210716,
+  "decode_us": 88659,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "anaya.khanna@globalcorp.net",
+     "subject": "Tool: send_email",
+     "body": "I've uploaded the latest figures to the shared drive. Please review them before the meeting."
+    }
+   }
+  ],
+  "ms": 2378.0,
+  "prefill_tok": 327,
+  "decode_tok": 171,
+  "prefill_us": 1445142,
+  "decode_us": 913007,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "k.tanaka@corpmail.jp",
+     "phone_number": "+81 90-1234-5678",
+     "first_name": "Kenji Tanaka",
+     "last_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "ms": 2083.0,
+  "prefill_tok": 300,
+  "decode_tok": 139,
+  "prefill_us": 1311527,
+  "decode_us": 740321,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Client Follow-up",
+     "datetime": "2024-11-25T11:00:00"
+    }
+   }
+  ],
+  "ms": 1887.0,
+  "prefill_tok": 272,
+  "decode_tok": 132,
+  "prefill_us": 1156387,
+  "decode_us": 709519,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Galeria Luz y Sombra"
+    }
+   }
+  ],
+  "ms": 1544.0,
+  "prefill_tok": 274,
+  "decode_tok": 65,
+  "prefill_us": 1166939,
+  "decode_us": 353467,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Check-up with Dr. Chen",
+     "datetime": "2025-03-04T10:30:00"
+    }
+   }
+  ],
+  "ms": 1843.0,
+  "prefill_tok": 289,
+  "decode_tok": 107,
+  "prefill_us": 1243160,
+  "decode_us": 573694,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Priya",
+     "datetime": "2024-02-01T16:00:00"
+    }
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Caf\u00e9 Latt\u00e9, 78 King Street East, Toronto"
+    }
+   }
+  ],
+  "ms": 2303.0,
+  "prefill_tok": 313,
+  "decode_tok": 154,
+  "prefill_us": 1358045,
+  "decode_us": 921349,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Review Meeting",
+     "datetime": "2025-01-21T11:00:00"
+    }
+   }
+  ],
+  "ms": 1916.0,
+  "prefill_tok": 291,
+  "decode_tok": 95,
+  "prefill_us": 1345710,
+  "decode_us": 544840,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "hiroshi.tanaka@examplecorp.jp",
+     "subject": "Label"
+    }
+   }
+  ],
+  "ms": 2170.0,
+  "prefill_tok": 326,
+  "decode_tok": 131,
+  "prefill_us": 1441421,
+  "decode_us": 706250,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Aisha",
+     "last_name": "Khan",
+     "phone_number": "+44 7700 900567",
+     "email": "aisha.k@corp.com"
+    }
+   }
+  ],
+  "ms": 2294.0,
+  "prefill_tok": 334,
+  "decode_tok": 142,
+  "prefill_us": 1495049,
+  "decode_us": 772382,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Training Session",
+     "datetime": "2026-08-06T15:00:00"
+    }
+   }
+  ],
+  "ms": 1888.0,
+  "prefill_tok": 302,
+  "decode_tok": 98,
+  "prefill_us": 1328093,
+  "decode_us": 531194,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Portfolio Follow-up",
+     "body": "Looking forward to reviewing your designs.",
+     "to": "\n"
+    }
+   }
+  ],
+  "ms": 2275.0,
+  "prefill_tok": 324,
+  "decode_tok": 139,
+  "prefill_us": 1474418,
+  "decode_us": 774478,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Aina",
+     "last_name": "Sato",
+     "email": "aina.sato@examplecorp.com"
+    }
+   }
+  ],
+  "ms": 2164.0,
+  "prefill_tok": 298,
+  "decode_tok": 137,
+  "prefill_us": 1372706,
+  "decode_us": 760518,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Alpha Kickoff",
+     "datetime": "2026-12-07T10:00:00"
+    }
+   }
+  ],
+  "ms": 1884.0,
+  "prefill_tok": 266,
+  "decode_tok": 129,
+  "prefill_us": 1160307,
+  "decode_us": 701687,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "212-555-0199",
+     "email": "amara.n@designforge.com",
+     "first_name": "Amara",
+     "last_name": "Nkrumah"
+    }
+   }
+  ],
+  "ms": 2379.0,
+  "prefill_tok": 345,
+  "decode_tok": 142,
+  "prefill_us": 1560082,
+  "decode_us": 789163,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Appointment with Dr. Chen",
+     "datetime": "2025-09-01T15:00:00"
+    }
+   }
+  ],
+  "ms": 2070.0,
+  "prefill_tok": 312,
+  "decode_tok": 118,
+  "prefill_us": 1393237,
+  "decode_us": 647485,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "akio.tanaka@examplecorp.jp",
+     "subject": "Follow-up on Q3 Budget Review",
+     "body": "Akio, I attached the revised projections to the original email thread. Let me know if you need anything else before the Monday meeting."
+    }
+   }
+  ],
+  "ms": 2508.0,
+  "prefill_tok": 317,
+  "decode_tok": 175,
+  "prefill_us": 1478407,
+  "decode_us": 1007062,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1249.0,
+  "prefill_tok": 246,
+  "decode_tok": 16,
+  "prefill_us": 1127117,
+  "decode_us": 94432,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1202.0,
+  "prefill_tok": 249,
+  "decode_tok": 16,
+  "prefill_us": 1088239,
+  "decode_us": 91759,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1194.0,
+  "prefill_tok": 251,
+  "decode_tok": 16,
+  "prefill_us": 1086661,
+  "decode_us": 85585,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Pasadena Community Garden"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Volunteer Shift",
+     "datetime": "next Saturday at 9:30 AM"
+    }
+   }
+  ],
+  "ms": 2085.0,
+  "prefill_tok": 297,
+  "decode_tok": 134,
+  "prefill_us": 1317950,
+  "decode_us": 745887,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Green Bean Coffee Shop"
+    }
+   }
+  ],
+  "ms": 1803.0,
+  "prefill_tok": 264,
+  "decode_tok": 110,
+  "prefill_us": 1165173,
+  "decode_us": 615825,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Galeria M\u0142ynarska"
+    }
+   }
+  ],
+  "ms": 1165.0,
+  "prefill_tok": 216,
+  "decode_tok": 29,
+  "prefill_us": 976520,
+  "decode_us": 165536,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Update on Q2 Presentation",
+     "body": "I finished the slides for Q2. Please take a look when you get a chance.",
+     "to": "aisha.khan@fabrikmfg.com"
+    }
+   }
+  ],
+  "ms": 1890.0,
+  "prefill_tok": 299,
+  "decode_tok": 75,
+  "prefill_us": 1382250,
+  "decode_us": 483885,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Alpha Sync Up",
+     "datetime": "2024-05-28T16:00:00"
+    }
+   }
+  ],
+  "ms": 2101.0,
+  "prefill_tok": 308,
+  "decode_tok": 110,
+  "prefill_us": 1449859,
+  "decode_us": 619257,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Review Prep",
+     "datetime": "2026-01-21T09:00:00"
+    }
+   }
+  ],
+  "ms": 2075.0,
+  "prefill_tok": 301,
+  "decode_tok": 124,
+  "prefill_us": 1361209,
+  "decode_us": 692711,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1318.0,
+  "prefill_tok": 271,
+  "decode_tok": 16,
+  "prefill_us": 1208318,
+  "decode_us": 88729,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1333.0,
+  "prefill_tok": 271,
+  "decode_tok": 16,
+  "prefill_us": 1223113,
+  "decode_us": 88813,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1379.0,
+  "prefill_tok": 267,
+  "decode_tok": 16,
+  "prefill_us": 1265494,
+  "decode_us": 92782,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Gyeongbokgung Palace"
+    }
+   }
+  ],
+  "ms": 1346.0,
+  "prefill_tok": 251,
+  "decode_tok": 30,
+  "prefill_us": 1155876,
+  "decode_us": 168199,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Client Follow-up",
+     "datetime": "2026-03-10T14:30:00"
+    }
+   }
+  ],
+  "ms": 1924.0,
+  "prefill_tok": 247,
+  "decode_tok": 123,
+  "prefill_us": 1195481,
+  "decode_us": 704176,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1330.0,
+  "prefill_tok": 268,
+  "decode_tok": 16,
+  "prefill_us": 1219046,
+  "decode_us": 89774,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dr. Sharma Follow-up",
+     "datetime": "2024-10-05T13:00:00"
+    }
+   }
+  ],
+  "ms": 2470.0,
+  "prefill_tok": 357,
+  "decode_tok": 136,
+  "prefill_us": 1662525,
+  "decode_us": 776787,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Budget Meeting",
+     "datetime": "2026-09-18T10:30:00"
+    }
+   }
+  ],
+  "ms": 2016.0,
+  "prefill_tok": 263,
+  "decode_tok": 140,
+  "prefill_us": 1183776,
+  "decode_us": 806655,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Change to meeting time",
+     "body": "Hi Juliette, I need to move our 3 PM discussion to 3:30 PM today. Let me know if that works.",
+     "to": "juliette.dupont@corpmail.fr"
+    }
+   }
+  ],
+  "ms": 2049.0,
+  "prefill_tok": 319,
+  "decode_tok": 80,
+  "prefill_us": 1557952,
+  "decode_us": 468900,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Turn-by-turn"
+    }
+   }
+  ],
+  "ms": 1444.0,
+  "prefill_tok": 264,
+  "decode_tok": 25,
+  "prefill_us": 1276969,
+  "decode_us": 144825,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "Elias M\u00fcller",
+     "subject": "Running late"
+    }
+   }
+  ],
+  "ms": 2091.0,
+  "prefill_tok": 286,
+  "decode_tok": 129,
+  "prefill_us": 1328479,
+  "decode_us": 736448,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "ana.petrova@securemail.co.uk",
+     "last_name": "Anya Petrova",
+     "phone_number": "+44 20 7946 0884",
+     "first_name": "Anya Petrova"
+    }
+   }
+  ],
+  "ms": 2333.0,
+  "prefill_tok": 310,
+  "decode_tok": 149,
+  "prefill_us": 1436786,
+  "decode_us": 866259,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.ruiz@photostudio.com",
+     "subject": "Title",
+     "body": "Title: Photo Shoot Consultation"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Title",
+     "datetime": "2026-09-02T15:00:00"
+    }
+   }
+  ],
+  "ms": 2592.0,
+  "prefill_tok": 318,
+  "decode_tok": 187,
+  "prefill_us": 1482267,
+  "decode_us": 1077990,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Appointment",
+     "datetime": "2026-01-21T15:00:00"
+    }
+   }
+  ],
+  "ms": 2145.0,
+  "prefill_tok": 304,
+  "decode_tok": 106,
+  "prefill_us": 1500464,
+  "decode_us": 613265,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Meeting Cancellation for Friday",
+     "body": "Hi Elias, I need to cancel our review meeting scheduled for Friday at 10 AM. Something urgent came up. Let's try for next week.",
+     "to": "Elias.kallaste@inovatech.ee"
+    }
+   }
+  ],
+  "ms": 2190.0,
+  "prefill_tok": 325,
+  "decode_tok": 98,
+  "prefill_us": 1602207,
+  "decode_us": 565402,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team lunch at The Golden Spoon",
+     "datetime": "2026-03-30T13:30:00"
+    }
+   }
+  ],
+  "ms": 1651.0,
+  "prefill_tok": 295,
+  "decode_tok": 48,
+  "prefill_us": 1354709,
+  "decode_us": 275423,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "arguments",
+     "body": "arguments",
+     "to": "arguments"
+    }
+   }
+  ],
+  "ms": 2588.0,
+  "prefill_tok": 339,
+  "decode_tok": 167,
+  "prefill_us": 1604488,
+  "decode_us": 953280,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ").\n"
+    }
+   }
+  ],
+  "ms": 1693.0,
+  "prefill_tok": 286,
+  "decode_tok": 54,
+  "prefill_us": 1353017,
+  "decode_us": 317334,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Galerie Azur"
+    }
+   }
+  ],
+  "ms": 1392.0,
+  "prefill_tok": 250,
+  "decode_tok": 26,
+  "prefill_us": 1219953,
+  "decode_us": 150161,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "elias.stavros@bizmail.com",
+     "phone_number": "907-555-2233",
+     "first_name": "Elias Stavros",
+     "last_name": "Elias Stavros."
+    }
+   }
+  ],
+  "ms": 2488.0,
+  "prefill_tok": 295,
+  "decode_tok": 171,
+  "prefill_us": 1452402,
+  "decode_us": 1008335,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1489.0,
+  "prefill_tok": 256,
+  "decode_tok": 53,
+  "prefill_us": 1159003,
+  "decode_us": 308378,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Lunch with Javier",
+     "datetime": "2025-12-10T13:00:00"
+    }
+   }
+  ],
+  "ms": 2046.0,
+  "prefill_tok": 304,
+  "decode_tok": 101,
+  "prefill_us": 1422961,
+  "decode_us": 593243,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Tokyo Imperial Palace"
+    }
+   }
+  ],
+  "ms": 1779.0,
+  "prefill_tok": 258,
+  "decode_tok": 93,
+  "prefill_us": 1209108,
+  "decode_us": 547543,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "asharma@innovatetech.net",
+     "subject": "Meeting Reschedule Request",
+     "body": "Due to a conflict, I need to move our 3 PM meeting on Tuesday. Are you free at 10 AM or 4 PM instead?"
+    }
+   }
+  ],
+  "ms": 2536.0,
+  "prefill_tok": 318,
+  "decode_tok": 157,
+  "prefill_us": 1564829,
+  "decode_us": 947767,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "604-555-1212",
+     "email": "elena.petrova@research.org",
+     "first_name": "null",
+     "last_name": "null"
+    }
+   }
+  ],
+  "ms": 2557.0,
+  "prefill_tok": 337,
+  "decode_tok": 141,
+  "prefill_us": 1699818,
+  "decode_us": 823945,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.petrova@web.fi",
+     "first_name": "Anya Petrova",
+     "last_name": "040 123 4567"
+    }
+   }
+  ],
+  "ms": 1952.0,
+  "prefill_tok": 273,
+  "decode_tok": 117,
+  "prefill_us": 1253319,
+  "decode_us": 671876,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Dr. Chen",
+     "datetime": "2026-06-08T18:00:00"
+    }
+   }
+  ],
+  "ms": 1966.0,
+  "prefill_tok": 293,
+  "decode_tok": 100,
+  "prefill_us": 1356590,
+  "decode_us": 582075,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "+81 90-1234-5678",
+     "email": "kenji.tanaka@corpmail.jp",
+     "first_name": "Kenji Tanaka",
+     "last_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "ms": 2406.0,
+  "prefill_tok": 304,
+  "decode_tok": 151,
+  "prefill_us": 1468564,
+  "decode_us": 906319,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Toronto"
+    }
+   }
+  ],
+  "ms": 1462.0,
+  "prefill_tok": 266,
+  "decode_tok": 23,
+  "prefill_us": 1301879,
+  "decode_us": 133428,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Annual Performance Review with Mr. Chen",
+     "datetime": "2026-10-21T09:00:00"
+    }
+   }
+  ],
+  "ms": 2154.0,
+  "prefill_tok": 277,
+  "decode_tok": 130,
+  "prefill_us": 1358667,
+  "decode_us": 765704,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1319.0,
+  "prefill_tok": 260,
+  "decode_tok": 16,
+  "prefill_us": 1202802,
+  "decode_us": 94897,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Appointment",
+     "datetime": "2025-03-18T10:30:00"
+    }
+   }
+  ],
+  "ms": 2002.0,
+  "prefill_tok": 302,
+  "decode_tok": 94,
+  "prefill_us": 1422955,
+  "decode_us": 547832,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "null"
+    }
+   },
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 2452.0,
+  "prefill_tok": 302,
+  "decode_tok": 172,
+  "prefill_us": 1419900,
+  "decode_us": 1011262,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Global Tech Summit"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Summit Registration",
+     "datetime": "tomorrow at 9:00 AM"
+    }
+   }
+  ],
+  "ms": 2298.0,
+  "prefill_tok": 304,
+  "decode_tok": 126,
+  "prefill_us": 1522653,
+  "decode_us": 748161,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Location of The Himalayan Kitchen, 450 Broadway in Seattle"
+    }
+   }
+  ],
+  "ms": 1247.0,
+  "prefill_tok": 206,
+  "decode_tok": 38,
+  "prefill_us": 995771,
+  "decode_us": 226548,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Pasticceria Marchesi"
+    }
+   }
+  ],
+  "ms": 1371.0,
+  "prefill_tok": 257,
+  "decode_tok": 26,
+  "prefill_us": 1198820,
+  "decode_us": 149579,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Agenda for Friday Meeting",
+     "body": "Hi Kaius, please find the proposed agenda attached. I look forward to discussing the budget proposal then.",
+     "to": "kaius.holmqvist@nordic-solutions.com"
+    }
+   }
+  ],
+  "ms": 2110.0,
+  "prefill_tok": 334,
+  "decode_tok": 90,
+  "prefill_us": 1568817,
+  "decode_us": 519935,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "aaliyah.khan@webmail.co.uk",
+     "phone_number": "+44 7700 900511",
+     "last_name": "Aaliyah Khan",
+     "first_name": "Aaliyah Khan"
+    }
+   }
+  ],
+  "ms": 2291.0,
+  "prefill_tok": 304,
+  "decode_tok": 143,
+  "prefill_us": 1424007,
+  "decode_us": 836461,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "647-555-0192",
+     "email": "aisha.k@corpmail.com",
+     "first_name": "Aisha",
+     "last_name": "Khan"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Alpha Review",
+     "datetime": "2024-10-11T15:00:00"
+    }
+   }
+  ],
+  "ms": 2778.0,
+  "prefill_tok": 346,
+  "decode_tok": 173,
+  "prefill_us": 1650555,
+  "decode_us": 1095803,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "kenji.tanaka@example.jp",
+     "phone_number": "090) 1234-5678",
+     "first_name": "Kenji Tanaka",
+     "last_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "ms": 2390.0,
+  "prefill_tok": 311,
+  "decode_tok": 139,
+  "prefill_us": 1535269,
+  "decode_us": 824259,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1482.0,
+  "prefill_tok": 290,
+  "decode_tok": 16,
+  "prefill_us": 1363157,
+  "decode_us": 97160,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ")."
+    }
+   }
+  ],
+  "ms": 1774.0,
+  "prefill_tok": 312,
+  "decode_tok": 41,
+  "prefill_us": 1509342,
+  "decode_us": 236634,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "The Green Dragon Bookstore"
+    }
+   }
+  ],
+  "ms": 1381.0,
+  "prefill_tok": 213,
+  "decode_tok": 68,
+  "prefill_us": 973327,
+  "decode_us": 383103,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1634.0,
+  "prefill_tok": 256,
+  "decode_tok": 73,
+  "prefill_us": 1183157,
+  "decode_us": 426936,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1463.0,
+  "prefill_tok": 272,
+  "decode_tok": 16,
+  "prefill_us": 1347413,
+  "decode_us": 92966,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 2544.0,
+  "prefill_tok": 355,
+  "decode_tok": 125,
+  "prefill_us": 1778904,
+  "decode_us": 741257,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "elena.vasquez@techwaveintl.com",
+     "subject": "Project Status Update",
+     "body": "I've uploaded the latest figures to the shared drive. Let me know if you have any questions."
+    }
+   }
+  ],
+  "ms": 2596.0,
+  "prefill_tok": 321,
+  "decode_tok": 181,
+  "prefill_us": 1520822,
+  "decode_us": 1052684,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": "Anya Petrova",
+     "phone_number": "+44 20 7946 0880",
+     "email": "anya.petrova@inovatech.co.uk",
+     "last_name": "first_name"
+    }
+   }
+  ],
+  "ms": 3248.0,
+  "prefill_tok": 361,
+  "decode_tok": 169,
+  "prefill_us": 1982310,
+  "decode_us": 1235777,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1693.0,
+  "prefill_tok": 259,
+  "decode_tok": 16,
+  "prefill_us": 1562059,
+  "decode_us": 100218,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "elena.petrova@webcorp.com",
+     "phone_number": "+44 20 7946 0884",
+     "first_name": "Elena Petrova",
+     "last_name": "Elena Petrova"
+    }
+   }
+  ],
+  "ms": 2389.0,
+  "prefill_tok": 309,
+  "decode_tok": 147,
+  "prefill_us": 1480462,
+  "decode_us": 874856,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "'Agenda for Q4 Planning",
+     "datetime": "null"
+    }
+   }
+  ],
+  "ms": 2474.0,
+  "prefill_tok": 336,
+  "decode_tok": 149,
+  "prefill_us": 1587398,
+  "decode_us": 861809,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Sagrada Familia"
+    }
+   }
+  ],
+  "ms": 1547.0,
+  "prefill_tok": 257,
+  "decode_tok": 59,
+  "prefill_us": 1185478,
+  "decode_us": 339256,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Project Alpha Presentation",
+     "datetime": "2026-07-20T14:30:00"
+    }
+   }
+  ],
+  "ms": 2062.0,
+  "prefill_tok": 305,
+  "decode_tok": 99,
+  "prefill_us": 1460760,
+  "decode_us": 569761,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "akiko.tanaka@globalcorp.jp",
+     "subject": "Let me know if that time still works.",
+     "body": "Hi Akiko, just confirming our meeting on Monday at 10 AM regarding the Q3 budget review. Let me know if that time still works. Thanks!"
+    }
+   }
+  ],
+  "ms": 2695.0,
+  "prefill_tok": 326,
+  "decode_tok": 177,
+  "prefill_us": 1623797,
+  "decode_us": 1045678,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "a.sharma@webmail.in",
+     "first_name": "Anya Sharma",
+     "last_name": "+91 98765 43210"
+    }
+   }
+  ],
+  "ms": 2247.0,
+  "prefill_tok": 302,
+  "decode_tok": 121,
+  "prefill_us": 1504594,
+  "decode_us": 707350,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Librer\u00eda del Cobre"
+    }
+   }
+  ],
+  "ms": 1528.0,
+  "prefill_tok": 289,
+  "decode_tok": 28,
+  "prefill_us": 1344723,
+  "decode_us": 161289,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "jian.li@architekton.com",
+     "phone_number": "079 3344 5566",
+     "last_name": "Jian Li",
+     "first_name": "Jian Li"
+    }
+   }
+  ],
+  "ms": 2155.0,
+  "prefill_tok": 300,
+  "decode_tok": 124,
+  "prefill_us": 1400476,
+  "decode_us": 724113,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Checkup",
+     "datetime": "2024-07-16T10:00:00"
+    }
+   }
+  ],
+  "ms": 2020.0,
+  "prefill_tok": 266,
+  "decode_tok": 124,
+  "prefill_us": 1258652,
+  "decode_us": 735127,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "alessio.rossi@italian-design.it",
+     "subject": "Confirmed Order Details",
+     "body": "To"
+    }
+   }
+  ],
+  "ms": 1861.0,
+  "prefill_tok": 307,
+  "decode_tok": 52,
+  "prefill_us": 1533412,
+  "decode_us": 304466,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Investment Strategy Discussion",
+     "datetime": "2025-08-25T11:30:00"
+    }
+   },
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "787 555-1234",
+     "email": "kenji.tanaka@finplan.co.jp",
+     "first_name": "Kenji Tanaka",
+     "last_name": "Kenji Tanaka"
+    }
+   }
+  ],
+  "ms": 2989.0,
+  "prefill_tok": 343,
+  "decode_tok": 211,
+  "prefill_us": 1725619,
+  "decode_us": 1233208,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1351.0,
+  "prefill_tok": 265,
+  "decode_tok": 16,
+  "prefill_us": 1229389,
+  "decode_us": 98972,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Lunch meeting with Chen",
+     "datetime": "2026-05-01T13:00:00"
+    }
+   }
+  ],
+  "ms": 2356.0,
+  "prefill_tok": 325,
+  "decode_tok": 136,
+  "prefill_us": 1543174,
+  "decode_us": 785644,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Meeting with Javier about Q3 planning",
+     "datetime": "next Monday at 11:00 AM"
+    }
+   }
+  ],
+  "ms": 1951.0,
+  "prefill_tok": 301,
+  "decode_tok": 87,
+  "prefill_us": 1409372,
+  "decode_us": 512011,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "nearest sushi restaurant"
+    }
+   }
+  ],
+  "ms": 1959.0,
+  "prefill_tok": 274,
+  "decode_tok": 96,
+  "prefill_us": 1361927,
+  "decode_us": 575402,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "adityav@techserve.in",
+     "subject": "Regarding the Q4 presentation slides",
+     "body": "\n"
+    }
+   }
+  ],
+  "ms": 2059.0,
+  "prefill_tok": 333,
+  "decode_tok": 50,
+  "prefill_us": 1735138,
+  "decode_us": 296802,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1281.0,
+  "prefill_tok": 218,
+  "decode_tok": 45,
+  "prefill_us": 994617,
+  "decode_us": 256759,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Family Dinner at The Olive Branch",
+     "datetime": "2026-11-29T19:30:00"
+    }
+   }
+  ],
+  "ms": 1780.0,
+  "prefill_tok": 311,
+  "decode_tok": 49,
+  "prefill_us": 1461436,
+  "decode_us": 297194,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Client Follow-up Call",
+     "datetime": "2024-02-28T09:15:00"
+    }
+   }
+  ],
+  "ms": 2274.0,
+  "prefill_tok": 289,
+  "decode_tok": 148,
+  "prefill_us": 1374334,
+  "decode_us": 876456,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Caf\u00e9 Lattes & Bites at 1980 Eastlake Avenue East, Seattle"
+    }
+   }
+  ],
+  "ms": 1872.0,
+  "prefill_tok": 266,
+  "decode_tok": 90,
+  "prefill_us": 1296432,
+  "decode_us": 552989,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "jia.li@techwave.com",
+     "subject": "Update on Q4 projections",
+     "body": "Hi Jia, I've finished reviewing the Q4 projections. I'm attaching the updated spreadsheet. Please let me know if you have any feedback by Friday."
+    }
+   }
+  ],
+  "ms": 2761.0,
+  "prefill_tok": 325,
+  "decode_tok": 181,
+  "prefill_us": 1624837,
+  "decode_us": 1111475,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Yoga Class",
+     "datetime": "2026-08-30T18:30:00"
+    }
+   }
+  ],
+  "ms": 2183.0,
+  "prefill_tok": 296,
+  "decode_tok": 131,
+  "prefill_us": 1401810,
+  "decode_us": 759714,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": ")."
+    }
+   }
+  ],
+  "ms": 1694.0,
+  "prefill_tok": 294,
+  "decode_tok": 49,
+  "prefill_us": 1379089,
+  "decode_us": 292262,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Q3 Planning Session",
+     "datetime": "2026-07-17T14:00:00"
+    }
+   }
+  ],
+  "ms": 1909.0,
+  "prefill_tok": 267,
+  "decode_tok": 108,
+  "prefill_us": 1244034,
+  "decode_us": 635124,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Aki Sushi Bar at 14 Rue du Cherche-Midi, Paris"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dinner with Camila",
+     "datetime": "2026-07-21T19:30:00"
+    }
+   }
+  ],
+  "ms": 2469.0,
+  "prefill_tok": 309,
+  "decode_tok": 154,
+  "prefill_us": 1536539,
+  "decode_us": 908477,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1860.0,
+  "prefill_tok": 285,
+  "decode_tok": 59,
+  "prefill_us": 1474020,
+  "decode_us": 364356,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Call Aunt Elena about vacation plans",
+     "datetime": "2026-07-28T19:30:00"
+    }
+   }
+  ],
+  "ms": 2154.0,
+  "prefill_tok": 266,
+  "decode_tok": 151,
+  "prefill_us": 1254879,
+  "decode_us": 875363,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "O'Malley's Irish Pub"
+    }
+   }
+  ],
+  "ms": 1775.0,
+  "prefill_tok": 261,
+  "decode_tok": 91,
+  "prefill_us": 1215757,
+  "decode_us": 538295,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Maison des Pains"
+    }
+   }
+  ],
+  "ms": 1120.0,
+  "prefill_tok": 209,
+  "decode_tok": 25,
+  "prefill_us": 944824,
+  "decode_us": 150300,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "first_name": " 'Sharma",
+     "last_name": "555-1234"
+    }
+   }
+  ],
+  "ms": 2457.0,
+  "prefill_tok": 322,
+  "decode_tok": 139,
+  "prefill_us": 1540693,
+  "decode_us": 884354,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "987-654-3210",
+     "email": "mei.lin.design@outlook.com",
+     "first_name": "Mei",
+     "last_name": "Lin"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Client Kickoff",
+     "datetime": "2025-07-11T16:00:00"
+    }
+   }
+  ],
+  "ms": 2966.0,
+  "prefill_tok": 341,
+  "decode_tok": 198,
+  "prefill_us": 1735229,
+  "decode_us": 1200854,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "sofia.petrova@securemail.com",
+     "subject": "Update on Q4 Metrics",
+     "body": "Hi Sofia, I've finished compiling the Q4 metrics. The key takeaway is a 15% growth in the APAC region. Let me know if you want to schedule a quick call to review"
+    }
+   }
+  ],
+  "ms": 2210.0,
+  "prefill_tok": 333,
+  "decode_tok": 99,
+  "prefill_us": 1599162,
+  "decode_us": 582830,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Rescheduling Wednesday's Demo",
+     "body": "Hi Sofia, I need to push our demo back to Friday at 2 PM. Please let me know if that works for you.",
+     "to": "To the user,\\"
+    }
+   }
+  ],
+  "ms": 2018.0,
+  "prefill_tok": 318,
+  "decode_tok": 83,
+  "prefill_us": 1506472,
+  "decode_us": 489828,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "aditya.sharma@techsphere.in",
+     "phone_number": "07700 900221",
+     "first_name": "Aditya Sharma",
+     "last_name": "aditya.sharma@techsphere.in"
+    }
+   }
+  ],
+  "ms": 2715.0,
+  "prefill_tok": 303,
+  "decode_tok": 201,
+  "prefill_us": 1435637,
+  "decode_us": 1251072,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "bookstore Ateneo Grand Splendid"
+    }
+   }
+  ],
+  "ms": 1733.0,
+  "prefill_tok": 260,
+  "decode_tok": 79,
+  "prefill_us": 1233259,
+  "decode_us": 476017,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Vet Appointment",
+     "datetime": "2026-03-06T15:00:00"
+    }
+   }
+  ],
+  "ms": 2248.0,
+  "prefill_tok": 277,
+  "decode_tok": 141,
+  "prefill_us": 1384358,
+  "decode_us": 834150,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Avenida Central Hostel in San Jos\u00e9, Costa Rica"
+    }
+   }
+  ],
+  "ms": 1433.0,
+  "prefill_tok": 202,
+  "decode_tok": 87,
+  "prefill_us": 902214,
+  "decode_us": 506783,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1433.0,
+  "prefill_tok": 282,
+  "decode_tok": 16,
+  "prefill_us": 1319012,
+  "decode_us": 90462,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1329.0,
+  "prefill_tok": 260,
+  "decode_tok": 16,
+  "prefill_us": 1214722,
+  "decode_us": 92774,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Teacher Review",
+     "datetime": "2026-02-10T10:30:00"
+    }
+   }
+  ],
+  "ms": 2527.0,
+  "prefill_tok": 337,
+  "decode_tok": 132,
+  "prefill_us": 1685752,
+  "decode_us": 810231,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Kenji Tanaka",
+     "email": "k.tanaka@example.jp",
+     "phone_number": "090-1234-5678",
+     "first_name": "Kenji"
+    }
+   }
+  ],
+  "ms": 2282.0,
+  "prefill_tok": 299,
+  "decode_tok": 127,
+  "prefill_us": 1462653,
+  "decode_us": 787334,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist checkup with Dr. Chen",
+     "datetime": "2025-04-25T15:30:00"
+    }
+   }
+  ],
+  "ms": 2181.0,
+  "prefill_tok": 307,
+  "decode_tok": 111,
+  "prefill_us": 1483262,
+  "decode_us": 663921,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Q3 Report Review",
+     "body": "Please review the Q3 report documents before our Tuesday discussion.",
+     "to": "Li.chen@innovatech.com"
+    }
+   }
+  ],
+  "ms": 2458.0,
+  "prefill_tok": 320,
+  "decode_tok": 152,
+  "prefill_us": 1542943,
+  "decode_us": 889570,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Gallery Visit",
+     "datetime": "2024-03-03T14:30:00"
+    }
+   }
+  ],
+  "ms": 2340.0,
+  "prefill_tok": 310,
+  "decode_tok": 137,
+  "prefill_us": 1485440,
+  "decode_us": 831330,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Team Project Review",
+     "datetime": "2024-06-22T15:00:00"
+    }
+   },
+   {
+    "name": "create_contact",
+    "arguments": {
+     "phone_number": "555-0199",
+     "email": "maria.sanchez@vendorcorp.com",
+     "first_name": "Ms. Maria Sanchez",
+     "last_name": "Ms. Maria Sanchez"
+    }
+   }
+  ],
+  "ms": 3073.0,
+  "prefill_tok": 340,
+  "decode_tok": 211,
+  "prefill_us": 1696939,
+  "decode_us": 1338192,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Artisan Collective"
+    }
+   }
+  ],
+  "ms": 3645.0,
+  "prefill_tok": 344,
+  "decode_tok": 113,
+  "prefill_us": 2543923,
+  "decode_us": 1075975,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Appointment with Dr. Chen",
+     "datetime": "2024-11-08T10:30:00"
+    }
+   }
+  ],
+  "ms": 2322.0,
+  "prefill_tok": 310,
+  "decode_tok": 117,
+  "prefill_us": 1587530,
+  "decode_us": 694958,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "open_wifi_settings",
+    "arguments": {}
+   }
+  ],
+  "ms": 1485.0,
+  "prefill_tok": 266,
+  "decode_tok": 16,
+  "prefill_us": 1353014,
+  "decode_us": 108796,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.ortega@globalcomm.org",
+     "subject": "Follow-up on the logistics meeting",
+     "body": "Javier, I wanted to confirm the delivery schedule for next week. Everything is on track for Tuesday morning. Let me know if there are any changes."
+    }
+   }
+  ],
+  "ms": 2876.0,
+  "prefill_tok": 323,
+  "decode_tok": 174,
+  "prefill_us": 1714671,
+  "decode_us": 1134706,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Caf\u00e9 Lumi\u00e8re"
+    }
+   },
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Lunch with Samira",
+     "datetime": "Friday at 1:00 PM"
+    }
+   }
+  ],
+  "ms": 2224.0,
+  "prefill_tok": 300,
+  "decode_tok": 124,
+  "prefill_us": 1453984,
+  "decode_us": 747323,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1151.0,
+  "prefill_tok": 217,
+  "decode_tok": 16,
+  "prefill_us": 1029107,
+  "decode_us": 95692,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Museu de Arte de S\u00e3o Paulo Assis Chateaubriand"
+    }
+   }
+  ],
+  "ms": 1819.0,
+  "prefill_tok": 270,
+  "decode_tok": 84,
+  "prefill_us": 1293029,
+  "decode_us": 502771,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Libreria Acqua Alta Venice, Italy"
+    }
+   }
+  ],
+  "ms": 1405.0,
+  "prefill_tok": 201,
+  "decode_tok": 79,
+  "prefill_us": 907029,
+  "decode_us": 468874,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_off_flashlight",
+    "arguments": {}
+   }
+  ],
+  "ms": 1340.0,
+  "prefill_tok": 244,
+  "decode_tok": 16,
+  "prefill_us": 1220484,
+  "decode_us": 97104,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.soto@inotechcorp.net",
+     "subject": "Tuesday at 10:30 AM"
+    }
+   }
+  ],
+  "ms": 2776.0,
+  "prefill_tok": 335,
+  "decode_tok": 134,
+  "prefill_us": 1928407,
+  "decode_us": 823891,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Dentist Appointment",
+     "datetime": "2025-03-17T10:30:00"
+    }
+   }
+  ],
+  "ms": 1955.0,
+  "prefill_tok": 297,
+  "decode_tok": 88,
+  "prefill_us": 1412192,
+  "decode_us": 519268,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   },
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "nearest laundromat"
+    }
+   }
+  ],
+  "ms": 1809.0,
+  "prefill_tok": 257,
+  "decode_tok": 99,
+  "prefill_us": 1200422,
+  "decode_us": 586251,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Budget Review",
+     "datetime": "2025-04-07T14:00:00"
+    }
+   }
+  ],
+  "ms": 2115.0,
+  "prefill_tok": 305,
+  "decode_tok": 104,
+  "prefill_us": 1463646,
+  "decode_us": 618946,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "taco truck downtown art museum"
+    }
+   }
+  ],
+  "ms": 1766.0,
+  "prefill_tok": 257,
+  "decode_tok": 78,
+  "prefill_us": 1280503,
+  "decode_us": 462742,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Confirming lunch meeting change",
+     "body": "Hi Alberto, I need to push our lunch meeting back to 1:30 PM today. Let me know if that works for you.",
+     "to": "alberto.rossi@caffeitaliano.com"
+    }
+   }
+  ],
+  "ms": 2088.0,
+  "prefill_tok": 310,
+  "decode_tok": 83,
+  "prefill_us": 1557932,
+  "decode_us": 506011,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "...",
+     "body": ").\n",
+     "to": "chen.li@techsolutions.com"
+    }
+   }
+  ],
+  "ms": 2557.0,
+  "prefill_tok": 349,
+  "decode_tok": 140,
+  "prefill_us": 1706909,
+  "decode_us": 824766,
+  "init_ms": 0.0
+ },
+ {
+  "calls": [
+   {
+    "name": "show_map",
+    "arguments": {
+     "query": "Tiong Bahru Market"
+    }
+   }
+  ],
+  "ms": 1562.0,
+  "prefill_tok": 251,
+  "decode_tok": 61,
+  "prefill_us": 1172225,
+  "decode_us": 367499,
+  "init_ms": 0.0
+ }
+]

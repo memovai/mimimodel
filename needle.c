@@ -34,11 +34,13 @@
 #ifdef ESP_PLATFORM
 #include "esp_heap_caps.h"
 #define fast_malloc(sz) heap_caps_malloc((sz), MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)
+#define cold_malloc(sz) heap_caps_malloc((sz), MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)
 #define aligned_alloc16(sz) \
     heap_caps_aligned_alloc(16, (((sz) + 15) & ~(size_t)15), \
                             MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)
 #else
 #define fast_malloc malloc
+#define cold_malloc malloc
 static inline void *aligned_alloc16(size_t sz) {
     void *p = NULL;
     if (posix_memalign(&p, 16, (sz + 15) & ~(size_t)15) != 0) return NULL;
@@ -49,6 +51,15 @@ static inline void *aligned_alloc16(size_t sz) {
 #define NEEDLE_KV_SLACK 160   /* rows beyond the window: one call's decode */
 #define NEEDLE_QUERY_ROOM 512 /* query tokens the prefix cache stays valid for */
 #define NEEDLE_DECODE_ROOM 200
+#ifndef NEEDLE_PREFIX_SINK_DEFAULT
+#define NEEDLE_PREFIX_SINK_DEFAULT 160
+#endif
+#ifndef NEEDLE_REASON_MAX_DEFAULT
+#define NEEDLE_REASON_MAX_DEFAULT 256
+#endif
+#ifndef NEEDLE_BYTE_GRAMMAR_DEFAULT
+#define NEEDLE_BYTE_GRAMMAR_DEFAULT 1
+#endif
 #ifndef NEEDLE_SINKHORN_ITERS
 #define NEEDLE_SINKHORN_ITERS 20
 #endif
@@ -165,7 +176,8 @@ typedef struct {
     int n_markers;
 
     /* run state */
-    uint32_t max_len, kv_alloc;   /* kv cache is a ring of kv_alloc positions */
+    uint32_t max_len, kv_alloc;   /* prefix sink followed by a recent-token ring */
+    uint32_t sink_len;
     int8_t  *k_cache, *v_cache;   /* (L, n_kv, max_len, head_dim) int8 */
     float   *k_scale, *v_scale;   /* (L, n_kv, max_len) */
     float   *ering;               /* engram v ring (n_sites, depth, C) */
@@ -180,13 +192,14 @@ typedef struct {
     uint8_t *px_ering_valid;
 
     /* scratch */
-    float *x, *nx, *u, *bx, *h, *q, *k, *v, *att_out, *xh, *xh2, *z, *logits,
+    float *x, *nx, *u, *h, *q, *k, *v, *att_out, *xh, *xh2, *z, *logits,
           *ek, *ev, *e;
     /* quantized companions of xh / xh2, filled by cq_prepare_x. Indexed by
      * which prep buffer a caller passed (see prep_slot()). */
     int16_t *xq[2];
     float   *xs[2];
     float *cosv, *sinv;           /* rope tables (max_len, head_dim/2) */
+    float *attn_scores;            /* overflow buffers when kv_alloc > d_model */
 } Needle;
 
 /* ------------------------------------------------------------ .cact parse */
@@ -915,15 +928,28 @@ void needle_reset(Needle *m, uint32_t max_len) {
     /* A row is overwritten kv_alloc positions later, so kv_alloc > kv_window
      * keeps every in-window row intact — and leaves the prefix rows valid for
      * the next call as long as the slack covers one call's decode. */
-    uint32_t want = m->kv_window ? m->kv_window + NEEDLE_KV_SLACK : max_len;
+    uint32_t want = m->kv_window
+                  ? (m->sink_len ? m->sink_len + m->kv_window
+                                 : m->kv_window + NEEDLE_KV_SLACK)
+                  : max_len;
     m->kv_alloc = want < max_len ? want : max_len;
     free(m->k_cache); free(m->v_cache); free(m->k_scale); free(m->v_scale);
+    free(m->attn_scores);
     free(m->ering); free(m->ering_valid); free(m->hist);
     m->k_cache = (int8_t *)calloc((size_t)L * KV * m->kv_alloc * hd, 1);
     m->v_cache = (int8_t *)calloc((size_t)L * KV * m->kv_alloc * hd, 1);
     m->k_scale = (float *)calloc((size_t)L * KV * m->kv_alloc, 4);
     m->v_scale = (float *)calloc((size_t)L * KV * m->kv_alloc, 4);
-    if (!m->k_cache || !m->v_cache || !m->k_scale || !m->v_scale) {
+    m->attn_scores = NULL;
+    if (m->kv_alloc > C) {
+        size_t bytes = (size_t)2 * m->kv_alloc * sizeof(float);
+        m->attn_scores = (float *)fast_malloc(bytes);
+#ifdef ESP_PLATFORM
+        if (!m->attn_scores) m->attn_scores = (float *)malloc(bytes);
+#endif
+    }
+    if (!m->k_cache || !m->v_cache || !m->k_scale || !m->v_scale
+        || (m->kv_alloc > C && !m->attn_scores)) {
         fprintf(stderr, "needle_reset: KV alloc failed (len %u)\n", (unsigned)m->kv_alloc);
         m->max_len = 0;
         return;
@@ -946,7 +972,6 @@ void needle_reset(Needle *m, uint32_t max_len) {
         m->x = (float *)fast_malloc((size_t)n * C * 4);
         m->nx = (float *)fast_malloc((size_t)n * C * 4);
         m->u = (float *)fast_malloc(C * 4);
-        m->bx = (float *)fast_malloc(C * 4);
         m->h = (float *)fast_malloc(C * 4);
         m->q = (float *)fast_malloc(A * 4);
         m->k = (float *)fast_malloc((size_t)KV * hd * 4);
@@ -963,8 +988,26 @@ void needle_reset(Needle *m, uint32_t max_len) {
         m->z = (float *)fast_malloc(m->hada_n * 4);
         m->logits = (float *)malloc(m->vocab * 4);         /* cold: PSRAM ok */
         m->ek = (float *)fast_malloc((size_t)m->n_sites * C * 4);
-        m->ev = (float *)fast_malloc((size_t)m->n_sites * C * 4);
-        m->e = (float *)fast_malloc(C * 4);
+        m->ev = (float *)cold_malloc((size_t)m->n_sites * C * 4);
+        m->e = (float *)cold_malloc(C * 4);
+    }
+    if ((m->n_sites && (!m->ering || !m->ering_valid
+                        || !m->px_ering || !m->px_ering_valid))
+        || !m->hist || !m->x || !m->nx || !m->u || !m->h || !m->q || !m->k
+        || !m->v || !m->att_out || !m->xh || !m->xh2 || !m->xq[0]
+        || !m->xq[1] || !m->xs[0] || !m->xs[1] || !m->z || !m->logits
+        || !m->ek || !m->ev || !m->e) {
+        fprintf(stderr, "needle_reset: runtime scratch allocation failed"
+                " x=%p nx=%p u=%p h=%p q=%p k=%p v=%p ao=%p xh=%p xh2=%p"
+                " xq=%p/%p xs=%p/%p z=%p logits=%p ek=%p ev=%p e=%p\n",
+                (void *)m->x, (void *)m->nx, (void *)m->u, (void *)m->h,
+                (void *)m->q, (void *)m->k, (void *)m->v, (void *)m->att_out,
+                (void *)m->xh, (void *)m->xh2, (void *)m->xq[0],
+                (void *)m->xq[1], (void *)m->xs[0], (void *)m->xs[1],
+                (void *)m->z, (void *)m->logits, (void *)m->ek,
+                (void *)m->ev, (void *)m->e);
+        m->max_len = 0;
+        return;
     }
     free(m->cosv); free(m->sinv);
     uint32_t half = hd / 2;
@@ -1131,15 +1174,23 @@ static void tr(const char *tag, int layer, const float *x, int n) {
 }
 
 typedef struct {
-    const Needle *m; uint32_t layer, lo, pos, kv_start, kv_end;
+    const Needle *m;
+    uint32_t layer, prefix_n, recent_lo, pos, kv_start, kv_end;
+    float *scores;
 } AttnJob;
+
+static inline uint32_t kv_slot(const Needle *m, uint32_t pos) {
+    if (!m->sink_len) return pos % m->kv_alloc;
+    if (pos < m->sink_len) return pos;
+    return m->sink_len + (pos - m->sink_len) % m->kv_window;
+}
 
 static void attn_job_fn(void *p) {
     AttnJob *j = (AttnJob *)p;
     const Needle *m = j->m;
     uint32_t hd = m->head_dim, KV = m->n_kv, H = m->n_heads, reps = H / KV;
-    uint32_t i = j->layer, lo = j->lo, pos = j->pos;
-    float aw[512];
+    uint32_t i = j->layer, pos = j->pos;
+    float *aw = j->scores;
     float inv_sq = 1.0f / sqrtf((float)hd);
     uint32_t ka = m->kv_alloc;
     for (uint32_t kk = j->kv_start; kk < j->kv_end; kk++) {
@@ -1147,9 +1198,12 @@ static void attn_job_fn(void *p) {
         size_t sbase = ((size_t)i * KV + kk) * ka;
         for (uint32_t r = 0; r < reps; r++) {
             const float *qh = m->q + (kk * reps + r) * hd;
-            uint32_t T = pos + 1 - lo;
+            uint32_t recent_n = pos >= j->recent_lo ? pos + 1 - j->recent_lo : 0;
+            uint32_t T = j->prefix_n + recent_n;
             for (uint32_t tt = 0; tt < T; tt++) {
-                uint32_t sl = (lo + tt) % ka;
+                uint32_t logical = tt < j->prefix_n ? tt
+                                                    : j->recent_lo + tt - j->prefix_n;
+                uint32_t sl = kv_slot(m, logical);
                 const int8_t *kp = m->k_cache + kbase + (size_t)sl * hd;
                 float s0 = 0, s1 = 0, s2 = 0, s3 = 0;
                 for (uint32_t d = 0; d < hd; d += 4) {
@@ -1162,7 +1216,9 @@ static void attn_job_fn(void *p) {
             float *outp = m->att_out + (kk * reps + r) * hd;
             memset(outp, 0, hd * 4);
             for (uint32_t tt = 0; tt < T; tt++) {
-                uint32_t sl = (lo + tt) % ka;
+                uint32_t logical = tt < j->prefix_n ? tt
+                                                    : j->recent_lo + tt - j->prefix_n;
+                uint32_t sl = kv_slot(m, logical);
                 const int8_t *vp = m->v_cache + kbase + (size_t)sl * hd;
                 float w = aw[tt] * m->v_scale[sbase + sl];
                 for (uint32_t d = 0; d < hd; d++) outp[d] += w * vp[d];
@@ -1284,7 +1340,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         }
 
         /* int8 KV store: per-vector absmax scale */
-        uint32_t slot = pos % m->kv_alloc;
+        uint32_t slot = kv_slot(m, pos);
         for (uint32_t kk = 0; kk < KV; kk++) {
             size_t base = (((size_t)i * KV + kk) * m->kv_alloc + slot) * hd;
             size_t sbase = ((size_t)i * KV + kk) * m->kv_alloc + slot;
@@ -1307,11 +1363,21 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         }
         PROF_SPLIT(PROF_QKV_POST);
 
-        uint32_t lo = 0;
-        if (m->kv_window && pos + 1 > m->kv_window) lo = pos + 1 - m->kv_window;
+        uint32_t prefix_n = m->sink_len < pos + 1 ? m->sink_len : pos + 1;
+        uint32_t recent_lo = prefix_n;
+        if (m->kv_window && pos + 1 > m->kv_window) {
+            uint32_t window_lo = pos + 1 - m->kv_window;
+            if (window_lo > recent_lo) recent_lo = window_lo;
+        }
         uint32_t reps = H / KV;
-        AttnJob aj0 = { m, i, lo, pos, 0, KV / 2 };
-        AttnJob aj1 = { m, i, lo, pos, KV / 2, KV };
+        /* nx and h are dead until the next layer. Reuse them for the common
+         * <= d_model case instead of spending scarce ESP32 internal SRAM on
+         * dedicated attention buffers. */
+        float *score0 = m->attn_scores ? m->attn_scores : m->nx;
+        float *score1 = m->attn_scores ? m->attn_scores + m->kv_alloc : m->h;
+        AttnJob aj0 = { m, i, prefix_n, recent_lo, pos, 0, KV / 2, score0 };
+        AttnJob aj1 = { m, i, prefix_n, recent_lo, pos, KV / 2, KV,
+                        score1 };
         if (par_submit(attn_job_fn, &aj1)) {
             attn_job_fn(&aj0);
             par_wait();
@@ -1531,11 +1597,11 @@ int needle_decode_piece(const Needle *m, int id, char *buf, int buflen) {
 }
 
 /* ----------------------------------------------- constrained tool calling
- * Grammar-guided greedy decode for the fixed needle output shape:
+ * Byte-level grammar-guided greedy decode for the fixed Needle output shape:
  *   [{"name":"<tool>","arguments":{"<param>":<value>,...}}]
- * Structure text is teacher-forced; tool/param names are decoded with a
- * prefix-trie constraint over the schema; integer values are digit-masked.
- * This mirrors what the closed engine's grammar compiler does.            */
+ * Every candidate token is accepted only when all of its decoded bytes keep
+ * the schema valid. This preserves the model's natural tokenization across
+ * structural boundaries instead of teacher-forcing fragments separately. */
 
 #ifdef ESP_PLATFORM
 #include "esp_timer.h"
@@ -1550,6 +1616,7 @@ static int64_t needle_now_us(void) {
 
 typedef struct {
     int prefill_tok, decode_tok;
+    int reason_tok, reason_opened;
     int prefix_reused;
     int64_t prefill_us, decode_us;
 } NeedleStats;
@@ -1792,23 +1859,300 @@ static int piece_all_digits(const Needle *m, uint32_t t) {
     return m->piece_len[t] > 0;
 }
 
+/* The reference engine applies one byte-level grammar to the entire JSON
+ * value. Keep this path separate from the historical segmented decoder so the
+ * two can be ablated on identical logits. A token may cross several grammar
+ * states (for example `},{"name":"`), which is exactly what segmented
+ * teacher-forcing cannot preserve. */
+typedef enum {
+    BG_ARRAY_OPEN,
+    BG_CALL_OPEN,
+    BG_NAME_LITERAL,
+    BG_TOOL_NAME,
+    BG_ARGS_LITERAL,
+    BG_PARAM_START,
+    BG_PARAM_QUOTE,
+    BG_PARAM_NAME,
+    BG_PARAM_COLON,
+    BG_STRING_OPEN,
+    BG_STRING_VALUE,
+    BG_NUMBER_VALUE,
+    BG_AFTER_VALUE,
+    BG_CALL_CLOSE,
+    BG_AFTER_CALL,
+    BG_DONE,
+} ByteGrammarState;
+
+typedef struct {
+    ByteGrammarState state;
+    NTool *tools;
+    int n_tools, max_calls, calls;
+    uint32_t emitted_tools;
+    int tool, param;
+    uint32_t used_params;
+    int literal_off;
+    int escape;
+    char choice[80];
+    int choice_len;
+    char number[64];
+    int number_len;
+} ByteGrammar;
+
+static int bg_required_done(const ByteGrammar *g) {
+    const NTool *tool = &g->tools[g->tool];
+    for (int i = 0; i < tool->n_params; i++)
+        if (tool->params[i].required && !(g->used_params & (1u << i))) return 0;
+    return 1;
+}
+
+static int bg_choice_prefix(const ByteGrammar *g, int tools) {
+    if (tools) {
+        for (int i = 0; i < g->n_tools; i++) {
+            if (g->emitted_tools & (1u << i)) continue;
+            if (strncmp(g->tools[i].name, g->choice, (size_t)g->choice_len) == 0)
+                return 1;
+        }
+    } else {
+        const NTool *tool = &g->tools[g->tool];
+        for (int i = 0; i < tool->n_params; i++) {
+            if (g->used_params & (1u << i)) continue;
+            if (strncmp(tool->params[i].name, g->choice, (size_t)g->choice_len) == 0)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+static int bg_finish_choice(ByteGrammar *g, int tools) {
+    g->choice[g->choice_len] = 0;
+    if (tools) {
+        for (int i = 0; i < g->n_tools; i++) {
+            if (!(g->emitted_tools & (1u << i))
+                && strcmp(g->tools[i].name, g->choice) == 0) {
+                g->tool = i;
+                g->param = -1;
+                g->used_params = 0;
+                return 1;
+            }
+        }
+    } else {
+        NTool *tool = &g->tools[g->tool];
+        for (int i = 0; i < tool->n_params; i++) {
+            if (!(g->used_params & (1u << i))
+                && strcmp(tool->params[i].name, g->choice) == 0) {
+                g->param = i;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+static int bg_number_done(ByteGrammar *g) {
+    if (g->number_len <= 0 || g->number_len >= (int)sizeof g->number) return 0;
+    g->number[g->number_len] = 0;
+    char *end = NULL;
+    (void)strtod(g->number, &end);
+    return end && *end == 0;
+}
+
+static int bg_consume_byte(ByteGrammar *g, unsigned char byte) {
+    static const char name_literal[] = "\"name\":\"";
+    static const char args_literal[] = ",\"arguments\":{";
+    int again = 1;
+    while (again) {
+        again = 0;
+        switch (g->state) {
+        case BG_ARRAY_OPEN:
+            if (byte != '[') return 0;
+            g->state = BG_CALL_OPEN;
+            break;
+        case BG_CALL_OPEN:
+            if (byte != '{') return 0;
+            g->state = BG_NAME_LITERAL;
+            g->literal_off = 0;
+            break;
+        case BG_NAME_LITERAL:
+            if (byte != (unsigned char)name_literal[g->literal_off]) return 0;
+            if (++g->literal_off == (int)sizeof name_literal - 1) {
+                g->state = BG_TOOL_NAME;
+                g->choice_len = 0;
+            }
+            break;
+        case BG_TOOL_NAME:
+            if (byte == '"') {
+                if (!bg_finish_choice(g, 1)) return 0;
+                g->state = BG_ARGS_LITERAL;
+                g->literal_off = 0;
+            } else {
+                if (g->choice_len >= (int)sizeof g->choice - 1) return 0;
+                g->choice[g->choice_len++] = (char)byte;
+                if (!bg_choice_prefix(g, 1)) return 0;
+            }
+            break;
+        case BG_ARGS_LITERAL:
+            if (byte != (unsigned char)args_literal[g->literal_off]) return 0;
+            if (++g->literal_off == (int)sizeof args_literal - 1)
+                g->state = BG_PARAM_START;
+            break;
+        case BG_PARAM_START:
+            if (byte == '}' && bg_required_done(g)) {
+                g->state = BG_CALL_CLOSE;
+            } else if (byte == '"') {
+                g->state = BG_PARAM_NAME;
+                g->choice_len = 0;
+            } else return 0;
+            break;
+        case BG_PARAM_QUOTE:
+            if (byte != '"') return 0;
+            g->state = BG_PARAM_NAME;
+            g->choice_len = 0;
+            break;
+        case BG_PARAM_NAME:
+            if (byte == '"') {
+                if (!bg_finish_choice(g, 0)) return 0;
+                g->state = BG_PARAM_COLON;
+            } else {
+                if (g->choice_len >= (int)sizeof g->choice - 1) return 0;
+                g->choice[g->choice_len++] = (char)byte;
+                if (!bg_choice_prefix(g, 0)) return 0;
+            }
+            break;
+        case BG_PARAM_COLON:
+            if (byte != ':') return 0;
+            if (g->tools[g->tool].params[g->param].is_num) {
+                g->state = BG_NUMBER_VALUE;
+                g->number_len = 0;
+            } else g->state = BG_STRING_OPEN;
+            break;
+        case BG_STRING_OPEN:
+            if (byte != '"') return 0;
+            g->state = BG_STRING_VALUE;
+            g->escape = 0;
+            break;
+        case BG_STRING_VALUE:
+            if (g->escape) {
+                if (!(byte == '"' || byte == '\\' || byte == '/' || byte == 'b'
+                      || byte == 'f' || byte == 'n' || byte == 'r' || byte == 't'
+                      || byte == 'u'))
+                    return 0;
+                g->escape = 0;
+            } else if (byte == '\\') {
+                g->escape = 1;
+            } else if (byte == '"') {
+                g->used_params |= 1u << g->param;
+                g->state = BG_AFTER_VALUE;
+            } else if (byte < 0x20) return 0;
+            break;
+        case BG_NUMBER_VALUE:
+            if ((byte >= '0' && byte <= '9') || byte == '-' || byte == '+'
+                || byte == '.' || byte == 'e' || byte == 'E') {
+                if (g->number_len >= (int)sizeof g->number - 1) return 0;
+                g->number[g->number_len++] = (char)byte;
+            } else {
+                if (!bg_number_done(g)) return 0;
+                g->used_params |= 1u << g->param;
+                g->state = BG_AFTER_VALUE;
+                again = 1;
+            }
+            break;
+        case BG_AFTER_VALUE:
+            if (byte == ',') {
+                if (g->used_params == (uint32_t)((1u << g->tools[g->tool].n_params) - 1u))
+                    return 0;
+                g->state = BG_PARAM_QUOTE;
+            } else if (byte == '}' && bg_required_done(g)) {
+                g->state = BG_CALL_CLOSE;
+            } else return 0;
+            break;
+        case BG_CALL_CLOSE:
+            if (byte != '}') return 0;
+            g->emitted_tools |= 1u << g->tool;
+            g->calls++;
+            g->state = BG_AFTER_CALL;
+            break;
+        case BG_AFTER_CALL:
+            if (byte == ']') {
+                g->state = BG_DONE;
+            } else if (byte == ',' && g->calls < g->max_calls
+                       && g->emitted_tools != (uint32_t)((1u << g->n_tools) - 1u)) {
+                g->state = BG_CALL_OPEN;
+            } else return 0;
+            break;
+        case BG_DONE:
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int bg_consume_piece(ByteGrammar *g, const char *piece, int length) {
+    for (int i = 0; i < length; i++)
+        if (!bg_consume_byte(g, (unsigned char)piece[i])) return 0;
+    return 1;
+}
+
+static int dc_byte_grammar(Needle *m, DecCtx *dc, NTool *tools, int n_tools,
+                           int max_calls, char *out, size_t outsz) {
+    ByteGrammar grammar;
+    memset(&grammar, 0, sizeof grammar);
+    grammar.state = BG_ARRAY_OPEN;
+    grammar.tools = tools;
+    grammar.n_tools = n_tools;
+    grammar.max_calls = max_calls;
+    grammar.tool = grammar.param = -1;
+    size_t olen = 0;
+    for (int step = 0; step < NEEDLE_DECODE_ROOM; step++) {
+        int best = -1, best_len = 0;
+        float best_logit = -1e30f;
+        ByteGrammar best_grammar;
+        char best_piece[64];
+        for (uint32_t token = 0; token < m->n_pieces; token++) {
+            if (m->types[token] != 0 && m->types[token] != 4) continue;
+            char piece[64];
+            int length = needle_decode_piece(m, (int)token, piece, sizeof piece);
+            if (length <= 0 || olen + (size_t)length >= outsz) continue;
+            ByteGrammar candidate = grammar;
+            if (!bg_consume_piece(&candidate, piece, length)) continue;
+            if (m->logits[token] > best_logit) {
+                best = (int)token;
+                best_len = length;
+                best_logit = m->logits[token];
+                best_grammar = candidate;
+                memcpy(best_piece, piece, (size_t)length + 1);
+            }
+        }
+        if (best < 0) return -1;
+        memcpy(out + olen, best_piece, (size_t)best_len);
+        olen += (size_t)best_len;
+        grammar = best_grammar;
+        if (grammar.state == BG_DONE) {
+            out[olen] = 0;
+            return (int)olen;
+        }
+        dc_feed(m, dc, best);
+    }
+    return -1;
+}
+
 /* ------------------------------------------------------- tool retrieval ---
  * Needle attends over a 256-token sliding window. A tools block larger than
  * that pushes most of the tools out of view and selection collapses — measured
  * on google/mobile-actions: 22% tool-name accuracy with a 417-token block of 7
  * tools, 77% with a 191-token block of 3.
  *
- * The reference engine handles this with hybrid retrieval (text embeddings and
- * BM25 fused by reciprocal rank, `tool_rag_top_k` defaulting to 2). BM25 alone
- * reaches 97% recall@3 on that set and needs no forward pass, so that is what
- * this does. Pruning only kicks in when the block would not fit the budget, so
- * small tool sets are passed through untouched and keep the prefix cache warm. */
+ * The official Needle package documents a learned top-5 retrieval head when
+ * more than five tools are declared. This engine uses BM25 because it needs no
+ * additional forward pass; it reaches 97% recall@3 on this set. Pruning only
+ * kicks in when the block would not fit the budget, so small tool sets pass
+ * through untouched and keep the prefix cache warm. */
 
 #define NEEDLE_TOOLS_BUDGET 180   /* tokens; leaves room for the query */
 #define NEEDLE_RAG_MIN_K    2
 #define NEEDLE_MAX_CALLS    4   /* mimiclaw's llm_response_t caps a turn at 4 */
 
-/* Logit margin the comma must clear before another call is opened.
+/* Legacy segmented decoder: logit margin the comma must clear before another
+ * call is opened. The default continuous byte grammar does not use this.
  *
  * The model is decisive when another call is genuinely wanted (`,{"` beats `]`
  * by ~2.7 nats) and nearly tied when it is not (~0.05 nats), so a threshold
@@ -1939,7 +2283,11 @@ static int prune_tools(Needle *m, const char *query, const char *tools_json,
 
     static int probe[4096];
     int full = needle_encode(m, tools_json, probe, 4096);
-    if (full <= budget) return 0;               /* already fits; keep cache warm */
+    if (full <= budget) {
+        if (getenv("NEEDLE_DEBUG_RETRIEVAL"))
+            fprintf(stderr, "[retrieval] full=%d budget=%d keep=all\n", full, budget);
+        return 0;                               /* already fits; keep cache warm */
+    }
 
     const char *starts[NT_MAX_TOOLS];
     int lens[NT_MAX_TOOLS];
@@ -1977,6 +2325,11 @@ static int prune_tools(Needle *m, const char *query, const char *tools_json,
         out[o++] = ']';
         out[o] = 0;
     }
+    if (getenv("NEEDLE_DEBUG_RETRIEVAL")) {
+        fprintf(stderr, "[retrieval] full=%d budget=%d keep=%d", full, budget, keep);
+        for (int i = 0; i < keep; i++) fprintf(stderr, " | %s", docs[order[i]]);
+        fprintf(stderr, "\n");
+    }
     (void)outsz;
     return 1;
 }
@@ -1997,6 +2350,18 @@ static size_t json_append(char *out, size_t o, const char *s, size_t n) {
     return o;
 }
 
+static int text_join(char *out, size_t outsz, const char *const *parts, int n_parts) {
+    size_t used = 0;
+    for (int i = 0; i < n_parts; i++) {
+        size_t length = strlen(parts[i]);
+        if (length >= outsz - used) return 0;
+        memcpy(out + used, parts[i], length);
+        used += length;
+    }
+    out[used] = 0;
+    return 1;
+}
+
 /* Run one constrained tool call. Returns length of JSON written to out. */
 int needle_toolcall_sys(Needle *m, const char *system, const char *query,
                         const char *tools_json, char *out, size_t outsz) {
@@ -2010,19 +2375,33 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
     /* Split at the </tools> marker: markers are atomic tokens, so the prefix
      * tokenization is always a true prefix of the whole prompt's. */
     static char prefix[8192], rest[8192];
-    if (system && system[0])
-        snprintf(prefix, sizeof prefix,
-                 "<|im_start|>system\n%s<|im_end|>\n<|im_start|>user\n<tools>%s</tools>",
-                 system, tools_json);
-    else
-        snprintf(prefix, sizeof prefix, "<|im_start|>user\n<tools>%s</tools>", tools_json);
-    snprintf(rest, sizeof rest, "\n%s<|im_end|>\n<|im_start|>assistant\n", query);
+    const char *prefix_parts_with_system[] = {
+        "<|im_start|>system\n", system, "<|im_end|>\n<|im_start|>user\n<tools>",
+        tools_json, "</tools>"
+    };
+    const char *prefix_parts[] = {
+        "<|im_start|>user\n<tools>", tools_json, "</tools>"
+    };
+    const char *rest_parts[] = {
+        "\n", query, "<|im_end|>\n<|im_start|>assistant\n"
+    };
+    int prefix_ok = system && system[0]
+                  ? text_join(prefix, sizeof prefix, prefix_parts_with_system, 5)
+                  : text_join(prefix, sizeof prefix, prefix_parts, 3);
+    if (!prefix_ok || !text_join(rest, sizeof rest, rest_parts, 3)) return -1;
 
     static int pids[4096], rids[1024];
     pids[0] = (int)m->bos_id;
     int n_pids = 1 + needle_encode(m, prefix, pids + 1, 4095);
     int n_rids = encode_raw(m, rest, rids, 1024);
     int n_ids = n_pids + n_rids;
+    if (getenv("NEEDLE_DEBUG_IDS")) {
+        fprintf(stderr, "[debug] prefix ids:");
+        for (int i = 0; i < n_pids; i++) fprintf(stderr, " %d", pids[i]);
+        fprintf(stderr, "\n[debug] turn ids:");
+        for (int i = 0; i < n_rids; i++) fprintf(stderr, " %d", rids[i]);
+        fprintf(stderr, "\n");
+    }
 
     uint32_t th = 2166136261u;
     for (const char *c = tools_json; *c; c++) th = (th ^ (uint8_t)*c) * 16777619u;
@@ -2048,6 +2427,23 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
          * query: the KV ring is separately capped at kv_window + slack, so a
          * larger max_len costs only the rope tables (256 B/position) and keeps
          * the prefix cache alive when a later query is longer than the first. */
+        const char *sink_mode = getenv("NEEDLE_PREFIX_SINK");
+        m->sink_len = (uint32_t)n_pids;
+        if (sink_mode && strcmp(sink_mode, "system") == 0) {
+            if (system && system[0]) {
+                static char system_prefix[4096];
+                static int system_ids[1024];
+                snprintf(system_prefix, sizeof system_prefix,
+                         "<|im_start|>system\n%s<|im_end|>\n", system);
+                system_ids[0] = (int)m->bos_id;
+                m->sink_len = 1u + (uint32_t)needle_encode(
+                    m, system_prefix, system_ids + 1, 1023);
+            } else m->sink_len = 0;
+        } else if (!sink_mode || strcmp(sink_mode, "1") != 0) {
+            int cap = sink_mode ? atoi(sink_mode) : NEEDLE_PREFIX_SINK_DEFAULT;
+            if (cap <= 0) m->sink_len = 0;
+            else if (m->sink_len > (uint32_t)cap) m->sink_len = (uint32_t)cap;
+        }
         needle_reset(m, (uint32_t)(n_pids + NEEDLE_QUERY_ROOM + NEEDLE_DECODE_ROOM));
         if (m->max_len == 0) return -1;
         ering_bytes = (size_t)m->n_sites * m->ering_depth * m->d_model * 4;
@@ -2075,21 +2471,76 @@ int needle_toolcall_sys(Needle *m, const char *system, const char *query,
     (void)outsz;
     /* free-run the reasoning section until the model opens <tool_call>
      * (capped); the think text is not part of the returned JSON */
-    for (int s = 0; s < 90; s++) {
+    int debug_reason = getenv("NEEDLE_DEBUG_REASON") != NULL;
+    int reason_max = NEEDLE_REASON_MAX_DEFAULT;
+    const char *reason_env = getenv("NEEDLE_REASON_MAX");
+    if (reason_env) reason_max = atoi(reason_env);
+    if (reason_max < 1) reason_max = 1;
+    if (reason_max > 512) reason_max = 512;
+    g_needle_stats.reason_tok = 0;
+    g_needle_stats.reason_opened = 0;
+    if (getenv("NEEDLE_DEBUG_TOP5")) {
+        int top[5];
+        for (int rank = 0; rank < 5; rank++) {
+            int best = -1;
+            for (uint32_t token = 0; token < m->n_pieces; token++) {
+                int duplicate = 0;
+                for (int prior = 0; prior < rank; prior++)
+                    if (top[prior] == (int)token) duplicate = 1;
+                if (!duplicate && (best < 0 || dc.logits[token] > dc.logits[best]))
+                    best = (int)token;
+            }
+            top[rank] = best;
+        }
+        fprintf(stderr, "[debug] top5:");
+        for (int rank = 0; rank < 5; rank++)
+            fprintf(stderr, " %d:%.4f", top[rank], dc.logits[top[rank]]);
+        fprintf(stderr, "\n");
+    }
+    if (debug_reason) fprintf(stderr, "[reason] ");
+    for (int s = 0; s < reason_max; s++) {
         int best = 0;
         for (uint32_t t = 1; t < m->n_pieces; t++)
             if (dc.logits[t] > dc.logits[best]) best = (int)t;
         if (m->types[best] == 3 && strcmp(m->pieces[best], "<tool_call>") == 0) {
             dc_feed(m, &dc, best);
+            g_needle_stats.reason_opened = 1;
             break;
         }
         if (best == (int)m->eos_id ||
             (m->types[best] == 3 && strcmp(m->pieces[best], "<|im_end|>") == 0)) {
             /* model refuses to call a tool */
             memcpy(out, "[]", 3);
+            if (debug_reason) fprintf(stderr, "\n");
             return 2;
         }
+        if (debug_reason) {
+            char piece[64];
+            needle_decode_piece(m, best, piece, sizeof piece);
+            fputs(piece, stderr);
+        }
         dc_feed(m, &dc, best);
+        g_needle_stats.reason_tok++;
+    }
+    if (debug_reason) fprintf(stderr, "\n");
+    const char *grammar_env = getenv("NEEDLE_BYTE_GRAMMAR");
+    int byte_grammar = grammar_env ? atoi(grammar_env) != 0
+                                   : NEEDLE_BYTE_GRAMMAR_DEFAULT;
+    if (byte_grammar) {
+        if (!g_needle_stats.reason_opened) {
+            memcpy(out, "[]", 3);
+            g_needle_stats.decode_tok = (int)(dc.pos - (uint32_t)n_ids);
+            g_needle_stats.decode_us = needle_now_us() - t_dec;
+            PROF_ADD_WALL(1, g_needle_stats.decode_us);
+            return 2;
+        }
+        int max_calls = NEEDLE_MAX_CALLS;
+        if (getenv("NEEDLE_MAX_CALLS")) max_calls = atoi(getenv("NEEDLE_MAX_CALLS"));
+        int length = dc_byte_grammar(m, &dc, tools, n_tools, max_calls, out, outsz);
+        g_needle_stats.decode_tok = (int)(dc.pos - (uint32_t)n_ids);
+        g_needle_stats.decode_us = needle_now_us() - t_dec;
+        PROF_ADD_WALL(1, g_needle_stats.decode_us);
+        return length;
     }
     /* The dataset's answers are often two calls (33% of google/mobile-actions),
      * so emit an array and let the model decide after each closing brace whether
@@ -2406,10 +2857,12 @@ int main(int argc, char **argv) {
             double t0 = now_ms();
             int cl = needle_toolcall_sys(&m, sys_part, q_part, row_tools, callbuf, sizeof callbuf);
             double dt = now_ms() - t0;
-            printf("%s\t%.0f\t%d\t%d\t%lld\t%lld\n", cl >= 0 ? callbuf : "[]", dt,
+            printf("%s\t%.0f\t%d\t%d\t%lld\t%lld\t%d\t%d\n",
+                   cl >= 0 ? callbuf : "[]", dt,
                    g_needle_stats.prefill_tok, g_needle_stats.decode_tok,
                    (long long)g_needle_stats.prefill_us,
-                   (long long)g_needle_stats.decode_us);
+                   (long long)g_needle_stats.decode_us,
+                   g_needle_stats.reason_tok, g_needle_stats.reason_opened);
             fflush(stdout);
             n++;
         }

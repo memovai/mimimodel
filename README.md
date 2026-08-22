@@ -27,13 +27,13 @@ $ turn on pin 5
 | **Model** | Needle 2 — 45M params, CQ 2-bit, 13.7 MB single file |
 | **Hardware** | ESP32-S3, 240 MHz Xtensa LX7, 16 MB flash, 8 MB PSRAM (~$5) |
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
-| **Speed** | fixed one-tool call: **16.875 s warm** · **36.365 s cold** · 1.93 tok/s prefill |
+| **ESP32 speed** | fixed one-tool: **1.94 tok/s prefill · 1.60 tok/s decode** · 16.170 s warm · 35.480 s cold |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
-| **Accuracy** | 49.3% on google/mobile-actions (961 cases, strict) — official engine 2.0.2 scores 69.2% on identical inputs |
+| **Accuracy** | **69.6%** on google/mobile-actions (961 cases, strict) — official engine 2.0.2: 69.2% on identical inputs |
 
 > **Honesty first:** this is several times slower than a cloud API, it does not understand
-> Chinese, it will happily call a tool when you say hello, and it scores well below the
-> official engine on the same eval. See [Benchmark](#benchmark) and [Limitations](#limitations).
+> Chinese, and it will happily call a tool when you say hello. Its strict score now matches the
+> official engine, but its name and error distributions still differ. See [Benchmark](#benchmark) and [Limitations](#limitations).
 > What it buys you is a language model that works with the network cable pulled out.
 
 ---
@@ -68,13 +68,18 @@ Replace `/dev/ttyUSB0` with the board's port; macOS ports usually begin with `/d
 ```bash
 cd needle-esp32s3
 idf.py set-target esp32s3
-idf.py build
+idf.py -DNEEDLE_FAST_MATH=ON build
 idf.py -p /dev/ttyUSB0 flash
 ./scripts/flash_weights.sh /dev/ttyUSB0        # 13.7 MB into `needle` @ 0x210000
 cd ..
 ```
 
 Do not leave `idf.py monitor` running: the CLI needs the serial port.
+Fast math is the default for maximum device speed. Use `-DNEEDLE_FAST_MATH=OFF` only when
+reproducing the IEEE-style parity baseline.
+The accuracy-aligned defaults keep 160 prefix tokens, allow 256 reasoning tokens, and use the
+continuous byte grammar. ESP-IDF exposes them as `NEEDLE_PREFIX_SINK_TOKENS`,
+`NEEDLE_REASON_MAX_TOKENS`, and `NEEDLE_BYTE_GRAMMAR`.
 
 ### 3. Add tools
 
@@ -111,8 +116,8 @@ input. The command returns tool-call JSON but does not execute the selected tool
 
 The multi-tool output selects both tools and extracts the timestamp, email address, event title,
 and subject. Latency depends on the selected schema, query length, and generated calls. For a
-reproducible reference, the standard build (`fast_math=0`) with one fixed tool took **36.365 s**
-cold and **16.875 s** after a prefix-cache hit on the board above (2026-08-22). Both runs returned
+reproducible reference, the default fastest build (`fast_math=1`) with one fixed tool took **35.480 s**
+cold and **16.170 s** after a prefix-cache hit on the board above (2026-08-22). Both runs returned
 the same JSON shown in the simple example. See [Benchmark](#benchmark) for the exact conditions.
 
 > ⚠️ Flash the app **before or together with** the weights. Any firmware whose partition table
@@ -172,10 +177,10 @@ flowchart TB
 
 ### 3. Bounded memory
 
-Needle uses a 256-token sliding attention window. The KV cache is int8 (the width the model was
-post-trained for, per its own header) and lives in a **ring buffer** sized to the window plus a
-small slack, so RAM is constant no matter how long the prompt is. A row is only overwritten
-`kv_alloc` positions later, so any `kv_alloc > kv_window` keeps every in-window row intact.
+Needle uses a 256-token recent attention window. MimiModel protects the first 160 prompt tokens
+as an attention sink and keeps the latest 256 beside them. The int8 KV cache therefore stays at
+416 physical rows, the same allocation as the old ring, while retaining system instructions and
+the start of the tool block throughout decode.
 
 ```mermaid
 flowchart LR
@@ -200,38 +205,27 @@ flowchart LR
 
 ### 4. Grammar-constrained decoding
 
-A 45M model left to free-run produces almost-JSON. The engine instead drives the decode against
-the tool schema, mirroring what the closed engine's grammar compiler does:
-
-- structural text (`[{"name":"`, `","arguments":{`) is **forced**. The decoder masks logits to
-  tokens that are a prefix of the required string, avoiding direct token-ID splicing and keeping
-  the model's context canonical;
-- the **tool name** is chosen by scoring each candidate's full mean token log-probability
-  (teacher-forced with a cheap counter rewind), after a free first-token pre-rank keeps only the
-  top 3 candidates;
-- **integer arguments** are digit-masked; **required parameters** are forced to appear.
+A 45M model left to free-run produces almost-JSON. MimiModel validates every byte of each
+candidate token against one continuous grammar compiled from the active tool schemas. Tokens may
+cross JSON structural boundaries naturally, tool and parameter names stay within the schema,
+required parameters must appear, and integer values remain numeric. No structural fragment is
+teacher-forced in a separate model step.
 
 ```mermaid
 stateDiagram-v2
     [*] --> Think
     Think --> Think : free reasoning tokens
     Think --> Declined : model emits im_end
-    Think --> Name : model emits tool_call
-    Name --> Args : top-3 candidates scored by mean token logprob
-    Args --> Int : integer param — logits masked to digits
-    Args --> Str : string param — free until the closing quote
-    Int --> Branch
-    Str --> Branch
-    Branch --> Args : a required param is still unfilled
-    Branch --> Done : all required params filled
+    Think --> Call : model emits tool_call
+    Call --> Call : next token keeps the byte grammar valid
+    Call --> Done : grammar reaches the array close
     Done --> [*] : always schema-valid JSON
     Declined --> [*] : empty array
 ```
 
 
-The payoff is that the output is always schema-valid — a 45M model left to free-run is not.
-It does not close the gap to the official engine, which runs the same weights through its own
-grammar compiler; see [Benchmark](#benchmark).
+The payoff is schema-valid output without changing the model's natural token history. This was
+the largest accuracy fix in the official-engine attribution; see [Benchmark](#benchmark).
 
 ### 5. KV prefix cache — the single biggest win
 
@@ -270,7 +264,7 @@ Raw engine throughput, measured on hardware:
 | Hot scratch moved to internal SRAM | +5% |
 | PSRAM weight cache (opportunistic) | +8% |
 | TIE728 aligned float loads + 2-row/8-accumulator CQ2 kernel | 512×512 matvec: 5.272 → 3.781 ms single-core; 2.700 → 1.960 ms dual-core |
-| **Current fixed one-tool run** | **1.93 tok/s prefill, 1.62 decode; 36.365 s cold, 16.875 s warm** |
+| **Default fastest one-tool run** | **1.94 tok/s prefill, 1.60 decode; 35.480 s cold, 16.170 s warm** |
 | KV prefix cache (costs ~20% raw speed for a bigger ring) | **end-to-end 8.2×** |
 
 ### What did not work
@@ -289,8 +283,8 @@ Raw engine throughput, measured on hardware:
 
 ## Limitations
 
-- **Latency is schema-dependent.** The controlled one-tool workload takes 16.875 s warm and
-  36.365 s cold; larger schemas and multi-call outputs can take minutes. A cloud API remains much
+- **Latency is schema-dependent.** The controlled one-tool workload takes 16.170 s warm and
+  35.480 s cold; larger schemas and multi-call outputs can take minutes. A cloud API remains much
   faster. The value here comes from offline operation, zero API cost, and keeping data on-device.
 - **Chinese is unsupported by the model.** Chinese device commands score 0/5, with identical
   failures in the official engine. This places the limitation in the model itself. Confidence
@@ -339,31 +333,30 @@ caught both of the bugs described under [Correctness](#correctness).
 Scored on [google/mobile-actions](https://huggingface.co/datasets/google/mobile-actions)
 (CC-BY-4.0) — the 961-case on-device function-calling eval published alongside
 FunctionGemma — scored here with ordered strict exact match: function names, call
-order and every argument must match. These are fresh runs using each record's own
-tool order, native retrieval, separate developer/user turns, and preserved whitespace.
+order and every argument must match. The current engine was rerun on 2026-08-22;
+the official column reuses its directly comparable artifact because the engine and
+dataset hashes are unchanged. Both use each record's own tool order, native retrieval,
+separate developer/user turns, and preserved whitespace.
 
 | | this engine | official engine, same records/schemas |
 |---|---|---|
-| accuracy | 49.3% | 69.2% |
-| tool-name accuracy | 79.1% | 98.1% |
-| 1-call cases (640) | 60.3% | 73.6% |
-| 2-call cases (320) | 27.5% | 60.3% |
+| accuracy | **69.6%** | 69.2% |
+| tool-name accuracy | 90.8% | **98.1%** |
+| 1-call cases (640) | **76.2%** | 73.6% |
+| 2-call cases (320) | 56.2% | **60.3%** |
 
-The old custom-engine artifact scores 48.8% strict or 50.4% after lowercasing and
-trimming string arguments. The old 76.9% official figure summed stale flags:
-63 rows disagree with their own raw output, whose strict score is 70.7%. The new
-artifacts score 49.3%/69.2% and have zero saved-flag mismatches. The harness now
-reads the saved metric from the sidecar before auditing flags.
+The old engine scored 469/961 (48.8%). The official dylib and this repo contain
+byte-identical weights, so the loss was traced through paired ablations: a
+90-token reasoning cutoff recovered 44 rows when raised to 256, preserving the
+prompt prefix recovered another 63, and replacing segmented teacher-forcing with
+one continuous byte grammar recovered 96. The 160-token prefix cap loses three
+rows versus a full prefix while fitting the existing ESP32 KV allocation.
 
-**Where the gap is.** It is 13.3 points on single-call rows and 32.8 points on
-two-call rows. Single-call name selection is much closer (95.8% against 99.2%);
-the larger deficit is multi-call continuation, followed by argument extraction.
-The historical emitted-call breakdown reaches the same diagnosis: once this
-engine actually emits two calls, the main remaining loss is in their arguments;
-too many turns stop after the first call. The continuation decision here comes
-from one `,` versus `]` logit comparison.
-[`bench/README.md`](bench/README.md#multi-call) has the breakdown, the tuning
-sweep, and the two bugs that had to be fixed before that number moved off zero.
+Strict accuracy is now slightly above the official run, but the engines do not
+make the same mistakes. MimiModel still has lower name accuracy and more
+under-calls, while it wins more argument rows. The full evidence chain and raw
+paired reports are in
+[Official Needle accuracy gap: root-cause report](docs/official-engine-accuracy-gap.md).
 
 Cactus publishes 63.7% exact and 98.3% name accuracy for Needle 2 on the same
 named split and metric. The current public Python package (2.0.6, engine 2.0.2)
@@ -372,26 +365,28 @@ prompt/schema conversion, selected-tool traces, raw rows, or binary hash, the
 5.5-point exact-match difference is not attributable; the site value is kept as
 an external reference, not merged with the directly comparable columns above.
 
-The old per-phase speed numbers also divided each phase's token count by total
-request time. With the actual phase timers wired through, a 100-case protocol
-audit measured this engine at 244 prefill / 195 decode tok/s, versus 1664 / 996
-for the official engine. Median request latency was 1711 ms versus 667 ms when
-the official engine's schema/RAG initialization is included.
+**Local M4 benchmark (2026-08-22):** 200 canonical-order, native-retrieval cases,
+run serially on an Apple M4 with 16 GB RAM. This engine measured 191 prefill / 141
+decode tok/s with 2259 ms median completion latency. The unchanged official engine
+2.0.2 measured 1204/702 tok/s, 665 ms completion, or 948 ms including its 293 ms
+median initialization. These are actual phase timers; the old numbers incorrectly
+divided phase token counts by whole-request time.
+[Commands, hashes, raw artifacts, and attribution](docs/benchmark-20260822.md)
+are recorded separately.
 
-**Current real ESP32-S3 speed (2026-08-22):** a standard fair build (`fast_math=0`,
-profiling off) ran a fixed 51-token, one-tool prompt in 36.365 s cold and 16.875 s
-warm. Prefill/decode reached 1.93/1.62 tok/s cold; both runs emitted the exact
-flashlight call. The TIE728 CQ2 kernel reduced a 512×512 matvec from 5.272 to
-3.781 ms on one core and from about 2.700 to 1.960 ms across two cores. Its boot
-self-test measured a maximum absolute error of 6.676e-06 against scalar C. A
-mobile-actions row ran in 171.0 s and matched the host output, strict result,
-tool name, and arguments. One row proves timing and parity, not accuracy.
+**Current real ESP32-S3 speed (2026-08-22):** the default fastest build
+(`fast_math=1`, `profile=0`) ran a fixed one-tool prompt in 35.480 s cold
+and 16.170 s warm. Cold prefill/decode reached 1.94/1.60 tok/s; both runs
+emitted identical flashlight calls. Its TIE728 boot self-test passed with maximum
+absolute error 8.583e-06. A complex 333-token mobile-actions input completed two
+strict-exact tool calls in 413.742 s and matched the current host output byte for
+byte. Three earlier selected rows took 169.1/319.6/255.4 s and also matched the
+host; these device samples are parity checks, not an accuracy estimate.
 [Exact payload, settings, and raw console output](docs/esp32s3-tie728-audit.md) are preserved separately.
 
 **Pre-TIE728 audit (2026-08-19):** the same 240 MHz rev 0.2 board with 8 MB octal
-PSRAM measured 42.895/20.067 s cold/warm on the fixed one-tool workload. Optional
-`-ffast-math` reached 41.541/19.444 s but remains opt-in because near-tie greedy
-decisions can change. Two corrected-protocol mobile-actions rows matched the
+PSRAM measured 42.895/20.067 s cold/warm on the fixed one-tool workload. Its
+then-optional `-ffast-math` reached 41.541/19.444 s. Two corrected-protocol rows matched the
 standard host byte-for-byte. Full raw data is in
 [`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json).
 

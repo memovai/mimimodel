@@ -1,0 +1,14 @@
+{
+  "engine": "ours",
+  "protocol_version": 2,
+  "metric": "strict",
+  "tool_order": "dataset",
+  "retrieval": "native",
+  "dataset_sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+  "engine_sha256": "a054785aa2125d0eeb30ebd737342a8c89e45e77937ea3c94b53508d19b6dd27",
+  "model_sha256": "b43aabfcaf1a6db6acf488076eab71d823c08697c7af4521fc1d174b60ede5ba",
+  "runtime_env": {
+    "NEEDLE_PREFIX_SINK": "1",
+    "NEEDLE_REASON_MAX": "256"
+  }
+}

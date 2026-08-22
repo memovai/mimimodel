@@ -26,6 +26,10 @@ mkdir -p model && curl -Lo model/needle2.cact \
 
 # the engine binary the harnesses call
 cc -O3 -o /tmp/needle_ma needle.c -lm
+
+# fast grammar-state regression (no model inference)
+cc -O2 -o /tmp/test_byte_grammar bench/test_byte_grammar.c -lm
+/tmp/test_byte_grammar
 ```
 
 The mobile-actions dataset (25 MB) downloads itself on first run into
@@ -49,42 +53,49 @@ official build cannot be proven after the fact.
 .venv/bin/python bench/mobile_actions.py --limit 300
 ```
 
-The 2026-08-19 protocol-v2 rerun gives:
+The final 2026-08-22 rerun gives:
 
 ```
 === google/mobile-actions eval · this engine · 961 cases ===
-accuracy (ordered strict exact, all 961): 474/961 (49.3%)   name acc 760/961 (79.1%)
-  1-call (640): exact 386 (60.3%)   names 613 (95.8%)
-  2-call (320): exact  88 (27.5%)   names 147 (45.9%)
-  3-call (  1): exact   0 ( 0.0%)   names   0 ( 0.0%)
-latency: median 1814 ms, p90 2262 ms
+accuracy (ordered strict exact, all 961): 669/961 (69.6%)   name acc 873/961 (90.8%)
+  1-call (640): exact 488 (76.2%)   names 629 (98.3%)
+  2-call (320): exact 180 (56.2%)   names 243 (75.9%)
+  3-call (  1): exact   1 (100.0%)  names   1 (100.0%)
 ```
 
 ### Where it stands
 
 | | this engine | official engine 2.0.2, identical inputs |
 |---|---|---|
-| strict accuracy | 49.3% | 69.2% |
-| name accuracy | 79.1% | 98.1% |
-| 1-call strict | 60.3% | 73.6% |
-| 2-call strict | 27.5% | 60.3% |
+| strict accuracy | **69.6%** | 69.2% |
+| name accuracy | 90.8% | **98.1%** |
+| 1-call strict | **76.2%** | 73.6% |
+| 2-call strict | 56.2% | **60.3%** |
 
-The historical custom output scores 469/961 (48.8%) strict or 484/961 (50.4%)
-under `strip().lower()`. The former 76.9% official number was not a valid
-re-score: it summed flags in `oracle_961.json`, where 63 rows disagree with their
-own output. That raw output scores 679/961 (70.7%) strict. Protocol-v2 changed 339
-custom outputs (40 wins, 35 losses) and 196 official outputs (55 wins, 69 losses),
-which is why a single headline cannot be moved between protocols. Run
-`python bench/mobile_actions.py --rescore <file>` to audit any artifact; it reads
-the saved metric from the sidecar before checking flags.
+The weights embedded in the official engine and `model/needle2.cact` are
+byte-identical. The old `48.8%` result came from three engine differences:
 
-The remaining gap is in this engine, not the model or the data. It splits cleanly:
+| Controlled change | Strict result | Increment |
+|---|---:|---:|
+| old recent-window context, 90-token reasoning cap, segmented decoder | 469/961 | baseline |
+| allow up to 256 reasoning tokens | 513/961 | +44 |
+| retain the prompt prefix alongside the recent window | 576/961 | +63 |
+| replace segmented teacher-forcing with one continuous byte grammar | 672/961 | +96 |
+| cap the protected prefix at 160 tokens for ESP32 memory | **669/961** | -3 |
 
-- **1-call (640 cases): 60.3% against 73.6%.** Names are close (95.8% vs
-  99.2%); the loss is in argument values.
-- **2-call (320 cases): 27.5% against 60.3%.** This is where most of the total gap
-  lives. Deciding *whether to open a second call* is the weak part — see
-  [Multi-call](#multi-call).
+The 160-token prefix uses the same 416 physical KV rows as the old ring. A full
+prefix needs up to 522 rows and about 1.56 MB more PSRAM. The cap keeps nearly all
+of the accuracy gain without increasing the ESP32 KV allocation.
+
+This is strict-score parity, not output parity. The final engine still under-calls
+more often and has lower name accuracy, while it wins more argument rows. The
+paired error taxonomy, first-divergence traces, retrieval ablation, and exact
+reproduction files are in
+[the official-engine gap report](../docs/official-engine-accuracy-gap.md).
+
+The former 76.9% official number was not a valid re-score: it summed stale flags
+in `oracle_961.json`. Run `python bench/mobile_actions.py --rescore <file>` to
+derive metrics from the saved raw outputs.
 
 Cactus publishes 63.7% exact / 98.3% names for Needle 2 on the same named split
 and strict metric. The public package scores 69.2%/98.1% here. The site does not
@@ -94,80 +105,11 @@ number as an external reference, not a third directly comparable column.
 
 ### Multi-call
 
-321 of the 961 cases expect more than one tool call, so a single-call engine has a
-hard ceiling of 66.6%. The multi-call path is **on by default**
-(`NEEDLE_MAX_CALLS=4`). The following ablation uses the legacy workload and one knob:
-
-| | `MAX_CALLS=1` | `MAX_CALLS=4` (default) |
-|---|---|---|
-| strict accuracy | 39.3% | **48.8%** |
-| name accuracy | 63.6% | **78.9%** |
-| 1-call strict (640) | 59.1% | 58.8% |
-| 1-call names (640) | 95.5% | 94.7% |
-| 2-call strict (320) | 0% | **29.1%** |
-
-+9.5 points overall for 0.3 points of single-call accuracy. That trade only became
-this favourable after the two bugs below were fixed; before them the same switch
-was a net loss, which is why it shipped disabled at first.
-
-After emitting a call, the engine compares the logit of `,` (open another call)
-against `]` (stop). `NEEDLE_CONT_MARGIN` is how far ahead `,` must be before another
-call is opened, so it trades 2-call recall against 1-call precision. Swept over 300
-cases:
-
-| margin | overall | 1-call exact | 1-call names | 2-call exact |
-|---|---|---|---|---|
-| 0 | 39.0% | 54.0% | 83.0% | 9.0% |
-| 1.0 | 46.7% | 58.0% | 91.5% | 24.0% |
-| **2.0** (default) | **49.3%** | 60.5% | 96.5% | **27.0%** |
-| 3.0 | 42.0% | 61.0% | 97.0% | 4.0% |
-| 4.0+ | 40.7% | 61.0% | 97.0% | 0% |
-
-The curve is sharp on both sides. Below 2.0 the model opens calls it should not and
-1-call name accuracy collapses; above 2.0 it almost never opens a second call and
-the 2-call bucket goes to zero. There is no setting that is good at both.
-
-#### Historical 2-call diagnosis: call *count*, not call *content*
-
-Splitting the legacy run's 320 two-call cases by how many calls each engine emitted:
-
-| calls emitted | this engine | official engine |
-|---|---|---|
-| 0 | 0 | 6 |
-| 1 | 132 | 2 |
-| **2 (correct)** | **155** | **311** |
-| 3 | 30 | 1 |
-| 4 | 3 | 0 |
-
-Restricted to the turns where it emitted exactly two calls, this engine gets both
-tool names right **98%** of the time and the whole answer strict **60%** — against
-the official engine's 100% and 64%, and close to this engine's own 1-call rate.
-Call count is the larger problem, but argument decoding remains a measurable gap.
-
-The problem is that it only reaches two calls on 155 of 320 (48%) where the
-official engine reaches it on 311 (97%). 132 turns stop one call short and 33
-overshoot. So the entire 2-call deficit is one binary decision made 320 times from
-a single logit comparison, and the official engine evidently does not make it that
-way. Anything that predicts call count better — a stop classifier, a second pass
-that re-reads the query after the first call — is worth far more here than any
-improvement to argument decoding.
-
-Two bugs had to be fixed before any of this measured correctly, and both looked
-like model quality problems:
-
-**The call opening was forced as two segments** (`[` then `{"name":"`) instead of
-one. `dc_force` masks logits per segment, so splitting it changed which tokens the
-model walks through and cost 1-call exact 61.1% → 50.8%. Forcing `[{"name":"` as a
-single segment fixed it.
-
-**The next call's opening was forced before checking there was a candidate left.**
-With BM25 pruning the tool list to 2–3 entries, a turn could emit every candidate
-and still force `,{"name":"`, then break out of the loop with nothing to fill it —
-producing `...},{"name":"]`, which fails to parse and scores zero. This hit 172 of
-the 320 two-call cases. The candidate check now runs *before* the forced opening.
-
-The second bug also inverted the tuning conclusion: the margin sweep run before the
-fix said larger margins hurt the 2-call bucket. After the fix, 2.0 is the clear peak.
+321 of 961 rows expect more than one call, so a single-call engine has a 66.6%
+ceiling. The default byte grammar lets the model choose `,` or `]` in the same
+continuous constrained stream and caps the result at four calls. It no longer uses
+the legacy `NEEDLE_CONT_MARGIN` heuristic. The final 2-call bucket is 180/320
+strict, up from 84/320 in the segmented baseline.
 
 ### The metric
 
@@ -213,14 +155,12 @@ engine** (85% → 100% on a 200-case sample). `build_turn()` returns the two par
 separately and both engines receive them the same way.
 
 **The tool list has to be pruned.** Needle attends over a 256-token sliding window.
-The 7-tool block in this dataset is 417 tokens, so most of it sits outside the
-window and selection collapses — measured 22% tool-name accuracy with the full
-block against 77% with a 191-token one. The reference engine solves this with tool
-RAG (`tool_rag_top_k = 2` is its *default*; see
-`cactus-engine/src/utils.h:507`). This engine does the same with BM25, which gets
-97.1% recall@3 on this set for no forward pass. It kicks in only when the block
-exceeds `NEEDLE_TOOLS_BUDGET` (180 tokens), so small tool sets pass through
-untouched and keep the KV prefix cache warm.
+The 7-tool block in this dataset is 417 tokens, so selection degrades without a
+retrieval stage. The official Needle package documents a learned top-5 retrieval
+head when more than five tools are declared. This engine uses BM25, which gets
+97.1% recall@3 on this set without another model forward pass. It kicks in only
+when the block exceeds `NEEDLE_TOOLS_BUDGET` (180 tokens), so small tool sets pass
+through untouched and keep the KV prefix cache warm.
 
 ## Speed
 
@@ -236,22 +176,23 @@ The old table reported 166/59 tok/s by dividing prefill and decode token counts
 separately by the same whole-request wall time. Those are not phase throughputs.
 The batch protocol now exports the phase timers already maintained by `needle.c`.
 
-Protocol audit on an M4 Mac, first 100 dataset-order cases, serial:
+Current-source audit on an Apple M4 Mac (16 GB), first 200 cases with canonical
+tool order and native retrieval, run serially on 2026-08-22:
 
 | | this engine | official engine | ratio |
 |---|---|---|---|
-| completion latency, median | 1711 ms | 464 ms | 3.7× |
-| request latency incl. init | 1711 ms | 667 ms | 2.6× |
-| prefill | 244 tok/s | 1664 tok/s | 6.8× |
-| decode | 195 tok/s | 996 tok/s | 5.1× |
-| peak RSS | 20 MB | 163 MB | |
+| completion latency, median | 2259 ms | 665 ms | 3.4× |
+| completion latency, P90 | 3122 ms | 877 ms | 3.6× |
+| request latency incl. init | 2259 ms | 948 ms | 2.4× |
+| prefill | 191 tok/s | 1204 tok/s | 6.3× |
+| decode | 141 tok/s | 702 tok/s | 5.0× |
 
-Official `Needle(...)` initialization was previously excluded from per-call
-latency. It costs a 202 ms median with randomized tool order in this sample, versus
-31 ms when order is fixed and its tool-index cache can be reused. The C engine's
-parse and BM25 retrieval remain inside its completion measurement.
+Official `Needle(...)` initialization costs a 293 ms median in this run. The C
+engine's parse and BM25 retrieval remain inside its completion measurement. Raw
+rows and hashes are in `results/speed_ours_final_20260822.json` and
+`results/speed_oracle_20260822.json`.
 
-With common BM25 top-2 on the same 100 cases, median completion was 1509 ms versus
+In the earlier 100-case audit, common BM25 top-2 measured 1509 ms versus
 98 ms, or 186 ms for the official engine including its 79 ms initialization. Phase
 throughput was 252/196 tok/s here and 1979/1296 officially. This is the cleaner
 kernel/decoder comparison; native mode is the relevant product comparison.
@@ -277,13 +218,15 @@ Compiler flags were not a shortcut on the tested M4 host. `-O3`,
 
 ```bash
 cd needle-esp32s3
-# parity build (default): IEEE-style math, no profiler
+# fastest product build (default): fast math, no profiler
+idf.py -DNEEDLE_FAST_MATH=ON -DNEEDLE_PROFILE=OFF build
+# reproducibility build: IEEE-style math, no profiler
 idf.py -DNEEDLE_FAST_MATH=OFF -DNEEDLE_PROFILE=OFF build
-# performance audit build used below
+# hotspot profiling build
 idf.py -DNEEDLE_FAST_MATH=ON -DNEEDLE_PROFILE=ON build
 idf.py -p /dev/tty.usbXXX flash
 cd .. && .venv/bin/python bench/device_runner.py --port /dev/tty.usbXXX \
-  --sample 12 --seed 20260819 --timeout 1200
+  --sample 12 --seed 20260819 --timeout 1200 --allow-nonstandard
 ```
 
 `device_runner.py` sends each case over the serial REPL and compares the board's
@@ -291,6 +234,30 @@ answer against the host engine's on the same case. Both run the same `needle.c`
 against the same weights, but Xtensa and arm64 can still take different greedy
 branches. Running all 961 on the board would take about three days, so device
 samples must report confidence intervals and both raw-output and score parity.
+
+### 2026-08-22 fastest-default audit
+
+The final `fast_math=1`, `profile=0`, 160-token prefix-sink firmware measured a
+fixed one-tool workload at 35.480 s cold and 16.170 s warm. Cold prefill/decode
+was 1.94/1.60 tok/s; warm was 1.88/1.60. Both outputs were identical and the
+TIE728 boot self-test passed at 8.583e-06 maximum absolute error.
+
+The accuracy-attribution row 8 also ran on the board. It consumed 333 prompt and
+216 decode tokens in 413.742 s, returned both calls strict-exact, and matched the
+fast-math host output. Its artifact is
+`results/esp32s3_sink160_grammar_row8_20260822.json`.
+
+The three rows below are the earlier TIE728 speed/parity audit retained for
+historical comparison:
+
+| row | time | prefill | decode | name | strict | host parity |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 319.648 s | 1.58 tok/s | 1.24 tok/s | pass | fail | pass |
+| 1 | 255.435 s | 1.59 tok/s | 1.24 tok/s | pass | fail | pass |
+| 9 | 169.074 s | 1.65 tok/s | 1.24 tok/s | pass | pass | pass |
+
+This is 3/3 raw host parity and score parity, not a population accuracy estimate.
+Exact payloads, hashes, and raw rows are in the dated artifacts under `results/`.
 
 ### 2026-08-19 protocol audit
 
@@ -306,10 +273,11 @@ whitespace, and strict scoring:
 | mobile-actions row 1 | 292 s | 282.8 s | -3.2% |
 
 The short workload measured 1.65 prefill / 1.41 decode tok/s at baseline and
-1.70 / 1.46 tok/s with fast math. Three fast-math mobile-actions rows all
+1.70 / 1.46 tok/s with fast math. Three pre-TIE728 fast-math mobile-actions rows all
 matched the standard host output byte-for-byte; row 9 was also a strict-exact
 dataset success and took 189.2 s. Three rows are a parity check, not an accuracy
-estimate, so fast math remains an explicit opt-in.
+estimate. This historical audit kept fast math opt-in; it is now the product
+default, while IEEE-style math remains available for controlled reproduction.
 
 Board profiling puts Q/K/V/gate at 48-52%, out projection plus Hadamard at
 17-18%, mHC at 16-17%, and attention at only 6-9%. The existing dual-core split
@@ -401,7 +369,10 @@ answers in about 30 s (measured separately: 241 s cold, 29 s warm).
 | File | What |
 |---|---|
 | `ours_961.json` | legacy fixed-order run, default config (`MAX_CALLS=4`, `CONT_MARGIN=2.0`) |
-| `ours_961_protocol_v2.json` | current dataset-order strict run, 474/961 |
+| `ours_961_protocol_v2.json` | pre-TIE728 dataset-order strict run, 474/961 |
+| `ours_961_20260822.json` | current-source dataset-order strict run, 469/961 |
+| `ours_961_sink160_reason256_grammar_20260822.json` | final ESP32-sized decoder configuration, 669/961 |
+| `ours_961_final_20260822.json` | final source/binary rerun after ESP32 scratch fixes, same raw outputs, 669/961 |
 | `ours_961_singlecall.json` | same build forced to `NEEDLE_MAX_CALLS=1`, the single-vs-multi comparison |
 | `ours_961_margin0_multicall.json` | multi-call at `CONT_MARGIN=0` — the full-eval version of the sweep's top row |
 | `oracle_961.json` | legacy official output; saved pass flags are stale, re-score raw fields |
@@ -412,6 +383,9 @@ answers in about 30 s (measured separately: 241 s cold, 29 s warm).
 | `device_parity12.json` | ESP32-S3, firmware and host built from the same source — the parity number quoted above |
 | `device_5.json`, `device_25.json` | earlier ESP32-S3 samples. `device_25` was run against a stale firmware build; its 22/25 parity is a measurement artefact, kept only because the trap is worth seeing |
 | `speed_ours.json`, `speed_oracle.json` | per-call latency and throughput |
+| `speed_ours_final_20260822.json`, `speed_oracle_20260822.json` | final-source 200-case M4 speed audit |
+| `esp32s3_fast_tie_*_20260822.json` | fastest-default device timing and host-parity rows |
+| `esp32s3_sink160_grammar_row8_20260822.json` | final firmware, complex two-call/date row, strict and host parity |
 
 Each row holds the query, expected calls, produced calls, pass flags and wall time.
 New runs also write `<out>.meta.json` with reproducibility hashes. Treat pass flags
@@ -425,14 +399,17 @@ Environment variables, all read at call time:
 |---|---|---|
 | `NEEDLE_TOOLS_BUDGET` | 180 | token budget above which BM25 prunes the tool list; `0` disables pruning |
 | `NEEDLE_MAX_CALLS` | 4 | cap on tool calls per turn; `1` restores single-call behaviour |
-| `NEEDLE_CONT_MARGIN` | 2.0 | logit margin `,` must beat `]` by before another call is opened; swept above |
-| `NEEDLE_NAME_SCORED` | unset | score candidate tool names by mean token logprob instead of the greedy prefix walk (measured worse: 58% vs 64%) |
-| `NEEDLE_NO_VALMASK` | unset | stop masking pure-structure tokens at the start of a string value (measured worse: −63 exact matches) |
+| `NEEDLE_PREFIX_SINK` | 160 | protected prefix tokens; `0` disables, `1` keeps the full prefix, `system` keeps only the system turn |
+| `NEEDLE_REASON_MAX` | 256 | reasoning-token cap before `<tool_call>`; the old value 90 truncated 139 rows in one ablation |
+| `NEEDLE_BYTE_GRAMMAR` | 1 | continuous byte grammar; `0` restores the legacy segmented decoder |
+| `NEEDLE_CONT_MARGIN` | 2.0 | legacy segmented decoder only: comma-vs-close margin when `NEEDLE_BYTE_GRAMMAR=0` |
+| `NEEDLE_NAME_SCORED` | unset | legacy segmented decoder only: score candidate names by mean token logprob |
+| `NEEDLE_NO_VALMASK` | unset | legacy segmented decoder only: disable the initial string-value structure mask |
 | `NEEDLE_NO_PREFIX_CACHE` | unset | force a cold prefill on every call |
 | `NEEDLE_FREE` | unset | unconstrained decoding, for inspecting raw model output |
-| `NEEDLE_DEBUG` | unset | print tool-name candidate scores and branch decisions to stderr |
-| `NEEDLE_DEBUG_VAL` | unset | print the top logits at the start of each argument value |
-| `NEEDLE_DEBUG_STOP` | unset | print the `,` vs `]` logits at each stop-or-continue decision |
+| `NEEDLE_DEBUG` | unset | legacy decoder: print name scores and branch decisions |
+| `NEEDLE_DEBUG_VAL` | unset | legacy decoder: print top logits at the start of argument values |
+| `NEEDLE_DEBUG_STOP` | unset | legacy decoder: print comma-vs-close logits |
 
 ## Two traps worth knowing about
 

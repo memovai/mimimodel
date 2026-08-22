@@ -1,0 +1,10 @@
+loaded: 27 layers, d_model 512, vocab 8192, kv_window 256
+batch: 200 queries in 385.2 s (1.93 s/query)
+
+=== this engine (scalar C99) · 200 calls ===
+protocol  : tool-order=canonical, retrieval=native, developer whitespace preserved
+latency   : median    1952 ms   p90    2508 ms   total 386 s
+tokens    : prefill median 297, decode median 101 per call
+prefill   : median     216 tok/s
+decode    : median     174 tok/s
+-> bench/results/speed_ours_20260822.json

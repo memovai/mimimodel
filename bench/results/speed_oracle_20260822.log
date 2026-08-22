@@ -1,0 +1,9 @@
+
+=== official closed-source engine · 200 calls ===
+protocol  : tool-order=canonical, retrieval=native, developer whitespace preserved
+complete  : median     665 ms   p90     877 ms   total 187 s
+init      : median     293 ms   request total median 948 ms
+prefill   : median    1204 tok/s
+decode    : median     702 tok/s
+peak RAM  : 164 MB
+-> bench/results/speed_oracle_20260822.json

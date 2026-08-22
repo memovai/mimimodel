@@ -1,0 +1,11 @@
+{
+  "engine": "oracle",
+  "protocol_version": 2,
+  "metric": "strict",
+  "tool_order": "dataset",
+  "retrieval": "common-bm25-2",
+  "dataset_sha256": "91d251ee958cfd295af6c4504c236a3a1ad19517de240c3bc680bacfcbf7e7d9",
+  "engine_sha256": "f8ff35e0ceea5812f3f90bddbb40ca3a8d03af07c84555e116bf0096fa994afd",
+  "cactus_needle_version": "2.0.6",
+  "cactus_needle_engine_version": "2.0.2"
+}

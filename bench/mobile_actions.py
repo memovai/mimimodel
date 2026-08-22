@@ -193,6 +193,8 @@ def run_ours(cases, binary):
                 "decode_tok": int(parts[3]),
                 "prefill_us": int(parts[4]) if len(parts) > 4 else None,
                 "decode_us": int(parts[5]) if len(parts) > 5 else None,
+                "reason_tok": int(parts[6]) if len(parts) > 6 else None,
+                "reason_opened": bool(int(parts[7])) if len(parts) > 7 else None,
                 "init_ms": 0.0,
             })
         except (ValueError, json.JSONDecodeError, IndexError) as exc:
@@ -352,6 +354,14 @@ def main():
         else:
             model_path = os.path.join(ROOT, "model", "needle2.cact")
             meta["model_sha256"] = sha256_file(model_path)
+            runtime_keys = (
+                "NEEDLE_PREFIX_SINK", "NEEDLE_REASON_MAX", "NEEDLE_TOOLS_BUDGET",
+                "NEEDLE_CONT_MARGIN", "NEEDLE_MAX_CALLS", "NEEDLE_NO_VALMASK",
+                "NEEDLE_NAME_SCORED", "NEEDLE_BYTE_GRAMMAR",
+            )
+            meta["runtime_env"] = {
+                key: os.environ[key] for key in runtime_keys if key in os.environ
+            }
         with open(args.out + ".meta.json", "w") as handle:
             json.dump(meta, handle, indent=2)
         print(f"per-case results -> {args.out}")

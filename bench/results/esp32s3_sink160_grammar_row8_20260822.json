@@ -1,0 +1,70 @@
+[
+ {
+  "dataset_index": 8,
+  "n_expected": 2,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-06-12T09:13:55\u001eDay of week is Wednes",
+  "want": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Budget Review",
+     "datetime": "2024-06-20T10:30:00"
+    }
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "subject": "Budget Meeting Invite",
+     "to": "rsharma@financelink.co.in",
+     "body": "Please see the calendar invite for the quarterly review. Bring the Q2 expenditure reports."
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Budget Review",
+     "datetime": "2024-06-20T10:30:00"
+    }
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "rsharma@financelink.co.in",
+     "subject": "Budget Meeting Invite",
+     "body": "Please see the calendar invite for the quarterly review. Bring the Q2 expenditure reports."
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_calendar_event",
+    "arguments": {
+     "title": "Quarterly Budget Review",
+     "datetime": "2024-06-20T10:30:00"
+    }
+   },
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "rsharma@financelink.co.in",
+     "subject": "Budget Meeting Invite",
+     "body": "Please see the calendar invite for the quarterly review. Bring the Q2 expenditure reports."
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "host_name_ok": true,
+  "host_exact_ok": true,
+  "agrees_on_score": true,
+  "seconds": 414.0,
+  "device_ms": 413742,
+  "prefill_tok": 333,
+  "prefill_tps": 1.57,
+  "decode_tok": 216,
+  "decode_tps": 1.1
+ }
+]

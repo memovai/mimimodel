@@ -28,13 +28,13 @@ $ turn on pin 5
 | **Modelo** | Needle 2 — 45M parámetros, CQ de 2 bits, archivo único de 13,7 MB |
 | **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~5 $) |
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
-| **Velocidad** | llamada fija de una herramienta: **16,875 s caliente** · **36,365 s fría** · prefill 1,93 tok/s |
+| **Velocidad ESP32** | una herramienta fija: **prefill 1,94 tok/s · decode 1,60 tok/s** · 16,170 s caliente · 35,480 s fría |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
-| **Precisión** | 49,3% en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
+| **Precisión** | **69,6%** en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
 
 > **Honestidad por delante:** esto es varias veces más lento que una API en la nube, no entiende
-> chino, si le saludas te llamará una herramienta igualmente, y queda bastante por debajo del
-> motor oficial en la misma evaluación. Véanse el [benchmark](#benchmark) y las
+> chino y, si le saludas, llamará una herramienta igualmente. La puntuación strict ya iguala al
+> motor oficial, aunque la precisión de nombres y la distribución de errores difieren. Véanse el [benchmark](#benchmark) y las
 > [limitaciones](#limitaciones). Lo que ganas es un modelo de lenguaje que funciona con el
 > cable de red desenchufado.
 
@@ -70,13 +70,18 @@ Requiere ESP-IDF v5.5+, una placa con 16 MB de flash y 8 MB de PSRAM, y los peso
 ```bash
 cd needle-esp32s3
 idf.py set-target esp32s3
-idf.py build
+idf.py -DNEEDLE_FAST_MATH=ON build
 idf.py -p /dev/ttyUSB0 flash
 ./scripts/flash_weights.sh /dev/ttyUSB0        # 13,7 MB en `needle` en 0x210000
 cd ..
 ```
 
 No dejes `idf.py monitor` abierto: la CLI necesita el puerto serie.
+Fast math está activado por defecto para obtener la máxima velocidad. Usa
+`-DNEEDLE_FAST_MATH=OFF` solo para reproducir la referencia con semántica IEEE.
+Los valores por defecto alineados en precisión protegen 160 tokens de prefijo, permiten 256 tokens
+de reasoning y activan la gramática byte continua. Las opciones ESP-IDF son
+`NEEDLE_PREFIX_SINK_TOKENS`, `NEEDLE_REASON_MAX_TOKENS` y `NEEDLE_BYTE_GRAMMAR`.
 
 ### 3. Añadir herramientas
 
@@ -114,8 +119,8 @@ herramientas.
 
 La salida doble selecciona ambas herramientas y extrae la fecha y hora, el correo, el título y el
 asunto. La latencia depende del esquema seleccionado, la longitud de la consulta y las llamadas
-generadas. Como referencia reproducible, la compilación estándar (`fast_math=0`) con una herramienta
-fija tardó **36,365 s** en frío y **16,875 s** tras acertar la caché de prefijo en la placa anterior
+generadas. Como referencia reproducible, la compilación más rápida por defecto (`fast_math=1`) con una herramienta
+fija tardó **35,480 s** en frío y **16,170 s** tras acertar la caché de prefijo en la placa anterior
 (2026-08-22). Ambas ejecuciones devolvieron el mismo JSON del ejemplo simple. Las condiciones exactas
 están en el [benchmark](#benchmark).
 
@@ -180,11 +185,9 @@ flowchart TB
 
 ### 3. Memoria acotada
 
-Needle usa una ventana de atención deslizante de 256 tokens. La caché KV es int8 (el ancho para el
-que el modelo fue post-entrenado, según su propia cabecera) y vive en un **búfer circular**
-dimensionado a la ventana más un pequeño margen, de modo que la RAM es constante sea cual sea la
-longitud del prompt. Una fila solo se sobrescribe `kv_alloc` posiciones más tarde, así que cualquier
-`kv_alloc > kv_window` deja intactas todas las filas dentro de la ventana.
+Needle usa una ventana de atención con los 256 tokens más recientes. MimiModel protege además los
+primeros 160 tokens del prompt. La caché KV int8 conserva 416 filas físicas, la misma asignación que
+el anillo anterior, mientras mantiene visibles las instrucciones de sistema y el inicio de tools.
 
 ```mermaid
 flowchart LR
@@ -209,39 +212,26 @@ flowchart LR
 
 ### 4. Decodificación restringida por gramática
 
-Un modelo de 45M en carrera libre produce algo *casi* JSON. En vez de eso, el motor guía la
-decodificación contra el esquema de herramientas, replicando lo que hace el compilador de gramáticas
-del motor cerrado:
-
-- el texto estructural (`[{"name":"`, `","arguments":{`) se **fuerza**. El decodificador enmascara
-  los logits a los tokens que son prefijo de la cadena requerida, evita insertar IDs de token
-  directamente y mantiene canónico el contexto del modelo;
-- el **nombre de la herramienta** se elige puntuando la log-probabilidad media completa de cada
-  candidato (con teacher-forcing y un rebobinado de contador muy barato), después de que un
-  preordenamiento gratuito por el primer token deje solo los 3 mejores candidatos;
-- los **argumentos enteros** se enmascaran a dígitos; los **parámetros obligatorios** se fuerzan a aparecer.
+Un modelo de 45M en carrera libre produce algo *casi* JSON. MimiModel compila una gramática byte
+continua desde los esquemas activos y valida todos los bytes de cada token candidato. Los tokens
+pueden cruzar límites estructurales de JSON; nombres, parámetros obligatorios y enteros permanecen
+dentro del esquema sin teacher-forcing fragmentado.
 
 ```mermaid
 stateDiagram-v2
     [*] --> Razonamiento
     Razonamiento --> Razonamiento : tokens de razonamiento libres
     Razonamiento --> Declinado : el modelo emite im_end
-    Razonamiento --> Nombre : el modelo emite tool_call
-    Nombre --> Args : los 3 mejores candidatos puntuados por log-prob media
-    Args --> Entero : parámetro entero — logits enmascarados a dígitos
-    Args --> Cadena : parámetro string — libre hasta la comilla de cierre
-    Entero --> Bifurcacion
-    Cadena --> Bifurcacion
-    Bifurcacion --> Args : queda un parámetro obligatorio sin rellenar
-    Bifurcacion --> Hecho : todos los obligatorios rellenados
+    Razonamiento --> Llamada : el modelo emite tool_call
+    Llamada --> Llamada : el siguiente token mantiene válida la gramática
+    Llamada --> Hecho : la gramática alcanza el cierre del array
     Hecho --> [*] : JSON siempre válido según el esquema
     Declinado --> [*] : array vacío
 ```
 
 
-La recompensa es que la salida siempre es válida según el esquema — un modelo de 45M en carrera
-libre no lo consigue. No cierra la diferencia con el motor oficial, que ejecuta los mismos pesos
-con su propio compilador de gramáticas; véase el [benchmark](#benchmark).
+La salida queda válida sin cambiar el historial natural de tokens. Fue la mayor mejora de la
+atribución frente al motor oficial; véase el [benchmark](#benchmark).
 
 ### 5. Caché de prefijo KV — la mayor ganancia individual
 
@@ -281,7 +271,7 @@ Rendimiento bruto del motor, medido sobre hardware real:
 | Scratch caliente trasladado a SRAM interna | +5% |
 | Caché de pesos en PSRAM (oportunista) | +8% |
 | Cargas float alineadas TIE728 + kernel CQ2 de 2 filas/8 acumuladores | matvec 512×512: 5,272 → 3,781 ms en un núcleo; 2,700 → 1,960 ms en dos |
-| **Medición actual con una herramienta fija** | **prefill 1,93 tok/s, decode 1,62; 36,365 s en frío, 16,875 s en caliente** |
+| **Medición más rápida por defecto con una herramienta fija** | **prefill 1,94 tok/s, decode 1,60; 35,480 s en frío, 16,170 s en caliente** |
 | Caché de prefijo KV (cuesta ~20% de velocidad bruta por agrandar el anillo) | **8,2× extremo a extremo** |
 
 ### Lo que no funcionó
@@ -301,8 +291,8 @@ Rendimiento bruto del motor, medido sobre hardware real:
 
 ## Limitaciones
 
-- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 16,875 s en
-  caliente y 36,365 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
+- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 16,170 s en
+  caliente y 35,480 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
   minutos. Una API en la nube sigue siendo mucho más rápida. El valor está en trabajar sin conexión,
   sin coste de API y con los datos en el dispositivo.
 - **El modelo no admite chino.** Las órdenes de dispositivo en chino obtienen 0/5 y el motor oficial
@@ -354,53 +344,58 @@ Evaluado sobre [google/mobile-actions](https://huggingface.co/datasets/google/mo
 (CC-BY-4.0) — el conjunto de 961 casos de llamada a funciones en dispositivo
 publicado junto a FunctionGemma — puntuado aquí con *ordered strict exact match*:
 los nombres de función, el orden de las llamadas y cada argumento deben coincidir.
-La nueva ejecución conserva el orden de herramientas de cada registro, los turnos
-developer/user separados y los espacios originales; ambos motores usan su recuperación nativa.
+Este motor se volvió a ejecutar el 2026-08-22. La columna oficial reutiliza el
+artefacto directamente comparable porque los hashes del engine y del dataset no
+cambiaron. Ambos conservan el orden de herramientas de cada registro, los turnos
+developer/user separados, los espacios originales y su recuperación nativa.
 
 | | este motor | motor oficial, mismos registros/esquemas |
 |---|---|---|
-| precisión | 49,3% | 69,2% |
-| precisión de nombre | 79,1% | 98,1% |
-| casos de 1 llamada (640) | 60,3% | 73,6% |
-| casos de 2 llamadas (320) | 27,5% | 60,3% |
+| precisión | **69,6%** | 69,2% |
+| precisión de nombre | 90,8% | **98,1%** |
+| casos de 1 llamada (640) | **76,2%** | 73,6% |
+| casos de 2 llamadas (320) | 56,2% | **60,3%** |
 
-El artefacto histórico de este motor puntúa 48,8% estricto y 50,4% solo tras
-normalizar mayúsculas y espacios. El 76,9% oficial sumaba indicadores obsoletos:
-63 filas contradicen su propia salida, cuya puntuación estricta es 70,7%. Los
-nuevos artefactos puntúan 49,3%/69,2% y no tienen indicadores inconsistentes.
+El motor anterior puntuaba 469/961 (48,8%). Los pesos del dylib oficial y los del
+repositorio son idénticos byte a byte. En ablaciones pareadas de las 961 filas,
+subir el límite de reasoning de 90 a 256 recuperó 44 filas, conservar el prefijo
+otras 63 y sustituir el teacher-forcing segmentado por una gramática byte continua
+otras 96. El límite de 160 tokens para ESP32 pierde solo 3 filas frente al prefijo
+completo y conserva la asignación KV anterior.
 
-**Dónde está la diferencia.** Son 13,3 puntos en filas de una llamada y 32,8 en
-filas de dos llamadas. La selección de nombre en filas de una llamada está más
-cerca (95,8% frente a 99,2%); el principal déficit es detenerse antes de la segunda
-llamada, seguido de la extracción de argumentos. El desglose,
-la curva de ajuste y los dos errores que hubo que corregir están en
-[`bench/README.md`](bench/README.md#multi-call).
+Superar ligeramente al motor oficial en strict no implica equivalencia token a
+token. MimiModel conserva menor precisión de nombres y más under-calls, pero gana
+más filas de argumentos. El análisis completo está en el
+[informe de causa raíz](docs/official-engine-accuracy-gap.md).
 
 Cactus publica 63,7% exacto y 98,3% de nombres. El paquete público actual
 2.0.6/engine 2.0.2 obtiene 69,2%/98,1% en este arnés. Como la web no publica la
 conversión de prompts/esquemas, las herramientas recuperadas, las filas crudas ni
 el hash binario, esa diferencia de 5,5 puntos no es atribuible.
 
-Con los temporizadores de fase reales, una auditoría de 100 casos midió 244/195
-tok/s de prefill/decode frente a 1664/996; la latencia total fue 1711 ms frente a
-667 ms incluyendo la inicialización oficial.
+**Benchmark local M4 (2026-08-22):** 200 casos con orden canónico de herramientas
+y recuperación nativa, ejecutados en serie en un Apple M4 con 16 GB. Este motor
+midió 191/141 tok/s de prefill/decode y 2259 ms de mediana de completion. El engine
+oficial 2.0.2 sin cambios midió 1204/702 tok/s, 665 ms de completion y 948 ms al
+incluir sus 293 ms de inicialización mediana. Son temporizadores de fase reales.
+[Los comandos, hashes, artefactos y la atribución](docs/benchmark-20260822.md)
+se conservan por separado.
 
-**Velocidad actual en ESP32-S3 real (2026-08-22):** una compilación justa estándar
-(`fast_math=0`, profiling desactivado) procesó un prompt fijo de 51 tokens y una
-herramienta en 36,365 s en frío y 16,875 s en caliente. El prefill/decode alcanzó
-1,93/1,62 tok/s en frío; ambas ejecuciones emitieron exactamente la llamada de la
-linterna. El kernel CQ2 TIE728 redujo un matvec 512×512 de 5,272 a 3,781 ms en un
-núcleo y de unos 2,700 a 1,960 ms en dos. Su autoprueba al arrancar midió un error
-absoluto máximo de 6,676e-06 frente al C escalar. Una fila mobile-actions tardó
-171,0 s y coincidió con el host en salida, resultado strict, nombre y argumentos.
-Una fila confirma tiempo y paridad, no precisión.
+**Velocidad actual en ESP32-S3 real (2026-08-22):** la compilación más rápida por
+defecto (`fast_math=1`, `profile=0`) procesó un prompt fijo de 51 tokens y una
+herramienta en 35,480 s en frío y 16,170 s en caliente.
+El prefill/decode en frío alcanzó 1,94/1,60 tok/s; ambas ejecuciones emitieron
+la misma llamada de linterna. La autoprueba TIE728 pasó con un error absoluto máximo
+de 8,583e-06. Una entrada mobile-actions compleja de 333 tokens completó dos llamadas
+strict-exact en 413,742 s y coincidió byte por byte con el host actual. Tres filas
+anteriores tardaron 169,1/319,6/255,4 s y también coincidieron; estas muestras de la
+placa comprueban paridad, no precisión poblacional.
 [El payload exacto, la configuración y la consola sin procesar](docs/esp32s3-tie728-audit.md)
 se conservan por separado.
 
 **Auditoría anterior a TIE728 (2026-08-19):** la misma placa rev 0.2 a 240 MHz con
 8 MB de PSRAM octal midió 42,895/20,067 s en frío/caliente con una herramienta fija.
-El `-ffast-math` opcional alcanzó 41,541/19,444 s, pero sigue desactivado en la
-evaluación justa porque puede cambiar decisiones voraces casi empatadas. Dos filas
+El `-ffast-math`, entonces opcional, alcanzó 41,541/19,444 s. Dos filas
 mobile-actions coincidieron byte a byte con el host estándar. Datos completos en
 [`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json).
 

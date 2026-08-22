@@ -1,0 +1,99 @@
+[
+ {
+  "dataset_index": 0,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2024-09-15T17:35:19\u001eDay of week is Sunday",
+  "want": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "email": "lena.petrova.design@webmail.com",
+     "phone_number": "+359 888 123 456",
+     "first_name": "Lena",
+     "last_name": "Petrova"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "create_contact",
+    "arguments": {
+     "last_name": "Lena Petrova",
+     "first_name": "Petrova",
+     "phone_number": "+359 888 123 456",
+     "email": "lena.petrova.design@webmail.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "host_name_ok": true,
+  "host_exact_ok": false,
+  "agrees_on_score": true,
+  "seconds": 320.2,
+  "device_ms": 319648,
+  "prefill_tok": 314,
+  "prefill_tps": 1.58,
+  "decode_tok": 145,
+  "decode_tps": 1.24
+ },
+ {
+  "dataset_index": 1,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2026-11-16T05:43:19\u001eDay of week is Monday",
+  "want": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "body": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+     "subject": "Update on Q4 Report",
+     "to": "javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "device": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.ortega@ecotradeintl.com",
+     "subject": "Update on Q4 Report",
+     "body": "To javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "host": [
+   {
+    "name": "send_email",
+    "arguments": {
+     "to": "javier.ortega@ecotradeintl.com",
+     "subject": "Update on Q4 Report",
+     "body": "To javier.ortega@ecotradeintl.com"
+    }
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": false,
+  "agrees_with_host": true,
+  "host_name_ok": true,
+  "host_exact_ok": false,
+  "agrees_on_score": true,
+  "seconds": 256.0,
+  "device_ms": 255435,
+  "prefill_tok": 308,
+  "prefill_tps": 1.59,
+  "decode_tok": 72,
+  "decode_tps": 1.24
+ }
+]

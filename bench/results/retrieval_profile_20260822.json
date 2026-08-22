@@ -1,0 +1,359 @@
+{
+  "total": 961,
+  "budget_tokens": 180,
+  "kept_tool_counts": {
+    "2": 401,
+    "3": 295,
+    "4": 265
+  },
+  "full_expected_sequence_recall": 914,
+  "retrieval_misses": 47,
+  "retrieval_miss_rows": [
+    101,
+    106,
+    121,
+    130,
+    134,
+    160,
+    167,
+    181,
+    200,
+    240,
+    244,
+    245,
+    268,
+    348,
+    370,
+    379,
+    392,
+    416,
+    434,
+    472,
+    520,
+    543,
+    567,
+    571,
+    596,
+    608,
+    618,
+    625,
+    634,
+    656,
+    662,
+    688,
+    734,
+    777,
+    781,
+    782,
+    783,
+    846,
+    855,
+    872,
+    890,
+    901,
+    921,
+    927,
+    928,
+    941,
+    957
+  ],
+  "retrieval_miss_examples": [
+    {
+      "row": 101,
+      "expected": [
+        "create_contact",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "create_calendar_event",
+        "send_email"
+      ]
+    },
+    {
+      "row": 106,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 121,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 130,
+      "expected": [
+        "show_map",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "show_map",
+        "create_contact"
+      ]
+    },
+    {
+      "row": 134,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "show_map"
+      ]
+    },
+    {
+      "row": 160,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "send_email"
+      ]
+    },
+    {
+      "row": 167,
+      "expected": [
+        "create_contact",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "send_email",
+        "create_contact"
+      ]
+    },
+    {
+      "row": 181,
+      "expected": [
+        "show_map",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "create_calendar_event",
+        "turn_on_flashlight",
+        "turn_off_flashlight"
+      ]
+    },
+    {
+      "row": 200,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "create_contact"
+      ]
+    },
+    {
+      "row": 240,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 244,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 245,
+      "expected": [
+        "create_contact",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "send_email",
+        "create_calendar_event"
+      ]
+    },
+    {
+      "row": 268,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "show_map"
+      ]
+    },
+    {
+      "row": 348,
+      "expected": [
+        "turn_off_flashlight",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "turn_off_flashlight",
+        "turn_on_flashlight",
+        "show_map",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 370,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 379,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "turn_off_flashlight"
+      ]
+    },
+    {
+      "row": 392,
+      "expected": [
+        "show_map",
+        "create_calendar_event"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 416,
+      "expected": [
+        "create_calendar_event",
+        "send_email"
+      ],
+      "selected": [
+        "send_email",
+        "turn_on_flashlight",
+        "show_map"
+      ]
+    },
+    {
+      "row": 434,
+      "expected": [
+        "create_calendar_event",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "turn_on_flashlight",
+        "turn_off_flashlight",
+        "open_wifi_settings"
+      ]
+    },
+    {
+      "row": 472,
+      "expected": [
+        "create_contact",
+        "show_map"
+      ],
+      "selected": [
+        "show_map",
+        "send_email",
+        "turn_on_flashlight"
+      ]
+    }
+  ],
+  "max_prefix_tokens": 266,
+  "max_prefix_row": 729,
+  "under_call_with_retrieval_miss": 36,
+  "under_call_despite_full_recall": 101,
+  "under_call_with_retrieval_miss_rows": [
+    106,
+    130,
+    134,
+    160,
+    167,
+    181,
+    200,
+    240,
+    244,
+    245,
+    268,
+    348,
+    370,
+    379,
+    392,
+    416,
+    472,
+    567,
+    571,
+    596
+  ],
+  "under_call_despite_full_recall_rows": [
+    8,
+    14,
+    15,
+    17,
+    21,
+    47,
+    61,
+    74,
+    77,
+    95,
+    105,
+    113,
+    132,
+    136,
+    139,
+    150,
+    177,
+    180,
+    183,
+    192
+  ],
+  "retrieval_miss_outcomes": {
+    "wrong_name": 5,
+    "under_call": 36,
+    "over_call": 5,
+    "names_correct": 1
+  }
+}

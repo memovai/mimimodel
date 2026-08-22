@@ -121,8 +121,11 @@ void app_main(void) {
 #else
     const int profile = 0;
 #endif
-    printf("[needle] build: fast_math=%d profile=%d sinkhorn_iters=%d\n",
-           fast_math, profile, NEEDLE_SINKHORN_ITERS);
+    printf("[needle] build: fast_math=%d profile=%d sinkhorn_iters=%d "
+           "prefix_sink=%d reason_max=%d byte_grammar=%d\n",
+           fast_math, profile, NEEDLE_SINKHORN_ITERS,
+           NEEDLE_PREFIX_SINK_DEFAULT, NEEDLE_REASON_MAX_DEFAULT,
+           NEEDLE_BYTE_GRAMMAR_DEFAULT);
     print_heap("boot");
 
     const esp_partition_t *part = esp_partition_find_first(
@@ -160,7 +163,9 @@ void app_main(void) {
         int64_t tc = esp_timer_get_time();
         size_t pf = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
         /* ring KV needs L*KV*window*hd*2 (int8 k+v) + scales; keep it + 600KB slack */
-        size_t kv_rows = g_model.kv_window + NEEDLE_KV_SLACK;
+        size_t protected_rows = NEEDLE_PREFIX_SINK_DEFAULT > NEEDLE_KV_SLACK
+                              ? NEEDLE_PREFIX_SINK_DEFAULT : NEEDLE_KV_SLACK;
+        size_t kv_rows = g_model.kv_window + protected_rows;
         size_t kv_need = (size_t)g_model.n_layers * g_model.n_kv * kv_rows
                          * g_model.head_dim * 2
                        + (size_t)g_model.n_layers * g_model.n_kv * kv_rows * 8

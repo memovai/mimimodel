@@ -1,0 +1,849 @@
+{
+  "candidate": {
+    "total": 961,
+    "exact": 669,
+    "names": 873,
+    "error_classes": {
+      "exact": 669,
+      "argument_values": 159,
+      "under_call": 69,
+      "argument_keys_and_values": 41,
+      "wrong_name": 17,
+      "argument_keys": 4,
+      "over_call": 2
+    },
+    "call_buckets": {
+      "1": {
+        "total": 640,
+        "exact": 488,
+        "names": 629,
+        "under_call": 8,
+        "over_call": 2
+      },
+      "2": {
+        "total": 320,
+        "exact": 180,
+        "names": 243,
+        "under_call": 61,
+        "over_call": 0
+      },
+      "3": {
+        "total": 1,
+        "exact": 1,
+        "names": 1,
+        "under_call": 0,
+        "over_call": 0
+      }
+    },
+    "argument_fields": {
+      "show_map.query": {
+        "total": 175,
+        "mismatches": 72,
+        "error_rate": 0.4114285714285714
+      },
+      "create_contact.phone_number": {
+        "total": 179,
+        "mismatches": 40,
+        "error_rate": 0.22346368715083798
+      },
+      "create_contact.first_name": {
+        "total": 182,
+        "mismatches": 37,
+        "error_rate": 0.2032967032967033
+      },
+      "create_contact.last_name": {
+        "total": 182,
+        "mismatches": 35,
+        "error_rate": 0.19230769230769232
+      },
+      "create_calendar_event.datetime": {
+        "total": 303,
+        "mismatches": 31,
+        "error_rate": 0.10231023102310231
+      },
+      "send_email.body": {
+        "total": 199,
+        "mismatches": 11,
+        "error_rate": 0.05527638190954774
+      },
+      "send_email.to": {
+        "total": 199,
+        "mismatches": 8,
+        "error_rate": 0.04020100502512563
+      },
+      "create_calendar_event.title": {
+        "total": 303,
+        "mismatches": 7,
+        "error_rate": 0.0231023102310231
+      },
+      "create_contact.email": {
+        "total": 155,
+        "mismatches": 7,
+        "error_rate": 0.04516129032258064
+      },
+      "send_email.subject": {
+        "total": 199,
+        "mismatches": 1,
+        "error_rate": 0.005025125628140704
+      }
+    },
+    "missing_argument_keys": {
+      "create_contact.phone_number": 33,
+      "create_contact.email": 3
+    },
+    "extra_argument_keys": {
+      "create_contact.email": 9
+    },
+    "argument_field_examples": {
+      "create_contact.last_name": [
+        {
+          "row": 2,
+          "expected": "Sharma",
+          "got": ""
+        },
+        {
+          "row": 40,
+          "expected": "Tanaka",
+          "got": "Kenji Tanaka"
+        },
+        {
+          "row": 60,
+          "expected": "Sharma",
+          "got": "Priya Sharma"
+        },
+        {
+          "row": 77,
+          "expected": "Nkrumah",
+          "got": ""
+        },
+        {
+          "row": 108,
+          "expected": "Stavros",
+          "got": "Elias Stavros"
+        }
+      ],
+      "create_contact.first_name": [
+        {
+          "row": 2,
+          "expected": "Anya",
+          "got": ""
+        },
+        {
+          "row": 77,
+          "expected": "Amara",
+          "got": ""
+        },
+        {
+          "row": 113,
+          "expected": "Elena",
+          "got": ""
+        },
+        {
+          "row": 145,
+          "expected": "Jian",
+          "got": "Jian Li"
+        },
+        {
+          "row": 148,
+          "expected": "Kenji",
+          "got": "Kenji Tanaka"
+        }
+      ],
+      "show_map.query": [
+        {
+          "row": 6,
+          "expected": "art supply store 'Canvas Creations' at 934 Willow Road, Portland, Oregon",
+          "got": "Canvas Creations 934 Willow Road Portland Oregon"
+        },
+        {
+          "row": 11,
+          "expected": "The Wandering Page bookstore in Brooklyn",
+          "got": "The Wandering Page bookstore"
+        },
+        {
+          "row": 25,
+          "expected": "Heritage Bookstore at 789 Elmwood Ave, Toronto",
+          "got": "789 Elmwood Ave, Toronto"
+        },
+        {
+          "row": 28,
+          "expected": "The Corner Bakery at 3850 N Sheridan Rd",
+          "got": "The Corner Bakery 3850 N Sheridan Rd"
+        },
+        {
+          "row": 52,
+          "expected": "Aroma Cafe at 15 Rue Saint-Antoine, Paris, France",
+          "got": "15 Rue Saint-Antoine, Paris, France"
+        }
+      ],
+      "create_calendar_event.datetime": [
+        {
+          "row": 7,
+          "expected": "2025-07-30T14:00:00",
+          "got": "2025-07-26T14:00:00"
+        },
+        {
+          "row": 37,
+          "expected": "2025-04-01T16:30:00",
+          "got": "2025-03-28T16:30:00"
+        },
+        {
+          "row": 83,
+          "expected": "2024-12-07T09:30:00",
+          "got": "2024-11-30T09:30:00"
+        },
+        {
+          "row": 113,
+          "expected": "2025-03-17T10:00:00",
+          "got": "2025-03-16 10:00"
+        },
+        {
+          "row": 136,
+          "expected": "2024-10-28T10:30:00",
+          "got": "2027-10-28T10:30:00"
+        }
+      ],
+      "create_calendar_event.title": [
+        {
+          "row": 35,
+          "expected": "Quarterly Financial Review.",
+          "got": "Quarterly Financial Review"
+        },
+        {
+          "row": 62,
+          "expected": "Important client meeting regarding the new contract",
+          "got": "important client meeting regarding the new contract"
+        },
+        {
+          "row": 272,
+          "expected": "Follow-up call with Mr. Tanaka",
+          "got": "follow-up call with Mr. Tanaka"
+        },
+        {
+          "row": 444,
+          "expected": "Dentist Appointment with Dr. Akira Tanaka",
+          "got": "Dentist appointment"
+        },
+        {
+          "row": 577,
+          "expected": "Pick up cake",
+          "got": "pick up the cake"
+        }
+      ],
+      "create_contact.phone_number": [
+        {
+          "row": 65,
+          "expected": "+81 90-1234-5678",
+          "got": null
+        },
+        {
+          "row": 75,
+          "expected": "(03) 1234-5678",
+          "got": null
+        },
+        {
+          "row": 138,
+          "expected": "+44 20 7946 0884",
+          "got": null
+        },
+        {
+          "row": 148,
+          "expected": "(787) 555-1234",
+          "got": "787 555-1234"
+        },
+        {
+          "row": 178,
+          "expected": "090-1234-5678",
+          "got": null
+        }
+      ],
+      "create_contact.email": [
+        {
+          "row": 100,
+          "expected": "anya.petrova@securemail.co.uk",
+          "got": "ana.petrova@securemail.co.uk"
+        },
+        {
+          "row": 108,
+          "expected": "elias.stavros@bizmail.com",
+          "got": "eliias.stavros@bizmail.com."
+        },
+        {
+          "row": 171,
+          "expected": "aditya.sharma@techsphere.in",
+          "got": null
+        },
+        {
+          "row": 621,
+          "expected": "ktanaka@techcorp.jp",
+          "got": "kenji.tanaka@techcorp.jp"
+        },
+        {
+          "row": 778,
+          "expected": "amara.okoro@examplemail.ng",
+          "got": null
+        }
+      ],
+      "send_email.to": [
+        {
+          "row": 105,
+          "expected": "ktanaka@techcorp.com",
+          "got": "kenji.tanaka@techcorp.com"
+        },
+        {
+          "row": 422,
+          "expected": "anya.sharma@examplecorp.com",
+          "got": "ana.sharma@examplecorp.com"
+        },
+        {
+          "row": 476,
+          "expected": "anya.sharma@corpmail.com",
+          "got": "ana.sharma@corpmail.com"
+        },
+        {
+          "row": 606,
+          "expected": "Sofia.Rodriguez@webmail.com",
+          "got": "sofia.Rodriguez@webmail.com"
+        },
+        {
+          "row": 663,
+          "expected": "Sofia.Katsaros@gmail.com",
+          "got": "sofia.katsaros@gmail.com"
+        }
+      ],
+      "send_email.subject": [
+        {
+          "row": 279,
+          "expected": "Initial Inquiry",
+          "got": "Inquiry"
+        }
+      ],
+      "send_email.body": [
+        {
+          "row": 279,
+          "expected": "Thank you for providing your details. We look forward to discussing the partnership further.",
+          "got": "Thank you for the update."
+        },
+        {
+          "row": 358,
+          "expected": "I need a restock of A4 paper and highlighters ASAP,",
+          "got": "I need a restock of A4 paper and highlighters ASAP"
+        },
+        {
+          "row": 417,
+          "expected": "Hi Sofia, please review the attached document when you get a chance. Let's discuss it tomorrow morning. Thanks,",
+          "got": "Hi Sofia, please review the attached document when you get a chance. Let's discuss it tomorrow morning. Thanks"
+        },
+        {
+          "row": 474,
+          "expected": "Hi Anaya, Just confirming I've sent the updated Q3 budget review spreadsheet. Let me know if you have any trouble accessing the file. Thanks,",
+          "got": "Hi Anaya, Just confirming I've sent the updated Q3 budget review spreadsheet. Let me know if you have any trouble accessing the file. Thanks"
+        },
+        {
+          "row": 615,
+          "expected": "Please send over the updated sales figures by end of day today.",
+          "got": "Please send over the updated sales figures by end of day."
+        }
+      ]
+    }
+  },
+  "reference": {
+    "total": 961,
+    "exact": 469,
+    "names": 759,
+    "error_classes": {
+      "argument_values": 235,
+      "argument_keys_and_values": 55,
+      "exact": 469,
+      "under_call": 137,
+      "over_call": 37,
+      "wrong_name": 28
+    },
+    "call_buckets": {
+      "1": {
+        "total": 640,
+        "exact": 385,
+        "names": 614,
+        "under_call": 0,
+        "over_call": 4
+      },
+      "2": {
+        "total": 320,
+        "exact": 84,
+        "names": 145,
+        "under_call": 136,
+        "over_call": 33
+      },
+      "3": {
+        "total": 1,
+        "exact": 0,
+        "names": 0,
+        "under_call": 1,
+        "over_call": 0
+      }
+    },
+    "argument_fields": {
+      "create_contact.last_name": {
+        "total": 135,
+        "mismatches": 110,
+        "error_rate": 0.8148148148148148
+      },
+      "create_contact.first_name": {
+        "total": 135,
+        "mismatches": 98,
+        "error_rate": 0.725925925925926
+      },
+      "show_map.query": {
+        "total": 156,
+        "mismatches": 64,
+        "error_rate": 0.41025641025641024
+      },
+      "create_calendar_event.datetime": {
+        "total": 219,
+        "mismatches": 51,
+        "error_rate": 0.2328767123287671
+      },
+      "create_contact.phone_number": {
+        "total": 135,
+        "mismatches": 47,
+        "error_rate": 0.34814814814814815
+      },
+      "send_email.body": {
+        "total": 141,
+        "mismatches": 27,
+        "error_rate": 0.19148936170212766
+      },
+      "send_email.to": {
+        "total": 141,
+        "mismatches": 27,
+        "error_rate": 0.19148936170212766
+      },
+      "create_contact.email": {
+        "total": 113,
+        "mismatches": 21,
+        "error_rate": 0.18584070796460178
+      },
+      "send_email.subject": {
+        "total": 141,
+        "mismatches": 14,
+        "error_rate": 0.09929078014184398
+      },
+      "create_calendar_event.title": {
+        "total": 219,
+        "mismatches": 9,
+        "error_rate": 0.0410958904109589
+      }
+    },
+    "missing_argument_keys": {
+      "create_contact.phone_number": 33,
+      "send_email.body": 5,
+      "create_contact.email": 2
+    },
+    "extra_argument_keys": {
+      "create_contact.email": 15
+    },
+    "argument_field_examples": {
+      "create_contact.first_name": [
+        {
+          "row": 0,
+          "expected": "Lena",
+          "got": "Petrova"
+        },
+        {
+          "row": 2,
+          "expected": "Anya",
+          "got": "Anya Sharma"
+        },
+        {
+          "row": 10,
+          "expected": "Marcus",
+          "got": "Marcus Oliveira"
+        },
+        {
+          "row": 26,
+          "expected": "Javier",
+          "got": "Javier Delgado"
+        },
+        {
+          "row": 45,
+          "expected": "Elena",
+          "got": "create_contact"
+        }
+      ],
+      "create_contact.last_name": [
+        {
+          "row": 0,
+          "expected": "Petrova",
+          "got": "Lena Petrova"
+        },
+        {
+          "row": 2,
+          "expected": "Sharma",
+          "got": "+91 98765 43210"
+        },
+        {
+          "row": 10,
+          "expected": "Oliveira",
+          "got": "Marcus Oliveira"
+        },
+        {
+          "row": 25,
+          "expected": "Khan",
+          "got": "Aisha Khan"
+        },
+        {
+          "row": 26,
+          "expected": "Delgado",
+          "got": "+34 678 555 123"
+        }
+      ],
+      "send_email.body": [
+        {
+          "row": 1,
+          "expected": "I've uploaded the revised figures to the shared drive. Let me know if you have any questions.",
+          "got": "To javier.ortega@ecotradeintl.com"
+        },
+        {
+          "row": 71,
+          "expected": "Hi Hiroshi, I just reviewed the updated Q3 plan and it looks great. Can we quickly sync up on Tuesday to confirm the timeline?",
+          "got": null
+        },
+        {
+          "row": 99,
+          "expected": "I need to check the inventory in the dark attic, I will be about 30 minutes late for dinner.",
+          "got": null
+        },
+        {
+          "row": 147,
+          "expected": "Your order #73491 is ready for pickup starting tomorrow morning at 9:00 AM.",
+          "got": "To"
+        },
+        {
+          "row": 153,
+          "expected": "Hi Aditya, I've reviewed the final draft. It looks good to go. Please confirm if you want me to print hard copies for the meeting tomorrow.",
+          "got": "\n"
+        }
+      ],
+      "create_contact.phone_number": [
+        {
+          "row": 2,
+          "expected": "+91 98765 43210",
+          "got": null
+        },
+        {
+          "row": 26,
+          "expected": "+34 678 555 123",
+          "got": null
+        },
+        {
+          "row": 60,
+          "expected": "+91 98765 43210",
+          "got": "91 98765 43210"
+        },
+        {
+          "row": 75,
+          "expected": "(03) 1234-5678",
+          "got": null
+        },
+        {
+          "row": 114,
+          "expected": "040 123 4567",
+          "got": null
+        }
+      ],
+      "create_contact.email": [
+        {
+          "row": 2,
+          "expected": "anya.sharma@examplemail.co.in",
+          "got": "a.sharma@examplemail.co.in"
+        },
+        {
+          "row": 100,
+          "expected": "anya.petrova@securemail.co.uk",
+          "got": "ana.petrova@securemail.co.uk"
+        },
+        {
+          "row": 114,
+          "expected": "anya.petrova@web.fi",
+          "got": "a.petrova@web.fi"
+        },
+        {
+          "row": 143,
+          "expected": "anya.sharma@webmail.in",
+          "got": "a.sharma@webmail.in"
+        },
+        {
+          "row": 210,
+          "expected": "adara.sharma@tech-sol.in",
+          "got": "adara.sharma@tech-sol"
+        }
+      ],
+      "show_map.query": [
+        {
+          "row": 6,
+          "expected": "art supply store 'Canvas Creations' at 934 Willow Road, Portland, Oregon",
+          "got": "Canvas Creations"
+        },
+        {
+          "row": 11,
+          "expected": "The Wandering Page bookstore in Brooklyn",
+          "got": "The Wandering Page bookstore"
+        },
+        {
+          "row": 25,
+          "expected": "Heritage Bookstore at 789 Elmwood Ave, Toronto",
+          "got": "789 Elmwood Ave, Toronto"
+        },
+        {
+          "row": 28,
+          "expected": "The Corner Bakery at 3850 N Sheridan Rd",
+          "got": "nearest branch of 'The Corner Bakery' cafe at 3850 N Sheridan Rd"
+        },
+        {
+          "row": 52,
+          "expected": "Aroma Cafe at 15 Rue Saint-Antoine, Paris, France",
+          "got": "Aroma Cafe 15 Rue Saint-Antoine, Paris, France"
+        }
+      ],
+      "create_calendar_event.datetime": [
+        {
+          "row": 7,
+          "expected": "2025-07-30T14:00:00",
+          "got": "2026-01-21T14:00:00"
+        },
+        {
+          "row": 20,
+          "expected": "2026-09-28T10:30:00",
+          "got": "next Monday at 10:30 AM"
+        },
+        {
+          "row": 37,
+          "expected": "2025-04-01T16:30:00",
+          "got": "2025-03-28T16:30:00"
+        },
+        {
+          "row": 83,
+          "expected": "2024-12-07T09:30:00",
+          "got": "next Saturday at 9:30 AM"
+        },
+        {
+          "row": 88,
+          "expected": "2026-09-08T09:00:00",
+          "got": "2026-01-21T09:00:00"
+        }
+      ],
+      "send_email.to": [
+        {
+          "row": 23,
+          "expected": "elena.petrova@starlightmed.org",
+          "got": "Elena.petrova@starlightmed.org"
+        },
+        {
+          "row": 99,
+          "expected": "elias.muller@webmail.de",
+          "got": "Elias M\u00fcller"
+        },
+        {
+          "row": 103,
+          "expected": "elias.kallaste@inovatech.ee",
+          "got": "Elias.kallaste@inovatech.ee"
+        },
+        {
+          "row": 170,
+          "expected": "s.ivanova@webmailpro.ru",
+          "got": "To send_email"
+        },
+        {
+          "row": 197,
+          "expected": "alberto.rossi@caffeitaliano.com",
+          "got": "To confirm the lunch meeting."
+        }
+      ],
+      "create_calendar_event.title": [
+        {
+          "row": 35,
+          "expected": "Quarterly Financial Review.",
+          "got": "Quarterly Financial Review"
+        },
+        {
+          "row": 62,
+          "expected": "Important client meeting regarding the new contract",
+          "got": "important client meeting regarding the new contract"
+        },
+        {
+          "row": 272,
+          "expected": "Follow-up call with Mr. Tanaka",
+          "got": "follow-up call with Mr. Tanaka"
+        },
+        {
+          "row": 444,
+          "expected": "Dentist Appointment with Dr. Akira Tanaka",
+          "got": "Dentist appointment"
+        },
+        {
+          "row": 577,
+          "expected": "Pick up cake",
+          "got": "pick up the cake"
+        }
+      ],
+      "send_email.subject": [
+        {
+          "row": 64,
+          "expected": "Project Update",
+          "got": "Tool: send_email"
+        },
+        {
+          "row": 71,
+          "expected": "Confirming Q3 Project Plan",
+          "got": "Label"
+        },
+        {
+          "row": 142,
+          "expected": "Confirming Monday Meeting",
+          "got": "Let me know if that time still works."
+        },
+        {
+          "row": 198,
+          "expected": "Rescheduling our Q3 Review meeting",
+          "got": "\\"
+        },
+        {
+          "row": 233,
+          "expected": "Regarding your research paper on AI ethics",
+          "got": "Trip to AI ethics"
+        }
+      ]
+    }
+  },
+  "paired": {
+    "reference_only": 34,
+    "candidate_only": 234,
+    "net_reference_advantage": -200,
+    "reference_only_by_candidate_error": {
+      "under_call": 20,
+      "argument_values": 12,
+      "argument_keys_and_values": 1,
+      "over_call": 1
+    },
+    "candidate_only_by_reference_error": {
+      "argument_values": 111,
+      "under_call": 64,
+      "over_call": 18,
+      "wrong_name": 18,
+      "argument_keys_and_values": 23
+    },
+    "net_by_error_class": {
+      "argument_keys_and_values": -22,
+      "argument_values": -99,
+      "over_call": -17,
+      "under_call": -44,
+      "wrong_name": -18
+    },
+    "example_indices": {
+      "candidate_only_argument_keys_and_values": [
+        26,
+        45,
+        59,
+        71,
+        99,
+        114,
+        143,
+        250,
+        281,
+        328,
+        333,
+        369
+      ],
+      "candidate_only_argument_values": [
+        0,
+        1,
+        10,
+        20,
+        23,
+        50,
+        64,
+        88,
+        103,
+        116,
+        118,
+        126
+      ],
+      "candidate_only_over_call": [
+        12,
+        46,
+        96,
+        220,
+        274,
+        307,
+        377,
+        390,
+        405,
+        461,
+        512,
+        553
+      ],
+      "candidate_only_under_call": [
+        8,
+        14,
+        15,
+        17,
+        21,
+        47,
+        61,
+        74,
+        139,
+        177,
+        180,
+        192
+      ],
+      "candidate_only_wrong_name": [
+        18,
+        209,
+        338,
+        339,
+        359,
+        449,
+        613,
+        648,
+        670,
+        718,
+        735,
+        821
+      ],
+      "reference_only_argument_keys_and_values": [
+        364
+      ],
+      "reference_only_argument_values": [
+        152,
+        168,
+        193,
+        411,
+        478,
+        602,
+        606,
+        633,
+        641,
+        663,
+        863,
+        939
+      ],
+      "reference_only_over_call": [
+        583
+      ],
+      "reference_only_under_call": [
+        41,
+        156,
+        271,
+        285,
+        287,
+        289,
+        445,
+        454,
+        457,
+        576,
+        586,
+        589
+      ]
+    }
+  }
+}
