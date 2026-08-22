@@ -1,0 +1,37 @@
+[
+ {
+  "dataset_index": 9,
+  "n_expected": 1,
+  "query": "Current date and time given in YYYY-MM-DDTHH:MM:SS format: 2025-01-25T11:01:53\u001eDay of week is Saturd",
+  "want": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "device": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "host": [
+   {
+    "name": "turn_on_flashlight",
+    "arguments": {}
+   }
+  ],
+  "name_ok": true,
+  "exact_ok": true,
+  "agrees_with_host": true,
+  "host_name_ok": true,
+  "host_exact_ok": true,
+  "agrees_on_score": true,
+  "seconds": 158.5,
+  "device_ms": 158111,
+  "prefill_tok": 252,
+  "prefill_tps": 1.75,
+  "decode_tok": 14,
+  "decode_tps": 1.29
+ }
+]

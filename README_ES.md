@@ -28,7 +28,7 @@ $ turn on pin 5
 | **Modelo** | Needle 2 — 45M parámetros, CQ de 2 bits, archivo único de 13,7 MB |
 | **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~5 $) |
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
-| **Velocidad ESP32** | una herramienta fija: **prefill 1,94 tok/s · decode 1,60 tok/s** · 16,170 s caliente · 35,480 s fría |
+| **Velocidad ESP32** | una herramienta fija: **prefill 2,07 tok/s · decode 1,69 tok/s** · 15,266 s caliente · 33,382 s fría |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
 | **Precisión** | **69,6%** en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
 
@@ -120,7 +120,7 @@ herramientas.
 La salida doble selecciona ambas herramientas y extrae la fecha y hora, el correo, el título y el
 asunto. La latencia depende del esquema seleccionado, la longitud de la consulta y las llamadas
 generadas. Como referencia reproducible, la compilación más rápida por defecto (`fast_math=1`) con una herramienta
-fija tardó **35,480 s** en frío y **16,170 s** tras acertar la caché de prefijo en la placa anterior
+fija tardó **33,382 s** en frío y **15,266 s** tras acertar la caché de prefijo en la placa anterior
 (2026-08-22). Ambas ejecuciones devolvieron el mismo JSON del ejemplo simple. Las condiciones exactas
 están en el [benchmark](#benchmark).
 
@@ -271,7 +271,8 @@ Rendimiento bruto del motor, medido sobre hardware real:
 | Scratch caliente trasladado a SRAM interna | +5% |
 | Caché de pesos en PSRAM (oportunista) | +8% |
 | Cargas float alineadas TIE728 + kernel CQ2 de 2 filas/8 acumuladores | matvec 512×512: 5,272 → 3,781 ms en un núcleo; 2,700 → 1,960 ms en dos |
-| **Medición más rápida por defecto con una herramienta fija** | **prefill 1,94 tok/s, decode 1,60; 35,480 s en frío, 16,170 s en caliente** |
+| Planificación entre operadores (mHC/Sinkhorn y gate durante trabajo independiente del núcleo 0) | latencia en frío -5,9%; en caliente -5,6% |
+| **Medición más rápida por defecto con una herramienta fija** | **prefill 2,07 tok/s, decode 1,69; 33,382 s en frío, 15,266 s en caliente** |
 | Caché de prefijo KV (cuesta ~20% de velocidad bruta por agrandar el anillo) | **8,2× extremo a extremo** |
 
 ### Lo que no funcionó
@@ -288,11 +289,15 @@ Rendimiento bruto del motor, medido sobre hardware real:
   de los datos y de las instrucciones disponibles.
 - **Sinkhorn en espacio lineal.** Matemáticamente equivalente a la versión en espacio logarítmico,
   pero sufre underflow y da NaN. Quédate con la logarítmica.
+- **Kernel CQ2 bloqueado de dos tokens.** Reutilizar cada lectura de pesos para dos vectores fue
+  numéricamente correcto, pero el par de matvec solo aceleró 1,11×. Una ruta target completa para
+  verificación tipo DFlash exigiría además estado y atención causal. Se retiró el prototipo; las
+  mediciones están en la [auditoría de overlap](docs/esp32s3-overlap-audit.md).
 
 ## Limitaciones
 
-- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 16,170 s en
-  caliente y 35,480 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
+- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 15,266 s en
+  caliente y 33,382 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
   minutos. Una API en la nube sigue siendo mucho más rápida. El valor está en trabajar sin conexión,
   sin coste de API y con los datos en el dispositivo.
 - **El modelo no admite chino.** Las órdenes de dispositivo en chino obtienen 0/5 y el motor oficial
@@ -382,15 +387,17 @@ incluir sus 293 ms de inicialización mediana. Son temporizadores de fase reales
 se conservan por separado.
 
 **Velocidad actual en ESP32-S3 real (2026-08-22):** la compilación más rápida por
-defecto (`fast_math=1`, `profile=0`) procesó un prompt fijo de 51 tokens y una
-herramienta en 35,480 s en frío y 16,170 s en caliente.
-El prefill/decode en frío alcanzó 1,94/1,60 tok/s; ambas ejecuciones emitieron
+defecto (`fast_math=1`, `profile=0`) procesó un prompt fijo de 52 tokens y una
+herramienta en 33,382 s en frío y 15,266 s en caliente.
+El prefill/decode en frío alcanzó 2,07/1,69 tok/s; las cinco ejecuciones emitieron
 la misma llamada de linterna. La autoprueba TIE728 pasó con un error absoluto máximo
-de 8,583e-06. Una entrada mobile-actions compleja de 333 tokens completó dos llamadas
+de 8,583e-06. Una fila mobile-actions de 252 tokens terminó strict exact en 158,111 s,
+un 6,5% más rápido que el firmware anterior, y coincidió byte a byte con el host.
+Una entrada mobile-actions compleja de 333 tokens completó dos llamadas
 strict-exact en 413,742 s y coincidió byte por byte con el host actual. Tres filas
 anteriores tardaron 169,1/319,6/255,4 s y también coincidieron; estas muestras de la
 placa comprueban paridad, no precisión poblacional.
-[El payload exacto, la configuración y la consola sin procesar](docs/esp32s3-tie728-audit.md)
+[El diseño de overlap, la configuración, los experimentos descartados y la evidencia](docs/esp32s3-overlap-audit.md)
 se conservan por separado.
 
 **Auditoría anterior a TIE728 (2026-08-19):** la misma placa rev 0.2 a 240 MHz con
