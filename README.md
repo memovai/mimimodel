@@ -27,11 +27,11 @@ $ turn on pin 5
 | **Model** | Needle 2 — 45M params, CQ 2-bit, 13.7 MB single file |
 | **Hardware** | ESP32-S3, 240 MHz Xtensa LX7, 16 MB flash, 8 MB PSRAM (~$5) |
 | **Engine** | one C99 file, ~2,000 lines, no dependencies beyond `libm` |
-| **Speed** | warm tool call **29 s** · cold **241 s** · 1.4 tok/s prefill |
+| **Speed** | fixed one-tool call: **16.875 s warm** · **36.365 s cold** · 1.93 tok/s prefill |
 | **Memory** | 13.7 MB flash (memory-mapped) · ~7.7 MB PSRAM · 256 KB firmware |
 | **Accuracy** | 49.3% on google/mobile-actions (961 cases, strict) — official engine 2.0.2 scores 69.2% on identical inputs |
 
-> **Honesty first:** this is slower than a cloud API by roughly 5×, it does not understand
+> **Honesty first:** this is several times slower than a cloud API, it does not understand
 > Chinese, it will happily call a tool when you say hello, and it scores well below the
 > official engine on the same eval. See [Benchmark](#benchmark) and [Limitations](#limitations).
 > What it buys you is a language model that works with the network cable pulled out.
@@ -95,11 +95,11 @@ hit.
 ### 4. Run
 
 ```bash
-# Simple: 103.9 seconds cold, 22.8 seconds with the same tool prefix cached
+# Simple tool call
 mimimodel run "Turn on the flashlight."
 # [{"name":"turn_on_flashlight","arguments":{}}]
 
-# Two tools: 251.6 seconds cold, 170.5 seconds cached
+# Multi-tool call with structured extraction
 mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
 # [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
 ```
@@ -109,9 +109,11 @@ same tool profile keep the connection and cached prefix. `mimimodel status` show
 build, and prefix hash; `mimimodel daemon stop` releases the port. The model expects English
 input. The command returns tool-call JSON but does not execute the selected tools.
 
-These timings were measured on the ESP32-S3 described above with the bundled three-tool profile.
-The two-tool output selected both tools and exactly extracted the timestamp, email address, event
-title, and subject.
+The multi-tool output selects both tools and extracts the timestamp, email address, event title,
+and subject. Latency depends on the selected schema, query length, and generated calls. For a
+reproducible reference, the standard build (`fast_math=0`) with one fixed tool took **36.365 s**
+cold and **16.875 s** after a prefix-cache hit on the board above (2026-08-22). Both runs returned
+the same JSON shown in the simple example. See [Benchmark](#benchmark) for the exact conditions.
 
 > ⚠️ Flash the app **before or together with** the weights. Any firmware whose partition table
 > puts a SPIFFS region over the weight area will auto-format it on first boot and silently corrupt
@@ -238,7 +240,8 @@ prompt (288 of 300 tokens). Its KV rows stay live in the ring, so only the query
 The split point is the `</tools>` marker — markers are atomic tokens, so the prefix's tokenization
 is provably a prefix of the whole prompt's.
 
-**Cold call 241 s → warm call 29 s (8.2×).**
+**Historical three-tool trace: cold 241 s → warm 29 s (8.2×).** The current TIE728 build is
+faster; this trace remains useful because it shows where the cache removes work phase by phase.
 
 ```mermaid
 flowchart TB
@@ -266,17 +269,19 @@ Raw engine throughput, measured on hardware:
 | Byte-LUT weight decode + quad-row kernel (4 rows share each activation load) | +18% |
 | Hot scratch moved to internal SRAM | +5% |
 | PSRAM weight cache (opportunistic) | +8% |
-| **Total** | **1.72 tok/s prefill (2.7×), 1.38 decode (2.3×)** |
+| TIE728 aligned float loads + 2-row/8-accumulator CQ2 kernel | 512×512 matvec: 5.272 → 3.781 ms single-core; 2.700 → 1.960 ms dual-core |
+| **Current fixed one-tool run** | **1.93 tok/s prefill, 1.62 decode; 36.365 s cold, 16.875 s warm** |
 | KV prefix cache (costs ~20% raw speed for a bigger ring) | **end-to-end 8.2×** |
 
 ### What did not work
 
-- **ESP32-S3 PIE 128-bit SIMD.** Implemented in assembly (`ee.vmulas.s16.accx`, 8 MACs per
+- **Dense int16 PIE path.** Implemented in assembly (`ee.vmulas.s16.accx`, 8 MACs per
   instruction) with an int16 quantized activation path. Numerically correct (self-test relative
   error 5.5e-5) and **0.32× the speed** — 3× *slower*. Unpacking 2-bit weights into int16 lanes
   dominates runtime, while PIE has no 2-bit unpack instruction and multiply-accumulates account
   for a smaller share. The code is kept
-  behind `-DNEEDLE_PIE`, off by default.
+  behind `-DNEEDLE_PIE`, off by default. The current TIE728 kernel succeeds by keeping CQ2 decode
+  in its byte-LUT form and using vector float loads and accumulators instead of widening weights.
 - **int16 arithmetic on the host.** 2.3× slower than float on ARM/x86, because the compiler
   auto-vectorizes the float loops. SIMD gains depend on data layout and instruction coverage.
 - **Linear-space Sinkhorn.** Mathematically equivalent to the log-space version, but underflows
@@ -284,9 +289,9 @@ Raw engine throughput, measured on hardware:
 
 ## Limitations
 
-- **~29 s per call.** A cloud API answers the same question in 3–8 s. The value here comes from
-  offline operation, zero API cost, and keeping data on the device; latency remains well above a
-  cloud API.
+- **Latency is schema-dependent.** The controlled one-tool workload takes 16.875 s warm and
+  36.365 s cold; larger schemas and multi-call outputs can take minutes. A cloud API remains much
+  faster. The value here comes from offline operation, zero API cost, and keeping data on-device.
 - **Chinese is unsupported by the model.** Chinese device commands score 0/5, with identical
   failures in the official engine. This places the limitation in the model itself. Confidence
   still drops to 0.02–0.22 on these cases, making them detectable.
@@ -373,14 +378,21 @@ audit measured this engine at 244 prefill / 195 decode tok/s, versus 1664 / 996
 for the official engine. Median request latency was 1711 ms versus 667 ms when
 the official engine's schema/RAG initialization is included.
 
-**Real ESP32-S3 audit (2026-08-19):** on a 240 MHz rev 0.2 board with 8 MB octal
-PSRAM, two corrected-protocol mobile-actions rows took 364/292 s at baseline and
-352.4/282.8 s with optional `-ffast-math` (about 3.2% faster); all outputs matched
-the standard host byte-for-byte. A third, host-correct row took 189.2 s and was
-both strict-exact and host-identical. A fixed one-tool workload measured
-42.895/20.067 s cold/warm at baseline and 41.541/19.444 s with fast math. This is
-a timing/parity audit, not an accuracy estimate; fast math stays opt-in because
-near-tie greedy decisions can change. Full data and rejected optimizations are in
+**Current real ESP32-S3 speed (2026-08-22):** a standard fair build (`fast_math=0`,
+profiling off) ran a fixed 51-token, one-tool prompt in 36.365 s cold and 16.875 s
+warm. Prefill/decode reached 1.93/1.62 tok/s cold; both runs emitted the exact
+flashlight call. The TIE728 CQ2 kernel reduced a 512×512 matvec from 5.272 to
+3.781 ms on one core and from about 2.700 to 1.960 ms across two cores. Its boot
+self-test measured a maximum absolute error of 6.676e-06 against scalar C. A
+mobile-actions row ran in 171.0 s and matched the host output, strict result,
+tool name, and arguments. One row proves timing and parity, not accuracy.
+[Exact payload, settings, and raw console output](docs/esp32s3-tie728-audit.md) are preserved separately.
+
+**Pre-TIE728 audit (2026-08-19):** the same 240 MHz rev 0.2 board with 8 MB octal
+PSRAM measured 42.895/20.067 s cold/warm on the fixed one-tool workload. Optional
+`-ffast-math` reached 41.541/19.444 s but remains opt-in because near-tie greedy
+decisions can change. Two corrected-protocol mobile-actions rows matched the
+standard host byte-for-byte. Full raw data is in
 [`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json).
 
 The standard fair build was also run on a fixed-seed proportional sample (8
@@ -433,9 +445,10 @@ are all other people's work.
   look worth attempting.
 - **[Andrej Karpathy, llama2.c](https://github.com/karpathy/llama2.c)** — the single-file,
   dependency-free C inference engine this one is shaped after.
-- **[Espressif](https://github.com/espressif/esp-idf)** — ESP-IDF, and
-  [esp-dsp](https://github.com/espressif/esp-dsp), whose `dspi_dotprod_s16_aes3.S` was the working
-  reference for ESP32-S3 PIE vector instruction syntax.
+- **[Espressif](https://github.com/espressif/esp-idf)** — ESP-IDF,
+  [esp-dsp](https://github.com/espressif/esp-dsp), and
+  [esp-dl](https://github.com/espressif/esp-dl). Their Xtensa assembly provided working references
+  for ESP32-S3 PIE/TIE728 syntax, aligned vector loads, and accumulator scheduling.
 - **[SentencePiece](https://github.com/google/sentencepiece)** — the BPE tokenizer model the
   `.cact` tokenizer blob is a dump of.
 - Walsh–Hadamard transforms and Lloyd-Max quantization are classical; the specific application of

@@ -27,11 +27,11 @@ $ turn on pin 5
 | **模型** | Needle 2 — 45M 参数，CQ 2-bit 量化，13.7 MB 单文件 |
 | **硬件** | ESP32-S3，240 MHz Xtensa LX7，16 MB flash，8 MB PSRAM（约 ¥35） |
 | **引擎** | 单个 C99 文件，约 2000 行，除 `libm` 外零依赖 |
-| **速度** | 热调用 **29 秒** · 冷调用 **241 秒** · 预填充 1.4 tok/s |
+| **速度** | 固定单工具调用：热 **16.875 秒** · 冷 **36.365 秒** · 预填充 1.93 tok/s |
 | **内存** | 13.7 MB flash（内存映射）· 约 7.7 MB PSRAM · 固件 256 KB |
 | **准确率** | google/mobile-actions 961 条 strict 49.3% —— 相同输入下官方 engine 2.0.2 为 69.2% |
 
-> **先说实话：** 它比云端 API 慢大约 5 倍，不懂中文，你跟它打招呼它也会给你调一个工具，
+> **先说实话：** 它比云端 API 慢数倍，不懂中文，你跟它打招呼它也会给你调一个工具，
 > 而且在同一套评测上明显落后于官方引擎。详见[评测](#评测)与[局限](#局限)。
 > 它换来的是——把网线拔掉之后依然能用的语言模型。
 
@@ -92,11 +92,11 @@ mimimodel tools list
 ### 4. 运行
 
 ```bash
-# 简单请求：冷调用 103.9 秒；相同工具前缀命中缓存后 22.8 秒
+# 简单工具调用
 mimimodel run "Turn on the flashlight."
 # [{"name":"turn_on_flashlight","arguments":{}}]
 
-# 双工具请求：冷调用 251.6 秒；命中缓存后 170.5 秒
+# 带结构化提取的双工具调用
 mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
 # [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
 ```
@@ -105,8 +105,10 @@ mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:
 前缀缓存。`mimimodel status` 显示端口、固件 build 和前缀 hash；`mimimodel daemon stop` 释放串口。
 模型输入需要使用英文。命令返回工具调用 JSON，但不会实际执行工具。
 
-以上耗时来自前述 ESP32-S3 和仓库附带的 3 工具 profile。双工具输出选对了两个工具，并准确提取了
-时间、邮箱地址、事件标题和邮件主题。
+双工具输出会选中两个工具，并提取时间、邮箱地址、事件标题和邮件主题。耗时取决于实际选中的 schema、
+查询长度和生成的调用数。作为可复现参照，标准公平构建（`fast_math=0`）在固定单工具 schema 下，
+冷调用为 **36.365 秒**，前缀缓存命中后为 **16.875 秒**（2026-08-22 真机实测）；两次输出都与上面的
+简单示例完全一致。精确测试条件见[评测](#评测)。
 
 > ⚠️ 先烧（或同时烧）app，再烧权重。任何分区表把 SPIFFS 区盖在权重区上的固件，都会在首次开机时
 > 自动格式化并悄无声息地损坏模型（这个坑让我们搭进去一个下午：flash 读回来是 `0xFFFF`，
@@ -226,7 +228,8 @@ stateDiagram-v2
 （300 token 里有 288 个）。它的 KV 行在环形缓冲里一直有效，所以只有查询部分需要预填充。
 切分点选在 `</tools>` 标记处——标记是原子 token，因此前缀的分词结果**可证明**是完整 prompt 分词的前缀。
 
-**冷调用 241 秒 → 热调用 29 秒（8.2 倍）。**
+**历史三工具 trace：冷调用 241 秒 → 热调用 29 秒（8.2 倍）。** 当前 TIE728 构建更快；这里保留该
+trace，用于展示前缀缓存逐阶段省掉了哪些计算。
 
 ```mermaid
 flowchart TB
@@ -254,23 +257,25 @@ flowchart TB
 | 字节查表反量化 + 四行内核（4 行共享同一次激活加载） | +18% |
 | 热区暂存迁入内部 SRAM | +5% |
 | PSRAM 权重缓存（机会主义地填满剩余空间） | +8% |
-| **合计** | **预填充 1.72 tok/s（2.7 倍），解码 1.38（2.3 倍）** |
+| TIE728 对齐浮点加载 + 双行/八累加器 CQ2 内核 | 512×512 matvec：单核 5.272 → 3.781 ms；双核 2.700 → 1.960 ms |
+| **当前固定单工具实测** | **预填充 1.93 tok/s，解码 1.62；冷 36.365 秒，热 16.875 秒** |
 | KV 前缀缓存（为放大环形缓冲，牺牲约 20% 原始速度） | **端到端 8.2 倍** |
 
 ### 没有奏效的尝试
 
-- **ESP32-S3 的 PIE 128-bit SIMD。** 用汇编实现了（`ee.vmulas.s16.accx`，单指令 8 次乘加）
+- **密集 int16 PIE 路径。** 用汇编实现了（`ee.vmulas.s16.accx`，单指令 8 次乘加）
   外加 int16 量化激活路径。数值完全正确（自检相对误差 5.5e-5），速度是 **0.32 倍**——慢了 3 倍。
   性能瓶颈集中在 2-bit 权重到 int16 通道的解包；乘加并不占主导，PIE 也缺少 2-bit 解包指令。代码保留在
-  `-DNEEDLE_PIE` 之后，默认关闭。
+  `-DNEEDLE_PIE` 之后，默认关闭。当前 TIE728 内核继续使用 CQ2 字节查表解码，并通过向量浮点加载和
+  累加器调度提速，避开了权重扩宽。
 - **主机端用 int16 运算。** 在 ARM/x86 上比浮点慢 2.3 倍，因为编译器会自动向量化浮点循环。
   SIMD 的收益取决于数据布局和指令覆盖。
 - **线性空间的 Sinkhorn。** 与对数空间版本数学等价，但会下溢成 NaN。老实用对数空间那版。
 
 ## 局限
 
-- **每次约 29 秒。** 同样的问题云端 API 3–8 秒就答完了。这里的价值在于离线可用、零 API 费用和
-  数据留在设备内；延迟仍明显高于云端。
+- **延迟取决于 schema。** 受控单工具用例热调用 16.875 秒、冷调用 36.365 秒；更大的 schema 和多调用
+  输出可能需要数分钟。云端 API 仍然快得多。这里的价值在于离线可用、零 API 费用和数据留在设备内。
 - **中文不可用。** 中文设备指令 0/5。官方引擎同样失败，问题来自模型本身的能力边界。
   好在这些用例的置信度会掉到 0.02–0.22，至少是可检测的。
 - **它不会拒绝。** 你让它讲个笑话，它照样吐一个工具调用。任何生产环境的路由都需要置信度门限
@@ -343,13 +348,19 @@ Cactus 页面发布值是同名 split/metric 下 63.7% exact、98.3% name。本�
 本引擎 prefill/decode 为 244/195 tok/s，官方为 1664/996 tok/s；把官方 schema/RAG
 初始化也计入后，请求延迟中位为 1711 ms 对 667 ms。
 
-**开发板实测（2026-08-19）。** ESP32-S3 rev 0.2、240 MHz、16 MB flash、8 MB
-80 MHz Octal PSRAM。修正协议后两条 mobile-actions 基线为 364/292 秒；可选
-`-ffast-math` 档为 352.4/282.8 秒，均提升约 3.2%，且两条都与标准主机输出逐字节一致。
-第三条主机严格正确的样本在板上耗时 189.2 秒，同时满足 strict exact 和 host parity。
-固定单工具 schema 的冷/热调用由 42.895/20.067 秒降到 41.541/19.444 秒，prefill/decode
-从约 1.65/1.41 提升到 1.70/1.46 tok/s。三条样本只能证明计时和一致性，不能作为准确率估计；
-fast-math 可能改变接近并列的贪心决策，因此默认公平评测档仍关闭它。
+**当前开发板速度（2026-08-22）。** 标准公平构建（`fast_math=0`、`profile=0`）在固定 51-token
+单工具 prompt 上，冷调用 36.365 秒，热调用 16.875 秒；冷调用的 prefill/decode 为
+1.93/1.62 tok/s，两次均输出完全一致的 flashlight 调用。TIE728 CQ2 内核把 512×512 matvec
+单核耗时从 5.272 ms 降到 3.781 ms，双核从约 2.700 ms 降到 1.960 ms；开机自检相对标量 C 的
+最大绝对误差为 6.676e-06。一条 mobile-actions 用例耗时 171.0 秒，原始输出、strict 结果、工具名和
+参数均与主机一致。单条用例用于确认速度和一致性，不代表总体准确率。
+[完整 payload、构建设置和原始串口输出](docs/esp32s3-tie728-audit.md)已单独保存。
+
+**TIE728 前审计（2026-08-19）。** 同一块 ESP32-S3 rev 0.2、240 MHz、8 MB 80 MHz Octal
+PSRAM 开发板，在固定单工具 schema 下测得冷/热 42.895/20.067 秒。可选 `-ffast-math` 为
+41.541/19.444 秒，但接近并列的贪心决策可能变化，因此公平评测默认关闭。两条修正协议后的
+mobile-actions 输出均与标准主机逐字节一致。完整原始数据见
+[`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json)。
 
 标准公平构建还跑了固定 seed 的比例分层样本（8 条单调用 + 4 条双调用）：strict exact
 5/12，name 9/12，耗时中位 315.5 秒，prefill/decode 中位 1.39/1.11 tok/s。exact 的
@@ -401,9 +412,10 @@ flowchart LR
   在 ESP32-S3 上以 9.9 tok/s 跑通了 28.9M 参数的模型。是它让这件事看起来值得一试。
 - **[Andrej Karpathy, llama2.c](https://github.com/karpathy/llama2.c)** —— 单文件、零依赖的 C
   推理引擎范式，本引擎的形态即脱胎于此。
-- **[Espressif](https://github.com/espressif/esp-idf)** —— ESP-IDF，以及
-  [esp-dsp](https://github.com/espressif/esp-dsp)，其 `dspi_dotprod_s16_aes3.S` 是我们确认
-  ESP32-S3 PIE 向量指令语法的可用参考。
+- **[Espressif](https://github.com/espressif/esp-idf)** —— ESP-IDF、
+  [esp-dsp](https://github.com/espressif/esp-dsp) 与
+  [esp-dl](https://github.com/espressif/esp-dl)。其中的 Xtensa 汇编为 ESP32-S3 PIE/TIE728
+  指令语法、对齐向量加载和累加器调度提供了可运行参考。
 - **[SentencePiece](https://github.com/google/sentencepiece)** —— `.cact` 里的 tokenizer 数据块
   就是它的 BPE 模型导出。
 - Walsh–Hadamard 变换和 Lloyd-Max 量化都是经典方法；而「用 Hadamard 恒等式规避反量化」这一具体

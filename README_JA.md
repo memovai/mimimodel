@@ -27,11 +27,11 @@ $ turn on pin 5
 | **モデル** | Needle 2 — 45M パラメータ、CQ 2-bit 量子化、13.7 MB の単一ファイル |
 | **ハードウェア** | ESP32-S3、240 MHz Xtensa LX7、16 MB flash、8 MB PSRAM（約 750 円） |
 | **エンジン** | C99 ファイル 1 本、約 2,000 行、`libm` 以外の依存なし |
-| **速度** | ウォーム呼び出し **29 秒** · コールド **241 秒** · プリフィル 1.4 tok/s |
+| **速度** | 固定 1 ツール呼び出し：ウォーム **16.875 秒** · コールド **36.365 秒** · プリフィル 1.93 tok/s |
 | **メモリ** | 13.7 MB flash（メモリマップ）· 約 7.7 MB PSRAM · ファームウェア 256 KB |
 | **精度** | google/mobile-actions 961 件の strict で 49.3% —— 同一入力の公式 engine 2.0.2 は 69.2% |
 
-> **先に正直なことを：** クラウド API より約 5 倍遅く、中国語は理解せず、挨拶しただけでも
+> **先に正直なことを：** クラウド API より数倍遅く、中国語は理解せず、挨拶しただけでも
 > 平気でツールを呼び、同じ評価セットで公式エンジンに大きく劣ります。
 > [ベンチマーク](#ベンチマーク)と[制約](#制約)を参照してください。
 > 代わりに得られるのは、LAN ケーブルを抜いても動く言語モデルです。
@@ -96,11 +96,11 @@ mimimodel tools list
 ### 4. 実行
 
 ```bash
-# 単純: コールド 103.9 秒、同じツールプレフィックスのキャッシュ後は 22.8 秒
+# 単純なツール呼び出し
 mimimodel run "Turn on the flashlight."
 # [{"name":"turn_on_flashlight","arguments":{}}]
 
-# 2 ツール: コールド 251.6 秒、キャッシュ後は 170.5 秒
+# 構造化抽出を伴う 2 ツール呼び出し
 mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
 # [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
 ```
@@ -110,8 +110,11 @@ mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:
 firmware build、プレフィックス hash を表示し、`mimimodel daemon stop` はポートを解放します。入力には英語を
 使います。コマンドはツール呼び出し JSON を返しますが、ツール自体は実行しません。
 
-この所要時間は、上記 ESP32-S3 と同梱の 3 ツール profile で実測しました。2 ツール出力は両方の
-ツールを選び、日時、メールアドレス、予定タイトル、件名を正確に抽出しました。
+2 ツール出力は両方のツールを選び、日時、メールアドレス、予定タイトル、件名を抽出します。
+所要時間は、選ばれた schema、query の長さ、生成する呼び出し数で変わります。再現可能な基準として、
+標準の公平な build（`fast_math=0`）と固定 1 ツール schema では、上記ボードでコールド
+**36.365 秒**、プレフィックス cache hit 後 **16.875 秒**でした（2026-08-22）。両方とも単純な
+例と同一の JSON を返しました。正確な条件は[ベンチマーク](#ベンチマーク)にあります。
 
 > ⚠️ 重みより**先に、あるいは同時に** app を書き込んでください。パーティションテーブルが SPIFFS
 > 領域を重み領域に重ねているファームウェアは、初回起動時にそこを自動フォーマットし、モデルを
@@ -238,7 +241,8 @@ stateDiagram-v2
 クエリ部分だけです。分割点は `</tools>` マーカー——マーカーは原子的なトークンなので、
 接頭辞のトークン化がプロンプト全体のトークン化の接頭辞になることが**証明できます**。
 
-**コールド 241 秒 → ウォーム 29 秒（8.2 倍）。**
+**過去の 3 ツール trace：コールド 241 秒 → ウォーム 29 秒（8.2 倍）。** 現在の TIE728 build は
+さらに高速です。この trace は、cache がどの処理を段階ごとに省くかを示すために残しています。
 
 ```mermaid
 flowchart TB
@@ -266,16 +270,18 @@ flowchart TB
 | バイト LUT による重みデコード ＋ 4 行カーネル（4 行で 1 回のアクティベーション読み出しを共有） | +18% |
 | ホットなスクラッチを内部 SRAM へ移動 | +5% |
 | PSRAM 重みキャッシュ（余った分を日和見的に使う） | +8% |
-| **合計** | **プリフィル 1.72 tok/s（2.7 倍）、デコード 1.38（2.3 倍）** |
+| TIE728 の aligned float load + 2 行/8 accumulator CQ2 kernel | 512×512 matvec：single-core 5.272 → 3.781 ms、dual-core 2.700 → 1.960 ms |
+| **現在の固定 1 ツール実測** | **プリフィル 1.93 tok/s、デコード 1.62、コールド 36.365 秒、ウォーム 16.875 秒** |
 | KV プレフィックスキャッシュ（リング拡大のため素の速度を約 20% 犠牲） | **エンドツーエンド 8.2 倍** |
 
 ### うまくいかなかったこと
 
-- **ESP32-S3 の PIE 128-bit SIMD。** アセンブリで実装しました（`ee.vmulas.s16.accx`、
+- **密な int16 PIE 経路。** アセンブリで実装しました（`ee.vmulas.s16.accx`、
   1 命令で 8 積和）。int16 量子化アクティベーション経路つき。数値は正しい（自己テストの相対誤差
   5.5e-5）のに速度は **0.32 倍**——3 倍*遅い*。2-bit 重みを int16 レーンへ展開する処理が実行時間の
   大半を占め、積和の比重は小さく、PIE には 2-bit 展開命令もありません。コードは `-DNEEDLE_PIE` の
-  後ろに残してあり、既定では無効です。
+  後ろに残してあり、既定では無効です。現在の TIE728 kernel は CQ2 の byte-LUT decode を維持し、
+  vector float load と accumulator scheduling で高速化するため、重みの拡張を回避できます。
 - **ホスト側での int16 演算。** ARM/x86 では float より 2.3 倍遅い。コンパイラが float ループを
   自動ベクトル化するためです。SIMD の効果はデータ配置と命令の対応範囲に左右されます。
 - **線形空間の Sinkhorn。** 対数空間版と数学的には等価ですが、アンダーフローして NaN になります。
@@ -283,8 +289,9 @@ flowchart TB
 
 ## 制約
 
-- **1 回あたり約 29 秒。** 同じ質問にクラウド API は 3〜8 秒で答えます。ここでの価値はオフライン
-  動作、API 費用ゼロ、端末内でのデータ保持にあります。レイテンシはクラウド API を大幅に上回ります。
+- **レイテンシは schema に依存します。** 制御した 1 ツール負荷はウォーム 16.875 秒、コールド
+  36.365 秒です。大きい schema や複数呼び出し出力には数分かかる場合があります。クラウド API は
+  依然として大幅に高速です。価値はオフライン動作、API 費用ゼロ、端末内でのデータ保持にあります。
 - **モデルは中国語に対応していません。** 中国語のデバイス命令は 0/5 で、公式エンジンも同じ結果です。
   これはモデル自体の能力限界を示します。信頼度スコアは 0.02〜0.22 まで落ちるため、検出は可能です。
 - **断ってくれません。** 冗談を言ってと頼んでも、モデルはツール呼び出しを出します。実運用の
@@ -358,14 +365,20 @@ binary hash を公開していないため、exact の 5.5 ポイント差は帰
 実際のフェーズ計時では、100 件の監査で prefill/decode は 244/195 tok/s、公式は
 1664/996 tok/s でした。公式初期化込みの総レイテンシは 1711 ms 対 667 ms です。
 
-**ESP32-S3 実機監査 (2026-08-19):** 240 MHz、rev 0.2、8 MB Octal PSRAM の
-ボードで、修正済みプロトコルの mobile-actions 2 件は通常 364/292 秒、任意の
-`-ffast-math` では 352.4/282.8 秒(約 3.2%短縮)で、すべて標準ホストとバイト単位で
-一致しました。ホスト側で厳密正解だった別の 1 件は 189.2 秒で、strict exact と
-host parity の両方を満たしました。固定 1 ツール負荷の cold/warm は通常
-42.895/20.067 秒、fast math で 41.541/19.444 秒です。これは時間と parity の監査で
-あり、精度推定ではありません。僅差の greedy 判断が変わり得るため fast math は任意です。
-全データは [`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json)
+**現在の ESP32-S3 実測速度（2026-08-22）：** 標準の公平な build（`fast_math=0`、`profile=0`）は、
+固定 51-token・1 ツール prompt をコールド 36.365 秒、ウォーム 16.875 秒で処理しました。
+コールド時の prefill/decode は 1.93/1.62 tok/s で、両方とも同一の flashlight call を出力しました。
+TIE728 CQ2 kernel は 512×512 matvec を single-core で 5.272 から 3.781 ms、dual-core で約
+2.700 から 1.960 ms へ短縮しました。起動時の scalar C との自己テストでは最大絶対誤差
+6.676e-06 でした。mobile-actions の 1 行は 171.0 秒で、host の生出力、strict 判定、ツール名、
+引数と一致しました。1 行で確認できるのは速度と parity であり、母集団精度ではありません。
+[正確な payload、設定、raw console 出力](docs/esp32s3-tie728-audit.md)は別文書に保存しています。
+
+**TIE728 導入前の監査（2026-08-19）：** 同じ 240 MHz rev 0.2、8 MB Octal PSRAM のボードで、
+固定 1 ツール負荷は cold/warm 42.895/20.067 秒でした。任意の `-ffast-math` は
+41.541/19.444 秒でしたが、僅差の greedy 判断を変え得るため、公平評価では無効です。
+修正済みプロトコルの mobile-actions 2 行は標準 host と byte 単位で一致しました。全データは
+[`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json)
 にあります。
 
 標準公平ビルドでも固定 seed の比例層化標本（1-call 8 件 + 2-call 4 件）を実行し、
@@ -417,9 +430,10 @@ flowchart LR
   あると思えたのはこれのおかげです。
 - **[Andrej Karpathy, llama2.c](https://github.com/karpathy/llama2.c)** —— 単一ファイル・依存なしの
   C 推論エンジンという形。本エンジンはこれに倣っています。
-- **[Espressif](https://github.com/espressif/esp-idf)** —— ESP-IDF、および
-  [esp-dsp](https://github.com/espressif/esp-dsp)。その `dspi_dotprod_s16_aes3.S` は ESP32-S3 の
-  PIE ベクトル命令の構文を確認するための実働リファレンスになりました。
+- **[Espressif](https://github.com/espressif/esp-idf)** —— ESP-IDF、
+  [esp-dsp](https://github.com/espressif/esp-dsp)、
+  [esp-dl](https://github.com/espressif/esp-dl)。これらの Xtensa assembly は ESP32-S3 の
+  PIE/TIE728 構文、aligned vector load、accumulator scheduling の実働リファレンスになりました。
 - **[SentencePiece](https://github.com/google/sentencepiece)** —— `.cact` 内のトークナイザ
   ブロブは、その BPE モデルのダンプです。
 - Walsh–Hadamard 変換と Lloyd-Max 量子化は古典的手法です。ただし逆量子化を回避するために

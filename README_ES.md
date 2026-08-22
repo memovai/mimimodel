@@ -28,11 +28,11 @@ $ turn on pin 5
 | **Modelo** | Needle 2 — 45M parámetros, CQ de 2 bits, archivo único de 13,7 MB |
 | **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~5 $) |
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
-| **Velocidad** | llamada en caliente **29 s** · en frío **241 s** · prefill 1,4 tok/s |
+| **Velocidad** | llamada fija de una herramienta: **16,875 s caliente** · **36,365 s fría** · prefill 1,93 tok/s |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
 | **Precisión** | 49,3% en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
 
-> **Honestidad por delante:** esto es unas 5 veces más lento que una API en la nube, no entiende
+> **Honestidad por delante:** esto es varias veces más lento que una API en la nube, no entiende
 > chino, si le saludas te llamará una herramienta igualmente, y queda bastante por debajo del
 > motor oficial en la misma evaluación. Véanse el [benchmark](#benchmark) y las
 > [limitaciones](#limitaciones). Lo que ganas es un modelo de lenguaje que funciona con el
@@ -97,11 +97,11 @@ prefijo efectivo e impedir un acierto de caché.
 ### 4. Ejecutar
 
 ```bash
-# Simple: 103,9 segundos en frío; 22,8 segundos con el mismo prefijo en caché
+# Llamada simple
 mimimodel run "Turn on the flashlight."
 # [{"name":"turn_on_flashlight","arguments":{}}]
 
-# Dos herramientas: 251,6 segundos en frío; 170,5 segundos con caché
+# Dos herramientas con extracción estructurada
 mimimodel run 'Create a calendar event titled "ESP32 demo" for 2026-08-21 at 14:30, then email ada@example.com with the subject "Demo confirmed".'
 # [{"name":"create_calendar_event","arguments":{"title":"ESP32 demo","datetime":"2026-08-21T14:30:00"}},{"name":"send_email","arguments":{"subject":"Demo confirmed","to":"ada@example.com"}}]
 ```
@@ -112,9 +112,12 @@ muestra el puerto, la compilación del firmware y el hash del prefijo; `mimimode
 libera el puerto. La entrada debe estar en inglés. El comando devuelve JSON, pero no ejecuta las
 herramientas.
 
-Los tiempos se midieron en el ESP32-S3 descrito arriba con el perfil incluido de tres herramientas.
-La salida doble seleccionó ambas herramientas y extrajo exactamente la fecha y hora, el correo, el
-título y el asunto.
+La salida doble selecciona ambas herramientas y extrae la fecha y hora, el correo, el título y el
+asunto. La latencia depende del esquema seleccionado, la longitud de la consulta y las llamadas
+generadas. Como referencia reproducible, la compilación estándar (`fast_math=0`) con una herramienta
+fija tardó **36,365 s** en frío y **16,875 s** tras acertar la caché de prefijo en la placa anterior
+(2026-08-22). Ambas ejecuciones devolvieron el mismo JSON del ejemplo simple. Las condiciones exactas
+están en el [benchmark](#benchmark).
 
 > ⚠️ Graba la app **antes o junto con** los pesos. Cualquier firmware cuya tabla de particiones
 > coloque una región SPIFFS sobre la zona de pesos la formateará automáticamente en el primer
@@ -248,7 +251,8 @@ prellenar la consulta. El punto de corte es el marcador `</tools>`: los marcador
 atómicos, de modo que la tokenización del prefijo es **demostrablemente** un prefijo de la del prompt
 completo.
 
-**Llamada en frío 241 s → en caliente 29 s (8,2×).**
+**Traza histórica con tres herramientas: 241 s en frío → 29 s en caliente (8,2×).** La compilación
+TIE728 actual es más rápida; la traza se conserva para mostrar qué trabajo elimina la caché en cada fase.
 
 ```mermaid
 flowchart TB
@@ -276,17 +280,19 @@ Rendimiento bruto del motor, medido sobre hardware real:
 | Decodificación de pesos por LUT de byte + kernel de 4 filas (4 filas comparten cada lectura de activación) | +18% |
 | Scratch caliente trasladado a SRAM interna | +5% |
 | Caché de pesos en PSRAM (oportunista) | +8% |
-| **Total** | **prefill 1,72 tok/s (2,7×), decode 1,38 (2,3×)** |
+| Cargas float alineadas TIE728 + kernel CQ2 de 2 filas/8 acumuladores | matvec 512×512: 5,272 → 3,781 ms en un núcleo; 2,700 → 1,960 ms en dos |
+| **Medición actual con una herramienta fija** | **prefill 1,93 tok/s, decode 1,62; 36,365 s en frío, 16,875 s en caliente** |
 | Caché de prefijo KV (cuesta ~20% de velocidad bruta por agrandar el anillo) | **8,2× extremo a extremo** |
 
 ### Lo que no funcionó
 
-- **SIMD PIE de 128 bits del ESP32-S3.** Implementado en ensamblador (`ee.vmulas.s16.accx`, 8 MAC
+- **Ruta PIE int16 densa.** Implementada en ensamblador (`ee.vmulas.s16.accx`, 8 MAC
   por instrucción) con una ruta de activaciones cuantizadas a int16. Numéricamente correcto
   (error relativo 5,5e-5 en la autoprueba) y **0,32× la velocidad**: 3 veces *más lento*. Desempaquetar
   los pesos de 2 bits en carriles int16 concentra el coste; PIE carece de una instrucción de
   desempaquetado de 2 bits y las multiplicaciones-acumulaciones representan una parte menor. El
-  código se conserva tras `-DNEEDLE_PIE`, desactivado por defecto.
+  código se conserva tras `-DNEEDLE_PIE`, desactivado por defecto. El kernel TIE728 actual mantiene
+  la decodificación CQ2 mediante LUT de bytes y acelera cargas y acumuladores float sin ensanchar pesos.
 - **Aritmética int16 en el host.** 2,3× más lenta que en float sobre ARM/x86, porque el compilador
   vectoriza automáticamente los bucles en float. El beneficio de SIMD depende de la disposición
   de los datos y de las instrucciones disponibles.
@@ -295,9 +301,10 @@ Rendimiento bruto del motor, medido sobre hardware real:
 
 ## Limitaciones
 
-- **~29 s por llamada.** Una API en la nube responde lo mismo en 3–8 s. El valor está en el
-  funcionamiento sin conexión, el coste cero de API y mantener los datos en el dispositivo; la
-  latencia sigue siendo muy superior a la de una API en la nube.
+- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 16,875 s en
+  caliente y 36,365 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
+  minutos. Una API en la nube sigue siendo mucho más rápida. El valor está en trabajar sin conexión,
+  sin coste de API y con los datos en el dispositivo.
 - **El modelo no admite chino.** Las órdenes de dispositivo en chino obtienen 0/5 y el motor oficial
   presenta los mismos fallos. La limitación pertenece al propio modelo. La puntuación de confianza
   cae a 0,02–0,22 en estos casos, lo que permite detectarlos.
@@ -378,14 +385,23 @@ Con los temporizadores de fase reales, una auditoría de 100 casos midió 244/19
 tok/s de prefill/decode frente a 1664/996; la latencia total fue 1711 ms frente a
 667 ms incluyendo la inicialización oficial.
 
-**Auditoría real ESP32-S3 (2026-08-19):** en una placa rev 0.2 a 240 MHz con 8 MB
-de PSRAM octal, dos filas mobile-actions con el protocolo corregido tardaron
-364/292 s de base y 352,4/282,8 s con `-ffast-math` opcional (aprox. 3,2% menos),
-siempre idénticas byte a byte al host estándar. Una tercera fila correcta tardó
-189,2 s y fue exacta y también idéntica al host. Una carga fija de una herramienta
-midió 42,895/20,067 s en frío/caliente y 41,541/19,444 s con fast math. Es una
-auditoría de tiempo y paridad, no una estimación de precisión; fast math sigue
-siendo opcional porque puede cambiar decisiones voraces casi empatadas. Datos en
+**Velocidad actual en ESP32-S3 real (2026-08-22):** una compilación justa estándar
+(`fast_math=0`, profiling desactivado) procesó un prompt fijo de 51 tokens y una
+herramienta en 36,365 s en frío y 16,875 s en caliente. El prefill/decode alcanzó
+1,93/1,62 tok/s en frío; ambas ejecuciones emitieron exactamente la llamada de la
+linterna. El kernel CQ2 TIE728 redujo un matvec 512×512 de 5,272 a 3,781 ms en un
+núcleo y de unos 2,700 a 1,960 ms en dos. Su autoprueba al arrancar midió un error
+absoluto máximo de 6,676e-06 frente al C escalar. Una fila mobile-actions tardó
+171,0 s y coincidió con el host en salida, resultado strict, nombre y argumentos.
+Una fila confirma tiempo y paridad, no precisión.
+[El payload exacto, la configuración y la consola sin procesar](docs/esp32s3-tie728-audit.md)
+se conservan por separado.
+
+**Auditoría anterior a TIE728 (2026-08-19):** la misma placa rev 0.2 a 240 MHz con
+8 MB de PSRAM octal midió 42,895/20,067 s en frío/caliente con una herramienta fija.
+El `-ffast-math` opcional alcanzó 41,541/19,444 s, pero sigue desactivado en la
+evaluación justa porque puede cambiar decisiones voraces casi empatadas. Dos filas
+mobile-actions coincidieron byte a byte con el host estándar. Datos completos en
 [`bench/results/device_protocol_audit_20260819.json`](bench/results/device_protocol_audit_20260819.json).
 
 La compilación justa también ejecutó una muestra proporcional de semilla fija
@@ -437,9 +453,10 @@ trabajo de otras personas.
   pareciera merecer el intento.
 - **[Andrej Karpathy, llama2.c](https://github.com/karpathy/llama2.c)** — el motor de inferencia en C
   de un solo archivo y sin dependencias al que este se parece.
-- **[Espressif](https://github.com/espressif/esp-idf)** — ESP-IDF y
-  [esp-dsp](https://github.com/espressif/esp-dsp), cuyo `dspi_dotprod_s16_aes3.S` fue la referencia
-  funcional para la sintaxis de las instrucciones vectoriales PIE del ESP32-S3.
+- **[Espressif](https://github.com/espressif/esp-idf)** — ESP-IDF,
+  [esp-dsp](https://github.com/espressif/esp-dsp) y
+  [esp-dl](https://github.com/espressif/esp-dl). Su ensamblador Xtensa sirvió como referencia
+  funcional para PIE/TIE728, cargas vectoriales alineadas y planificación de acumuladores.
 - **[SentencePiece](https://github.com/google/sentencepiece)** — el modelo de tokenizador BPE del que
   el blob de tokenizador de `.cact` es un volcado.
 - Las transformadas de Walsh–Hadamard y la cuantización de Lloyd-Max son clásicas; la aplicación
