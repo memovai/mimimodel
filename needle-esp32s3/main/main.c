@@ -122,10 +122,13 @@ void app_main(void) {
     const int profile = 0;
 #endif
     printf("[needle] build: fast_math=%d profile=%d sinkhorn_iters=%d "
-           "prefix_sink=%d reason_max=%d byte_grammar=%d\n",
+           "prefix_sink=%d reason_max=%d byte_grammar=%d mhc_overlap=%d "
+           "mt_min_rows=%d mhc_q_lead=%d gate_overlap=%d gate_lead=%d\n",
            fast_math, profile, NEEDLE_SINKHORN_ITERS,
            NEEDLE_PREFIX_SINK_DEFAULT, NEEDLE_REASON_MAX_DEFAULT,
-           NEEDLE_BYTE_GRAMMAR_DEFAULT);
+           NEEDLE_BYTE_GRAMMAR_DEFAULT, NEEDLE_MHC_OVERLAP_DEFAULT,
+           NEEDLE_MT_MIN_ROWS_DEFAULT, NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT,
+           NEEDLE_GATE_OVERLAP_DEFAULT, NEEDLE_GATE_LEAD_ROWS_DEFAULT);
     print_heap("boot");
 
     const esp_partition_t *part = esp_partition_find_first(
@@ -233,6 +236,7 @@ void app_main(void) {
         printf("[tie728] matvec aligned-load %lld us vs C %lld us (%.2fx)\n",
                (long long)((tt - tc) / 20), (long long)((tb - ta) / 20),
                (double)(tb - ta) / (double)(tt - tc));
+
 #ifdef NEEDLE_PROF
         printf("[matvec] single-core %lld us, dual-core %lld us (%.2fx)\n",
                (long long)((tb - ta) / 20), (long long)((td - tt) / 20),

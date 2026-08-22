@@ -1,0 +1,36 @@
+{
+  "date": "2026-08-22",
+  "board": "ESP32-S3 rev 0.2, 240 MHz, 16 MB QIO flash, 8 MB 80 MHz Octal PSRAM",
+  "firmware_sha256": "525cbc75ffecc51d314337671c520db8259e71aaccb8fadeef352034b65462aa",
+  "repeat_firmware_sha256": "0cb1b92084a36c392cc333ff1fa0046c86d6181ebec1c52448f0ab0625b81cd2",
+  "binary_comparison": "The two 281200-byte images differ only in the 32-byte embedded ELF identifier and 33-byte trailing image digest; their executable payloads are byte-identical.",
+  "firmware_build": "fast_math=1 profile=0 sinkhorn_iters=20 prefix_sink=160 reason_max=256 byte_grammar=1 mhc_overlap=1 mt_min_rows=64 mhc_q_lead=128 gate_overlap=1 gate_lead=32",
+  "query": "Turn on the flashlight.",
+  "tools": [
+    {
+      "name": "turn_on_flashlight",
+      "description": "Turns the flashlight on.",
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  ],
+  "expected": [
+    {
+      "name": "turn_on_flashlight",
+      "arguments": {}
+    }
+  ],
+  "final_verification": [
+    {"cache": "miss", "total_ms": 33381, "prefill_tokens": 52, "prefill_tps": 2.07, "decode_tokens": 14, "decode_tps": 1.69, "exact": true},
+    {"cache": "hit", "total_ms": 15266, "prefill_tokens": 14, "prefill_tps": 2.01, "decode_tokens": 14, "decode_tps": 1.69, "exact": true}
+  ],
+  "repeat_runs": [
+    {"cache": "miss", "total_ms": 33382, "prefill_tokens": 52, "prefill_tps": 2.07, "decode_tokens": 14, "decode_tps": 1.69, "exact": true},
+    {"cache": "hit", "total_ms": 15266, "prefill_tokens": 14, "prefill_tps": 2.01, "decode_tokens": 14, "decode_tps": 1.69, "exact": true},
+    {"cache": "hit", "total_ms": 15266, "prefill_tokens": 14, "prefill_tps": 2.01, "decode_tokens": 14, "decode_tps": 1.69, "exact": true},
+    {"cache": "hit", "total_ms": 15266, "prefill_tokens": 14, "prefill_tps": 2.01, "decode_tokens": 14, "decode_tps": 1.69, "exact": true},
+    {"cache": "hit", "total_ms": 15266, "prefill_tokens": 14, "prefill_tps": 2.01, "decode_tokens": 14, "decode_tps": 1.69, "exact": true}
+  ]
+}

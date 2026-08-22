@@ -46,6 +46,7 @@ static inline void *aligned_alloc16(size_t sz) {
     if (posix_memalign(&p, 16, (sz + 15) & ~(size_t)15) != 0) return NULL;
     return p;
 }
+
 #endif
 
 #define NEEDLE_KV_SLACK 160   /* rows beyond the window: one call's decode */
@@ -59,6 +60,21 @@ static inline void *aligned_alloc16(size_t sz) {
 #endif
 #ifndef NEEDLE_BYTE_GRAMMAR_DEFAULT
 #define NEEDLE_BYTE_GRAMMAR_DEFAULT 1
+#endif
+#ifndef NEEDLE_MHC_OVERLAP_DEFAULT
+#define NEEDLE_MHC_OVERLAP_DEFAULT 0
+#endif
+#ifndef NEEDLE_MT_MIN_ROWS_DEFAULT
+#define NEEDLE_MT_MIN_ROWS_DEFAULT 64
+#endif
+#ifndef NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT
+#define NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT 128
+#endif
+#ifndef NEEDLE_GATE_OVERLAP_DEFAULT
+#define NEEDLE_GATE_OVERLAP_DEFAULT 0
+#endif
+#ifndef NEEDLE_GATE_LEAD_ROWS_DEFAULT
+#define NEEDLE_GATE_LEAD_ROWS_DEFAULT 32
 #endif
 #ifndef NEEDLE_SINKHORN_ITERS
 #define NEEDLE_SINKHORN_ITERS 20
@@ -745,7 +761,10 @@ static void mv_job_fn(void *p) {
 
 static void cq_matvec_mt(const Needle *m, const CQMat *W, const float *xh, float *y) {
     static MvJob job;
-    if (!g_mv_go || W->out < 64) { cq_matvec(m, W, xh, y); return; }
+    if (!g_mv_go || W->out < NEEDLE_MT_MIN_ROWS_DEFAULT) {
+        cq_matvec(m, W, xh, y);
+        return;
+    }
     uint32_t half = W->out / 2;
     job.m = m; job.W = *W; job.xh = xh; job.y = y; job.r0 = half;
     if (!par_submit(mv_job_fn, &job)) { cq_matvec(m, W, xh, y); return; }
@@ -761,6 +780,38 @@ static void cq_matvec_mt(const Needle *m, const CQMat *W, const float *xh, float
     cq_matvec(m, W, xh, y);
 }
 #endif
+
+typedef struct {
+    const Needle *m;
+    uint32_t layer, lanes;
+    const float *xh;
+    float *hpost, *res;
+} MhcProjJob;
+
+static inline float sigmoidf_(float x);
+static void sinkhorn(float *lg, int n, int iters);
+
+/* phi_post and phi_res depend only on the layer input prepared for phi_pre.
+ * Computing them on the worker while core 0 builds the attention input fills
+ * a previously idle-core region without changing their arithmetic order. */
+static void mhc_proj_job_fn(void *p) {
+    MhcProjJob *j = (MhcProjJob *)p;
+    CQMat post = cq_rows(&j->m->phi_post, j->layer * j->lanes, j->lanes);
+    CQMat res = cq_rows(&j->m->phi_res, j->layer * j->lanes * j->lanes,
+                       j->lanes * j->lanes);
+    cq_matvec(j->m, &post, j->xh, j->hpost);
+    cq_matvec(j->m, &res, j->xh, j->res);
+    uint32_t own = j->layer % j->lanes;
+    for (uint32_t l = 0; l < j->lanes; l++) {
+        float off = (l == own) ? 0.0f : -4.0f;
+        j->hpost[l] = 2.0f * sigmoidf_(j->m->a_post[j->layer] * j->hpost[l]
+                         + j->m->b_post[j->layer * j->lanes + l] + off);
+    }
+    for (uint32_t l = 0; l < j->lanes * j->lanes; l++)
+        j->res[l] = j->m->a_res[j->layer] * j->res[l]
+                  + j->m->b_res[j->layer * j->lanes * j->lanes + l];
+    sinkhorn(j->res, (int)j->lanes, NEEDLE_SINKHORN_ITERS);
+}
 
 /* Copy a CQ matrix (packed indices + norms are contiguous in the blob) into
  * PSRAM to reduce flash-cache churn. Returns bytes used. */
@@ -1258,10 +1309,16 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         rms_unit(m->x, m->nx, (int)(n * C));
 
         /* hpre = sigmoid(a_pre*(phi_pre_i @ nx) + b_pre + pre_off) */
-        float hpre[MAX_LANES], tmpl[MAX_LANES * MAX_LANES];
+        float hpre[MAX_LANES], hpost[MAX_LANES];
+        float tmpl[MAX_LANES * MAX_LANES];
+        MhcProjJob mhc_job = {m, i, n, m->xh2, hpost, tmpl};
+        int mhc_overlap = 0;
         {
             /* phi_pre rows for layer i: rows [i*n, (i+1)*n) of (L*n, n*C) */
             cq_prepare_x(m, &m->phi_pre, m->nx, m->xh2);
+#if defined(ESP_PLATFORM) && NEEDLE_MHC_OVERLAP_DEFAULT
+            mhc_overlap = par_submit(mhc_proj_job_fn, &mhc_job);
+#endif
             CQMat sub = m->phi_pre;
             uint32_t row_bytes = sub.in_pad * sub.bits / 8;
             sub.packed += (uint64_t)i * n * row_bytes;
@@ -1308,12 +1365,39 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         PROF_SPLIT(PROF_QKV_PREP);
         tr("xh", (int)i, m->xh, (int)lp->q_proj.in_pad);
         static float gate[2048];
-        cq_matvec_mt(m, &lp->q_proj, m->xh, m->q);
+        if (mhc_overlap && NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT > 0
+                        && NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT < (int)lp->q_proj.out) {
+            uint32_t lead = NEEDLE_MHC_Q_LEAD_ROWS_DEFAULT;
+            CQMat q_head = cq_rows(&lp->q_proj, 0, lead);
+            cq_matvec(m, &q_head, m->xh, m->q);
+            par_wait();
+            CQMat q_tail = cq_rows(&lp->q_proj, lead, lp->q_proj.out - lead);
+            cq_matvec_mt(m, &q_tail, m->xh, m->q + lead);
+        } else {
+            if (mhc_overlap) par_wait();
+            cq_matvec_mt(m, &lp->q_proj, m->xh, m->q);
+        }
         PROF_SPLIT(PROF_Q);
         cq_matvec_mt(m, &lp->k_proj, m->xh, m->k);
         PROF_SPLIT(PROF_K);
         cq_matvec_mt(m, &lp->v_proj, m->xh, m->v);
         PROF_SPLIT(PROF_V);
+#ifdef ESP_PLATFORM
+        MvJob gate_job;
+#endif
+        int gate_overlap = 0;
+#if defined(ESP_PLATFORM) && NEEDLE_GATE_OVERLAP_DEFAULT
+        if (NEEDLE_GATE_LEAD_ROWS_DEFAULT > 0
+            && NEEDLE_GATE_LEAD_ROWS_DEFAULT < (int)lp->gate_proj.out) {
+            gate_job.m = m;
+            gate_job.W = cq_rows(&lp->gate_proj, 0,
+                                 NEEDLE_GATE_LEAD_ROWS_DEFAULT);
+            gate_job.xh = m->xh;
+            gate_job.y = gate;
+            gate_job.r0 = 0;
+            gate_overlap = par_submit(mv_job_fn, &gate_job);
+        }
+#endif
         tr("bx", (int)i, bx, (int)C);
         tr("qkv", (int)i, m->q, (int)A);
 
@@ -1378,6 +1462,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         AttnJob aj0 = { m, i, prefix_n, recent_lo, pos, 0, KV / 2, score0 };
         AttnJob aj1 = { m, i, prefix_n, recent_lo, pos, KV / 2, KV,
                         score1 };
+        if (gate_overlap) par_wait();
         if (par_submit(attn_job_fn, &aj1)) {
             attn_job_fn(&aj0);
             par_wait();
@@ -1389,7 +1474,14 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         PROF_SPLIT(PROF_ATTN);
 
         /* gate + out_proj (gate_proj input is h, reuse prepared xh) */
-        cq_matvec_mt(m, &lp->gate_proj, m->xh, gate);
+        if (gate_overlap) {
+            uint32_t lead = NEEDLE_GATE_LEAD_ROWS_DEFAULT;
+            CQMat gate_tail = cq_rows(&lp->gate_proj, lead,
+                                      lp->gate_proj.out - lead);
+            cq_matvec_mt(m, &gate_tail, m->xh, gate + lead);
+        } else {
+            cq_matvec_mt(m, &lp->gate_proj, m->xh, gate);
+        }
         for (uint32_t d = 0; d < A; d++) m->att_out[d] *= sigmoidf_(gate[d]);
         PROF_SPLIT(PROF_GATE);
         tr("attout", (int)i, m->att_out, (int)A);
@@ -1420,32 +1512,7 @@ const float *needle_step_ex(Needle *m, int token, uint32_t pos, int want_logits)
         tr("y", (int)i, y, (int)C);
 
         /* hpost + sinkhorn res mix */
-        float hpost[MAX_LANES];
-        {   /* xh2 still holds FWHT(nx) from phi_pre — same layout */
-            CQMat sub = m->phi_post;
-            uint32_t row_bytes = sub.in_pad * sub.bits / 8;
-            sub.packed += (uint64_t)i * n * row_bytes;
-            sub.norms += (uint64_t)i * n * (sub.in_pad / sub.group);
-            sub.out = n;
-            cq_matvec(m, &sub, m->xh2, hpost);
-        }
-        for (uint32_t l = 0; l < n; l++) {
-            float off = (l == own) ? 0.0f : -4.0f;
-            hpost[l] = 2.0f * sigmoidf_(m->a_post[i] * hpost[l]
-                                        + m->b_post[i * n + l] + off);
-        }
-        {
-            CQMat sub = m->phi_res;
-            uint32_t row_bytes = sub.in_pad * sub.bits / 8;
-            sub.packed += (uint64_t)i * n * n * row_bytes;
-            sub.norms += (uint64_t)i * n * n * (sub.in_pad / sub.group);
-            sub.out = n * n;
-            cq_matvec(m, &sub, m->xh2, tmpl);
-        }
-        for (uint32_t l = 0; l < n * n; l++)
-            tmpl[l] = m->a_res[i] * tmpl[l] + m->b_res[i * n * n + l];
-        sinkhorn(tmpl, (int)n, NEEDLE_SINKHORN_ITERS);
-
+        if (!mhc_overlap) mhc_proj_job_fn(&mhc_job);
         /* x = hres @ x + hpost[:,None]*y */
         static float xn[MAX_LANES * 512];
         for (uint32_t l = 0; l < n; l++) {
