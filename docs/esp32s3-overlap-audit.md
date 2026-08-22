@@ -72,6 +72,28 @@ does not justify the added memory and correctness surface.
 The useful idea was finer-grained scheduling of already independent operators, where the existing
 single-token engine can gain speed without changing numerical behavior.
 
+## Request-sized PSRAM weight tier
+
+A follow-up profile found that q/gate/out projections dominate wall time while the fixed boot
+weight cache must reserve memory for the worst-case 416-row KV ring. The engine now releases a
+second weight-cache tier before every KV resize, allocates the actual request's KV state, and uses
+the remaining PSRAM down to a 256 KB reserve. This tier loads q/gate/out matrices first, then k/v.
+It copies the original CQ bytes and restores the flash pointers before freeing the copies, so the
+arithmetic path and accumulation order do not change.
+
+| Fixed one-tool workload | Previous default | Dynamic tier | Reduction |
+|---|---:|---:|---:|
+| Cold | 33.382 s | **32.770 s** | **1.83%** |
+| Warm | 15.266 s | **14.914 s** | **2.31%** |
+
+The short profile cached another 1700 KB of weights. A 301-token prefill stress test needed the
+larger KV allocation, so the tier automatically cached 0 KB and completed with 206 KB PSRAM free.
+Switching back to the short profile rebuilt the 1700 KB tier, completed in 32.772 s, and left
+271 KB PSRAM free. Both calls returned the expected JSON. The firmware SHA-256 was
+`00ec9ec2317978b2299768624aa6b6ee5f732464438b9ea0c5deb48ee30f138f`; all intermediate timings
+and memory readings are in
+[`bench/results/esp32s3_dynamic_weight_cache_20260822.json`](../bench/results/esp32s3_dynamic_weight_cache_20260822.json).
+
 ## Correctness evidence
 
 - The fixed cold run and four warm runs emitted the same flashlight JSON.

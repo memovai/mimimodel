@@ -28,7 +28,7 @@ $ turn on pin 5
 | **Modelo** | Needle 2 — 45M parámetros, CQ de 2 bits, archivo único de 13,7 MB |
 | **Hardware** | ESP32-S3, Xtensa LX7 a 240 MHz, 16 MB flash, 8 MB PSRAM (~5 $) |
 | **Motor** | un archivo C99, ~2.000 líneas, sin más dependencias que `libm` |
-| **Velocidad ESP32** | una herramienta fija: **prefill 2,07 tok/s · decode 1,69 tok/s** · 15,266 s caliente · 33,382 s fría |
+| **Velocidad ESP32** | una herramienta fija: **prefill 2,11 tok/s · decode 1,73 tok/s** · 14,914 s caliente · 32,770 s fría |
 | **Memoria** | 13,7 MB flash (mapeada en memoria) · ~7,7 MB PSRAM · firmware de 256 KB |
 | **Precisión** | **69,6%** en google/mobile-actions (961 casos, strict) — engine oficial 2.0.2: 69,2% con entradas idénticas |
 
@@ -120,7 +120,7 @@ herramientas.
 La salida doble selecciona ambas herramientas y extrae la fecha y hora, el correo, el título y el
 asunto. La latencia depende del esquema seleccionado, la longitud de la consulta y las llamadas
 generadas. Como referencia reproducible, la compilación más rápida por defecto (`fast_math=1`) con una herramienta
-fija tardó **33,382 s** en frío y **15,266 s** tras acertar la caché de prefijo en la placa anterior
+fija tardó **32,770 s** en frío y **14,914 s** tras acertar la caché de prefijo en la placa anterior
 (2026-08-22). Ambas ejecuciones devolvieron el mismo JSON del ejemplo simple. Las condiciones exactas
 están en el [benchmark](#benchmark).
 
@@ -272,7 +272,8 @@ Rendimiento bruto del motor, medido sobre hardware real:
 | Caché de pesos en PSRAM (oportunista) | +8% |
 | Cargas float alineadas TIE728 + kernel CQ2 de 2 filas/8 acumuladores | matvec 512×512: 5,272 → 3,781 ms en un núcleo; 2,700 → 1,960 ms en dos |
 | Planificación entre operadores (mHC/Sinkhorn y gate durante trabajo independiente del núcleo 0) | latencia en frío -5,9%; en caliente -5,6% |
-| **Medición más rápida por defecto con una herramienta fija** | **prefill 2,07 tok/s, decode 1,69; 33,382 s en frío, 15,266 s en caliente** |
+| Nivel de pesos PSRAM dimensionado por solicitud, ordenado según el coste medido de las proyecciones | latencia en caliente -2,3%; se libera antes de redimensionar KV |
+| **Medición más rápida por defecto con una herramienta fija** | **prefill 2,11 tok/s, decode 1,73; 32,770 s en frío, 14,914 s en caliente** |
 | Caché de prefijo KV (cuesta ~20% de velocidad bruta por agrandar el anillo) | **8,2× extremo a extremo** |
 
 ### Lo que no funcionó
@@ -296,8 +297,8 @@ Rendimiento bruto del motor, medido sobre hardware real:
 
 ## Limitaciones
 
-- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 15,266 s en
-  caliente y 33,382 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
+- **La latencia depende del esquema.** La carga controlada de una herramienta tarda 14,914 s en
+  caliente y 32,770 s en frío; los esquemas mayores y las salidas con varias llamadas pueden tardar
   minutos. Una API en la nube sigue siendo mucho más rápida. El valor está en trabajar sin conexión,
   sin coste de API y con los datos en el dispositivo.
 - **El modelo no admite chino.** Las órdenes de dispositivo en chino obtienen 0/5 y el motor oficial
@@ -388,8 +389,8 @@ se conservan por separado.
 
 **Velocidad actual en ESP32-S3 real (2026-08-22):** la compilación más rápida por
 defecto (`fast_math=1`, `profile=0`) procesó un prompt fijo de 52 tokens y una
-herramienta en 33,382 s en frío y 15,266 s en caliente.
-El prefill/decode en frío alcanzó 2,07/1,69 tok/s; las cinco ejecuciones emitieron
+herramienta en 32,770 s en frío y 14,914 s en caliente.
+El prefill/decode en frío alcanzó 2,11/1,73 tok/s; las ejecuciones repetidas emitieron
 la misma llamada de linterna. La autoprueba TIE728 pasó con un error absoluto máximo
 de 8,583e-06. Una fila mobile-actions de 252 tokens terminó strict exact en 158,111 s,
 un 6,5% más rápido que el firmware anterior, y coincidió byte a byte con el host.

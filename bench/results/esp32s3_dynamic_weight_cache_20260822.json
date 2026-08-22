@@ -1,0 +1,34 @@
+{
+  "date": "2026-08-22",
+  "board": "ESP32-S3 rev 0.2, 240 MHz, 16 MB flash, 8 MB PSRAM",
+  "firmware_sha256": "00ec9ec2317978b2299768624aa6b6ee5f732464438b9ea0c5deb48ee30f138f",
+  "build": "fast_math=1 profile=0 sinkhorn_iters=20 prefix_sink=160 reason_max=256 byte_grammar=1 mhc_overlap=1 mt_min_rows=64 mhc_q_lead=128 gate_overlap=1 gate_lead=32 dynamic_cache=1 dynamic_reserve_kb=256",
+  "fixed_one_tool": {
+    "query": "Turn on the flashlight.",
+    "expected": [{"name": "turn_on_flashlight", "arguments": {}}],
+    "previous_default_ms": {"cold": 33382, "warm_median": 15266},
+    "dynamic_reserve_512_kb_ms": {"cold": 32950, "warm_runs": [15020, 15020, 15020]},
+    "dynamic_reserve_256_kb_layer_order_ms": {"cold": 32853, "warm_runs": [14964, 14963, 14964]},
+    "dynamic_reserve_256_kb_profile_order_ms": {"cold": 32770, "warm_runs": [14915, 14912]},
+    "dynamic_cached_kb": 1700,
+    "final_cold_rates_tok_s": {"prefill": 2.11, "decode": 1.73},
+    "output_exact": true
+  },
+  "resize_stress": {
+    "long_schema": {
+      "payload_bytes": 1208,
+      "prefill_tokens": 301,
+      "total_ms": 190661,
+      "dynamic_cached_kb": 0,
+      "psram_free_after_kb": 206,
+      "output_exact": true
+    },
+    "short_schema_after_long": {
+      "prefill_tokens": 52,
+      "total_ms": 32772,
+      "dynamic_cached_kb": 1700,
+      "psram_free_after_kb": 271,
+      "output_exact": true
+    }
+  }
+}
